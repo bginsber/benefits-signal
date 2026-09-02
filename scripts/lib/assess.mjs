@@ -153,7 +153,7 @@ export async function verifyCluster(cluster, docsById, { client, prompt, offline
   if (!primary) {
     return { ...base, checked_fields: { status: "unconfirmed", dates: "unconfirmed", posture: "unconfirmed" }, result: "unconfirmed", notes: "No primary authority located; commentary only. Status and dates are as the commentary states them and have not been checked against the agency, court, or register.", model: null };
   }
-  const res = await client.complete({
+  const ask = () => client.complete({
     key: `${prompt.version}-${cluster.id}`,
     system: [prompt.body],
     user: buildVerifyUser(cluster, members, primary),
@@ -161,6 +161,8 @@ export async function verifyCluster(cluster, docsById, { client, prompt, offline
     effort: "high",
     maxTokens: 2048,
   });
+  let res = await ask();
+  if (!res.data && res.stop_reason === "error") res = await ask(); // one retry; a blocked tool attempt is the usual cause
   if (!res.data) {
     return { ...base, checked_fields: { status: "unconfirmed", dates: "unconfirmed", posture: "unconfirmed" }, result: "unconfirmed", notes: `Verification not performed (${res.stop_reason}); treated as unconfirmed.`, model: res.model, stop_reason: res.stop_reason };
   }

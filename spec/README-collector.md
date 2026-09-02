@@ -62,3 +62,19 @@ If Outlook shows "Cannot download the RSS content" or "Outlook cannot process th
 The feed itself validates: `xmllint` well-formed, W3C Feed Validator zero errors and zero warnings, with an `atom:link rel="self"`, `docs`, and `generator` in the channel.
 
 A sample output from a live 2026-09-01 run is committed at `spec/sample-collated.xml` for inspection; `data/` and `_site/` are runtime output and are gitignored.
+
+
+## Weekly pipeline on Ben's Mac (no API key)
+
+The model stages (triage, cluster, verify, assess) run through the Claude Code CLI in headless mode on the Claude subscription, so there is no metered API spend. `scripts/weekly.sh` runs the whole chain and `scripts/install-schedule.sh` installs it as a launchd agent for Tuesdays at 18:00 local time, ahead of the Wednesday issue.
+
+```
+scripts/install-schedule.sh              # install or reinstall the launchd agent
+launchctl kickstart -k gui/$(id -u)/com.benefits-signal.weekly   # run it now
+scripts/weekly.sh --no-push              # run by hand without pushing
+scripts/install-schedule.sh --uninstall
+```
+
+Each run: collects the 30-day window; triages new documents in batches of eight (one Claude Code call per batch, about 15k tokens of context each); clusters, verifies, and assesses the in-scope documents into candidates; writes the candidate digest, the review template (`data/reviews/<issue>.json`), and the trustee-agenda handout; and commits `public/review.xml` plus the digest HTML so the daily Pages deploy carries them to the review feed in Outlook. Logs land in `data/logs/`. Publishing an issue stays a human step: fill in the review file, then `node scripts/publish.mjs --issue <date>` and push `public/issue.json`.
+
+The Mac must be awake at the scheduled time; launchd runs a missed job at the next wake. Any stage can also use a metered key instead by dropping `--claude-code` and exporting `ANTHROPIC_API_KEY`.

@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
   push:
     branches: [main]
-    paths: ["scripts/collect.mjs", ".github/workflows/collate.yml"]
+    paths: ["scripts/collect.mjs", ".github/workflows/collate.yml", "public/review.xml", "public/digests/**"]
 
 permissions:
   contents: read

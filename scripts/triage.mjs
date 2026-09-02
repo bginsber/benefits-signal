@@ -81,6 +81,11 @@ async function worker() {
     let results;
     try {
       results = await triageBatch(batch, { client, prompt, system, scans });
+      if (batch.length > 1 && results.every((r) => r.bucket === "skipped" && /model error/.test(r.record.skipped ?? ""))) {
+        console.error(`retry batch of ${batch.length} (${batch[0].id.slice(0, 8)}…) as single documents: ${results[0].record.skipped}`);
+        results = [];
+        for (const doc of batch) results.push(...(await triageBatch([doc], { client, prompt, system, scans })));
+      }
     } catch (e) {
       counts.skipped += batch.length;
       console.error(`FAIL  batch of ${batch.length} (${batch[0].id.slice(0, 8)}…): ${e.message}`);

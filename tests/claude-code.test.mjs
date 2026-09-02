@@ -10,12 +10,12 @@ test("headless Claude Code arguments replace the system prompt, exclude dynamic 
   const args = claudeCodeArgs({ system: ["A", "B"], schema: { type: "object" }, effort: "low", model: "claude-opus-5" });
   const at = (flag) => args[args.indexOf(flag) + 1];
   assert.equal(args[0], "-p");
-  assert.equal(at("--system-prompt"), "A\n\nB");
+  assert.match(at("--system-prompt"), /^You have no tools in this session[\s\S]*\n\nA\n\nB$/);
   assert.equal(at("--json-schema"), '{"type":"object"}');
   assert.equal(at("--output-format"), "json");
   assert.equal(at("--allowedTools"), "");
   assert.equal(at("--setting-sources"), "");
-  assert.equal(at("--max-turns"), "1");
+  assert.equal(at("--max-turns"), "3");
   assert.equal(at("--effort"), "low");
   assert.equal(at("--model"), "claude-opus-5");
   assert.ok(args.includes("--exclude-dynamic-system-prompt-sections"));
