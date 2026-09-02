@@ -356,3 +356,13 @@ Same check; nothing present. No change. Blocked on credentials from Ben.
 
 ## Iteration 39 · 2026-09-01 · waiting on credentials
 Same check; nothing present. No change. Blocked on credentials from Ben.
+
+## Iteration 40 · 2026-09-01 · final iteration of this loop run · waiting on credentials
+Same check; nothing present. The loop's 40-iteration budget ends here.
+
+**Handoff for the next run.**
+- Done and pushed: M1 (scans and sources as data), M2 (all reachable sources collected; source-silent notice), M5 (weekly digest, review template, review feed; weekly workflow disabled pending the secret), M6 (front end reads `public/issue.json`; publisher with release rules and a record-built source log), M7 (upcoming-obligations disclosure; trustee-agenda handout).
+- Built and tested in fixture mode, live half blocked: M3 (`scripts/triage.mjs`) and M4 (`scripts/assess.mjs`). Both fail with one clear line when no credentials resolve.
+- To finish: export `ANTHROPIC_API_KEY` in the shell (or install the `ant` CLI and `ant auth login`), then relaunch with the command at the top of `spec/horizon-scanning-goal.md`. The next iteration should: run `node scripts/triage.mjs` over `data/collected/` (≈323 documents; effort low, expect a few dollars); run `node scripts/assess.mjs`; record per-scan counts, candidates, tiers, verification results, and `cache_read_input_tokens` here; re-record the eleven hand-authored fixtures with `--record` (triage over `tests/fixtures/collected`, assess over `tests/fixtures/{matches,collected}`); re-run `npm test`, `npm run test:sites`, `npm run build`; then, if every acceptance check in the goal passes in that run, output the promise.
+- For Actions: add `ANTHROPIC_API_KEY` as a repository secret and uncomment the schedule in `.github/workflows/triage.yml`.
+- Suite state at close: 33 unit tests, 4 Sites tests, build green; working tree clean at this commit.
