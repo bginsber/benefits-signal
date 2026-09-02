@@ -12,7 +12,7 @@ Companion to `spec/horizon-scanning-goal.md`. The loop appends one entry per ite
 | M4 · Cluster, verify, assess | built; live run blocked on credentials | iteration 4, 2026-09-01 |
 | M5 · Weekly candidate digest | done (fixture); workflow disabled pending secret | iteration 5, 2026-09-01 |
 | M6 · Front end reads data | done | iteration 6, 2026-09-01 |
-| M7 · Obligations and trustee agenda | not started | |
+| M7 · Obligations and trustee agenda | done | iteration 7, 2026-09-01 |
 
 ## Baseline · 2026-09-01 · before iteration 1
 
@@ -229,3 +229,33 @@ Follow-ups (left alone):
 - `spec/README-collector.md` and `AGENTS.md` do not yet describe the publish step; a short "how an issue is released" paragraph belongs in the README when the loop finishes.
 - The source log's omitted-pool rows depend on `data/omitted/` from a live triage run; until credentials exist those rows come only from rejected candidates.
 Blocked: live triage/assess (M3, M4) still need credentials; the weekly workflow needs the repository secret.
+
+## Iteration 7 · 2026-09-01 · Milestone M7
+Slice: upcoming-obligations list in issue.json and one disclosure on the page; trustee-agenda handout. Credentials re-checked: still none.
+Done:
+- `spec/issue-schema.json`: optional top-level `obligations` array with a new `$defs.obligation` (date, kind ∈ comment_deadline | effective_date | deadline | meeting | filing, label, source, url, optional developmentId, confirmed).
+- `scripts/lib/publish.mjs` `buildObligations()`: released developments contribute their `operative_date` only when the verification record has `dates: confirmed` (kind inferred from the primary document's structured field); scan-matched Federal Register documents contribute `comments_close_on` and `effective_on`; dates before the issue date are dropped; deduped by date+url+kind (the development row wins); ascending. `buildIssue` now takes `matches`; the CLI reads `--matches` (default `data/matches`, fixture `tests/fixtures/matches`).
+- `src/Issue.jsx`: one `<details class="briefing-disclosure obligations-disclosure">` at the foot of the reading column, before the footer, rendered only when there is at least one obligation; inside, a `<dl>` of long-form date → linked label → source. `src/styles.css`: five small rules reusing the existing rule colour, tabular numerals, and the same summary styling; no new colours, buttons, or panels.
+- `public/issue.json`: two obligations the illustrative developments imply (September 30, 2026: cybersecurity comment deadline; ACA Forms 1094/1095 filing) so the disclosure is visible on the prototype.
+- `scripts/lib/digest.mjs` `trusteeAgendaItems()` / `renderTrusteeAgenda()`; `scripts/digest.mjs --trustee-agenda` now writes `data/digests/<issue>-trustee-agenda.md` only (no reviewer notes, no review template, no feed change) instead of filtering the main digest in place, which the M5 draft did.
+- Fixtures: `tests/fixtures/obligations/{collected,matches}/` = the M3/M4 fixtures plus one real IRS proposed rule (document 2026-16314, comments close 2026-09-25) with a hand-written fhw match record.
+- `tests/obligations.test.mjs` (3 tests): publisher output validates and carries exactly the one future obligation (the two released developments' dates precede the issue date); the page renders exactly one disclosure with the dated list before the footer and none when empty; `buildObligations` rule cases (confirmed vs unconfirmed, past dates, dedupe, sort); trustee-agenda filter and handout content via both the library and the CLI.
+- Screenshots (vite preview, 1568×783): `design-qa/obligations-closed.jpg` and `design-qa/obligations-open.jpg`. Closed: a single underlined "Upcoming obligations" summary between the last development and the footer rule, in the same style as "Read briefing and evidence". Open: two dated rows in the reading column, links in the existing link style, source in muted text. **Nothing appears outside the reading column; no dashboard chrome, counts, or charts.**
+Evidence:
+```
+$ npm test                       → ℹ tests 33  ℹ pass 33  ℹ fail 0
+$ npm run test:sites             → ℹ pass 4  ℹ fail 0
+$ npm run build                  → ✓ built; Prepared Sites build (CSS and JS bundle hashes changed as expected)
+$ node scripts/publish.mjs --fixture --issue 2026-09-02 --collected tests/fixtures/obligations/collected --matches tests/fixtures/obligations/matches …
+  obligations: 1 dated item(s)  → 2026-09-25 comment_deadline "Comments due: Employer Contributions to Trump Accounts … (Proposed Rule, Federal Health & Welfare)"
+$ node scripts/digest.mjs --fixture --issue 2026-09-02 --trustee-agenda
+trustee agenda for the issue of 2026-09-02: 3 of 3 candidate(s) touch a fiduciary duty → digests/2026-09-02-trustee-agenda.md
+```
+Decisions taken by default: none new.
+Assumptions:
+- "Open developments" for the obligations list means the developments released in this issue; developments from earlier issues that are not carried forward are not tracked separately (spec Phase 3 "open-development tracking" is beyond M7's wording).
+- The illustrative issue's two obligations are hand-written to match its hard-coded developments; a published issue derives them from records.
+Follow-ups (left alone):
+- Open-development tracking across issues (a development that leaves the issue but still has a future date).
+- The handout is Markdown only; an HTML or DOCX version for the attorneys would be a small addition once they say how they want it.
+Blocked: nothing for M7. **Loop status:** M1, M2, M5, M6, M7 are complete. M3 and M4 are built and tested but each has an acceptance half that requires a live model run, which needs credentials this machine does not have. The completion promise is therefore not true. Until `ANTHROPIC_API_KEY` is exported (or `ant auth login` is run) in the environment running this loop, each further iteration can only re-check credentials and end; when credentials appear, the next iteration runs `node scripts/triage.mjs` over `data/collected/`, then `node scripts/assess.mjs`, records the counts here, re-records the eleven hand-authored fixtures with `--record`, and re-runs the suite.

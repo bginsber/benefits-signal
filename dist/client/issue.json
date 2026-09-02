@@ -207,5 +207,25 @@
       "result": "Omitted",
       "note": "Items reviewed did not clear the relevance threshold."
     }
+  ],
+  "obligations": [
+    {
+      "date": "2026-09-30",
+      "kind": "comment_deadline",
+      "label": "Comments due: DOL proposes cybersecurity program requirements for employee benefit plans",
+      "source": "DOL Employee Benefits Security Administration",
+      "url": "https://www.dol.gov/agencies/ebsa",
+      "developmentId": "cybersecurity-program",
+      "confirmed": true
+    },
+    {
+      "date": "2026-09-30",
+      "kind": "filing",
+      "label": "Filing due: ACA Forms 1094/1095 reporting deadline",
+      "source": "IRS",
+      "url": "https://www.irs.gov/forms-pubs/about-form-1094-c",
+      "developmentId": "aca-reporting",
+      "confirmed": true
+    }
   ]
 }

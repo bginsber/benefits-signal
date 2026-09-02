@@ -100,11 +100,43 @@ export function buildSourceLog({ released, rejected, docsById, omitted = [] }) {
   return rows;
 }
 
+const KIND_LABEL = { comment_deadline: "Comments due", effective_date: "Effective", deadline: "Deadline", meeting: "Meeting", filing: "Filing due" };
+
+/**
+ * Upcoming obligations (spec § 13 Phase 3; goal M7): confirmed operative dates
+ * of released developments, plus Federal Register comment deadlines and
+ * effective dates on documents that matched a scan. Only dates on or after
+ * the issue date; ascending.
+ */
+export function buildObligations({ issueDate, released = [], matches = [], docsById = new Map() }) {
+  const out = [];
+  const seen = new Set();
+  const add = (o) => { const k = `${o.date}|${o.url}|${o.kind}`; if (o.date >= issueDate && !seen.has(k)) { seen.add(k); out.push(o); } };
+  for (const dev of released) {
+    const p = dev.pipeline ?? {};
+    const v = p.verification ?? {};
+    if (!p.operative_date || v.checked_fields?.dates !== "confirmed") continue;
+    const primary = docsById.get(v.primary_document_id);
+    const kind = primary?.structured?.comments_close_on === p.operative_date ? "comment_deadline" : primary?.structured?.effective_on === p.operative_date ? "effective_date" : primary?.structured?.meeting_date === p.operative_date ? "meeting" : "deadline";
+    add({ date: p.operative_date, kind, label: `${KIND_LABEL[kind]}: ${dev.headline}`, source: primary ? sourceName(primary.source) : (dev.authorityLabel || "Primary authority"), url: dev.authorityUrl, developmentId: dev.id, confirmed: true });
+  }
+  const scanNames = { fhw: "Federal Health & Welfare", met: "Multiemployer & Taft-Hartley", ca9: "California & Ninth Circuit", cyb: "Cybersecurity & Privacy", atf: "Apprenticeship & Training Funds" };
+  for (const m of matches) {
+    if (!(m.scan_ids ?? []).length) continue;
+    const d = docsById.get(m.document_id ?? m.id);
+    if (!d || !/^Federal Register/.test(d.source)) continue;
+    const scan = scanNames[m.scan_ids[0]] ?? m.scan_ids[0];
+    if (d.structured?.comments_close_on) add({ date: d.structured.comments_close_on, kind: "comment_deadline", label: `Comments due: ${d.title} (${d.categories?.[0] ?? "Federal Register"}, ${scan})`, source: sourceName(d.source), url: d.link, confirmed: true });
+    if (d.structured?.effective_on) add({ date: d.structured.effective_on, kind: "effective_date", label: `Effective: ${d.title} (${d.categories?.[0] ?? "Federal Register"}, ${scan})`, source: sourceName(d.source), url: d.link, confirmed: true });
+  }
+  return out.sort((a, b) => a.date.localeCompare(b.date) || a.label.localeCompare(b.label));
+}
+
 /**
  * Build the issue. `candidates` carry their `pipeline` block; `review` is the
  * ReviewDecision file; `previous` is the last published issue (or null).
  */
-export function buildIssue({ issueDate, candidates, review, previous = null, docsById = new Map(), omitted = [] }) {
+export function buildIssue({ issueDate, candidates, review, previous = null, docsById = new Map(), omitted = [], matches = [] }) {
   const previousIds = new Set((previous?.developments ?? []).map((d) => d.id));
   const released = [], rejected = [];
   for (const c of sortCandidates(candidates)) {
@@ -122,6 +154,7 @@ export function buildIssue({ issueDate, candidates, review, previous = null, doc
       issueSummary: readerSummaryLine(developments),
       developments,
       sourceLog: buildSourceLog({ released, rejected, docsById, omitted }),
+      obligations: buildObligations({ issueDate, released, matches, docsById }),
     },
     released, rejected,
   };

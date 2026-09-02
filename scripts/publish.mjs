@@ -10,7 +10,7 @@
  * Usage:
  *   node scripts/publish.mjs --issue 2026-09-02                  # data/candidates + data/reviews/2026-09-02.json → public/issue.json
  *   node scripts/publish.mjs --fixture --issue 2026-09-02 --out <file>
- *   options: --candidates <dir> --review <file> --previous <issue.json> --collected <dir> --omitted <dir> --out <file> --archive <dir>
+ *   options: --candidates <dir> --review <file> --previous <issue.json> --collected <dir> --omitted <dir> --matches <dir> --out <file> --archive <dir>
  */
 
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
@@ -34,6 +34,7 @@ const REVIEW = path.resolve(ROOT, opt("--review", fixture ? "tests/fixtures/revi
 const PREVIOUS = opt("--previous", fixture ? null : "public/issue.json");
 const COLLECTED = path.resolve(ROOT, opt("--collected", fixture ? "tests/fixtures/collected" : "data/collected"));
 const OMITTED = path.resolve(ROOT, opt("--omitted", "data/omitted"));
+const MATCHES = path.resolve(ROOT, opt("--matches", fixture ? "tests/fixtures/matches" : "data/matches"));
 const OUT = path.resolve(ROOT, opt("--out", "public/issue.json"));
 const ARCHIVE = opt("--archive", fixture ? null : "data/issues");
 
@@ -46,8 +47,10 @@ let docsById = new Map();
 try { docsById = new Map((await readCollected(COLLECTED)).map((d) => [d.id, d])); } catch { /* none */ }
 let omitted = [];
 try { omitted = await readCollected(OMITTED); } catch { /* none */ }
+let matches = [];
+try { matches = await readCollected(MATCHES); } catch { /* none */ }
 
-const { issue, released, rejected } = buildIssue({ issueDate: ISSUE, candidates, review, previous, docsById, omitted });
+const { issue, released, rejected } = buildIssue({ issueDate: ISSUE, candidates, review, previous, docsById, omitted, matches });
 const schema = await readJson(path.join(ROOT, "spec", "issue-schema.json"));
 const errors = validate(issue, schema);
 if (errors.length) {
@@ -66,4 +69,5 @@ const show = (f) => (f.startsWith(ROOT) ? path.relative(ROOT, f) : f);
 console.log(`issue of ${issue.issueDate}: ${issue.issueSummary}`);
 for (const d of issue.developments) console.log(`  ${d.lane.padEnd(5)} ${d.headline}${d.carriedForward ? " (carried forward)" : ""}`);
 for (const r of rejected) console.log(`  ----  not released: ${r.candidate.headline} (${r.why})`);
+console.log(`  obligations: ${issue.obligations.length} dated item(s)`);
 console.log(`  source log: ${issue.sourceLog.length} rows → ${show(OUT)}${ARCHIVE ? ` (archived under ${ARCHIVE}/${ISSUE}.json)` : ""}`);

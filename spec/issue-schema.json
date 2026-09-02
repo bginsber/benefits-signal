@@ -4,13 +4,21 @@
   "title": "Benefits Signal Issue",
   "description": "Contract for the JSON an issue publisher must emit. Field names match src/App.jsx exactly (camelCase). The front end renders `metadata` as generic label→pill pairs, so fiduciary-duty tags flow through as a 'Fiduciary duties' entry with no front-end change. Wiring this schema in requires only replacing the hard-coded `developments` and `sourceLog` constants with a fetch of issue.json.",
   "type": "object",
-  "required": ["issueDate", "issueSummary", "developments", "sourceLog"],
+  "required": [
+    "issueDate",
+    "issueSummary",
+    "developments",
+    "sourceLog"
+  ],
   "properties": {
     "issueDate": {
       "type": "string",
       "description": "Human-readable issue date as rendered in the masthead, e.g. 'Wednesday, August 26, 2026'."
     },
-    "issueDateISO": { "type": "string", "format": "date" },
+    "issueDateISO": {
+      "type": "string",
+      "format": "date"
+    },
     "issueSummary": {
       "type": "string",
       "description": "One-line masthead summary, e.g. 'Three developments worth your time. One needs a legal read.' A zero-development issue uses language like 'Nothing requires your attention this week.'"
@@ -18,30 +26,79 @@
     "developments": {
       "type": "array",
       "description": "Ordered NOW → NEXT → WATCH. May be empty.",
-      "items": { "$ref": "#/$defs/development" }
+      "items": {
+        "$ref": "#/$defs/development"
+      }
     },
     "sourceLog": {
       "type": "array",
-      "items": { "$ref": "#/$defs/sourceLogEntry" }
+      "items": {
+        "$ref": "#/$defs/sourceLogEntry"
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "description": "OPTIONAL (Phase 3, goal M7). Confirmed deadlines and effective dates across the issue's developments plus scan-matched Federal Register comment deadlines, ascending by date. Rendered as one quiet disclosure at the foot of the issue.",
+      "items": {
+        "$ref": "#/$defs/obligation"
+      }
     }
   },
   "$defs": {
     "development": {
       "type": "object",
       "required": [
-        "id", "lane", "cue", "headline", "status", "summary", "metadata",
-        "confidenceNote", "scan", "affected", "action", "timing",
-        "mergedSources", "nextStep", "completion", "passage",
-        "articleLabel", "articleUrl", "authorityLabel", "authorityUrl"
+        "id",
+        "lane",
+        "cue",
+        "headline",
+        "status",
+        "summary",
+        "metadata",
+        "confidenceNote",
+        "scan",
+        "affected",
+        "action",
+        "timing",
+        "mergedSources",
+        "nextStep",
+        "completion",
+        "passage",
+        "articleLabel",
+        "articleUrl",
+        "authorityLabel",
+        "authorityUrl"
       ],
       "properties": {
-        "id": { "type": "string", "description": "Stable slug; unchanged when a development carries across issues." },
-        "lane": { "enum": ["NOW", "NEXT", "WATCH"] },
-        "cue": { "type": "string", "description": "Lane cue, e.g. 'Attorney review', 'September 30, 2026', 'No action yet'." },
-        "headline": { "type": "string" },
-        "status": { "type": "string", "description": "Status line, middle-dot separated, e.g. 'Proposed · Comments due September 30'." },
+        "id": {
+          "type": "string",
+          "description": "Stable slug; unchanged when a development carries across issues."
+        },
+        "lane": {
+          "enum": [
+            "NOW",
+            "NEXT",
+            "WATCH"
+          ]
+        },
+        "cue": {
+          "type": "string",
+          "description": "Lane cue, e.g. 'Attorney review', 'September 30, 2026', 'No action yet'."
+        },
+        "headline": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status line, middle-dot separated, e.g. 'Proposed · Comments due September 30'."
+        },
         "summary": {
-          "type": "array", "items": { "type": "string" }, "minItems": 1, "maxItems": 3,
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 3,
           "description": "Collapsed-view paragraphs."
         },
         "uncertainty": {
@@ -51,15 +108,51 @@
         "metadata": {
           "type": "object",
           "description": "Label → pill values, rendered generically in the expanded view. Required keys below; 'Fiduciary duties' is the pipeline's addition and needs no front-end change.",
-          "required": ["Plan type", "Jurisdiction", "Topics", "Confidence", "Fiduciary duties"],
+          "required": [
+            "Plan type",
+            "Jurisdiction",
+            "Topics",
+            "Confidence",
+            "Fiduciary duties"
+          ],
           "properties": {
             "Plan type": {
               "type": "array",
-              "items": { "enum": ["Health & welfare", "Multiemployer", "Self-funded", "Training trust / apprenticeship fund", "Service providers", "All welfare plans"] }
+              "items": {
+                "enum": [
+                  "Health & welfare",
+                  "Multiemployer",
+                  "Self-funded",
+                  "Training trust / apprenticeship fund",
+                  "Service providers",
+                  "All welfare plans"
+                ]
+              }
             },
-            "Jurisdiction": { "type": "array", "items": { "type": "string" } },
-            "Topics": { "type": "array", "items": { "type": "string" } },
-            "Confidence": { "type": "array", "items": { "enum": ["High", "Medium", "Low"] }, "minItems": 1, "maxItems": 1 },
+            "Jurisdiction": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "Topics": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "Confidence": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "High",
+                  "Medium",
+                  "Low"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 1
+            },
             "Fiduciary duties": {
               "type": "array",
               "items": {
@@ -80,17 +173,46 @@
               "description": "Per spec § 7. 'None — Settlor or Administrative' is exclusive of other values."
             }
           },
-          "additionalProperties": { "type": "array", "items": { "type": "string" } }
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         },
-        "confidenceNote": { "type": "string", "description": "Confidence rationale; must reflect the verification record, e.g. whether primary authority confirmed status and dates." },
+        "confidenceNote": {
+          "type": "string",
+          "description": "Confidence rationale; must reflect the verification record, e.g. whether primary authority confirmed status and dates."
+        },
         "scan": {
-          "enum": ["Federal Health & Welfare", "Multiemployer & Taft-Hartley", "California & Ninth Circuit", "Cybersecurity & Privacy", "Apprenticeship & Training Funds"],
+          "enum": [
+            "Federal Health & Welfare",
+            "Multiemployer & Taft-Hartley",
+            "California & Ninth Circuit",
+            "Cybersecurity & Privacy",
+            "Apprenticeship & Training Funds"
+          ],
           "description": "Primary matched scan (front end shows one; additional matches live in pipeline data)."
         },
-        "affected": { "type": "string", "description": "Horizon assessment: Who." },
-        "action": { "type": "string", "description": "Horizon assessment: What." },
-        "timing": { "type": "string", "description": "Horizon assessment: By when — a date, or why no action is needed yet." },
-        "mergedSources": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "affected": {
+          "type": "string",
+          "description": "Horizon assessment: Who."
+        },
+        "action": {
+          "type": "string",
+          "description": "Horizon assessment: What."
+        },
+        "timing": {
+          "type": "string",
+          "description": "Horizon assessment: By when — a date, or why no action is needed yet."
+        },
+        "mergedSources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
         "nextStep": {
           "enum": [
             "Prepare internal research assignment",
@@ -102,23 +224,107 @@
           ],
           "description": "Closed list per spec § 8; doubles as the button label."
         },
-        "completion": { "type": "string", "description": "Status text shown after the reader clicks the next-step button, e.g. 'Research assignment prepared for attorney review.'" },
-        "passage": { "type": "string", "description": "Verbatim supporting quotation (quotes added by the front end)." },
-        "articleLabel": { "type": "string" },
-        "articleUrl": { "type": "string", "format": "uri", "description": "Practical commentary link." },
-        "authorityLabel": { "type": "string" },
-        "authorityUrl": { "type": "string", "format": "uri", "description": "Primary authority link." },
-        "carriedForward": { "type": "boolean", "description": "OPTIONAL (Phase 3): true when the development appeared in a prior issue; expanded view labels it rather than presenting it as new." }
+        "completion": {
+          "type": "string",
+          "description": "Status text shown after the reader clicks the next-step button, e.g. 'Research assignment prepared for attorney review.'"
+        },
+        "passage": {
+          "type": "string",
+          "description": "Verbatim supporting quotation (quotes added by the front end)."
+        },
+        "articleLabel": {
+          "type": "string"
+        },
+        "articleUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Practical commentary link."
+        },
+        "authorityLabel": {
+          "type": "string"
+        },
+        "authorityUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Primary authority link."
+        },
+        "carriedForward": {
+          "type": "boolean",
+          "description": "OPTIONAL (Phase 3): true when the development appeared in a prior issue; expanded view labels it rather than presenting it as new."
+        }
       }
     },
     "sourceLogEntry": {
       "type": "object",
-      "required": ["source", "scan", "result", "note"],
+      "required": [
+        "source",
+        "scan",
+        "result",
+        "note"
+      ],
       "properties": {
-        "source": { "type": "string" },
-        "scan": { "type": "string" },
-        "result": { "enum": ["Verified", "Kept", "Merged", "Omitted"], "description": "Front end styles by lowercase of this value (result-verified etc.)." },
-        "note": { "type": "string" }
+        "source": {
+          "type": "string"
+        },
+        "scan": {
+          "type": "string"
+        },
+        "result": {
+          "enum": [
+            "Verified",
+            "Kept",
+            "Merged",
+            "Omitted"
+          ],
+          "description": "Front end styles by lowercase of this value (result-verified etc.)."
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "obligation": {
+      "type": "object",
+      "required": [
+        "date",
+        "kind",
+        "label",
+        "source",
+        "url"
+      ],
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "kind": {
+          "enum": [
+            "comment_deadline",
+            "effective_date",
+            "deadline",
+            "meeting",
+            "filing"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "description": "What is due or takes effect, written for a trustee."
+        },
+        "source": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "developmentId": {
+          "type": "string",
+          "description": "Present when the obligation belongs to a development in this issue."
+        },
+        "confirmed": {
+          "type": "boolean",
+          "description": "True when a primary document supplied the date (Federal Register field or a confirmed verification record)."
+        }
       }
     }
   }

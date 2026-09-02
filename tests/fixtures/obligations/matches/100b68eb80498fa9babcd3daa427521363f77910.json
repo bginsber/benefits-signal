@@ -1,0 +1,46 @@
+{
+  "document_id": "100b68eb80498fa9babcd3daa427521363f77910",
+  "source": "Federal Register \u2014 Treasury Department, Internal Revenue Service",
+  "title": "Employer Contributions to Trump Accounts and Nondiscrimination Rules for Dependent Care Assistance Programs",
+  "link": "https://www.federalregister.gov/documents/2026/08/11/2026-16314/employer-contributions-to-trump-accounts-and-nondiscrimination-rules-for-dependent-care-assistance",
+  "prompt_version": "triage@1",
+  "model": "fixture",
+  "matched_at": "2026-09-01T00:00:00.000Z",
+  "usage": {},
+  "summary": "The IRS proposed rules on employer contributions to Trump Accounts and related nondiscrimination rules for dependent care assistance programs. Comments are due September 25, 2026.",
+  "matches": [
+    {
+      "scan_id": "fhw",
+      "score": 0.7,
+      "in_scope": true,
+      "reason": "Proposed IRS rules on employer contributions and cafeteria-plan nondiscrimination reach welfare plans the fhw charter covers."
+    },
+    {
+      "scan_id": "met",
+      "score": 0.2,
+      "in_scope": false,
+      "reason": "Nothing specific to jointly administered plans."
+    },
+    {
+      "scan_id": "ca9",
+      "score": 0.02,
+      "in_scope": false,
+      "reason": "No California content."
+    },
+    {
+      "scan_id": "cyb",
+      "score": 0.02,
+      "in_scope": false,
+      "reason": "No privacy content."
+    },
+    {
+      "scan_id": "atf",
+      "score": 0.05,
+      "in_scope": false,
+      "reason": "No apprenticeship content."
+    }
+  ],
+  "scan_ids": [
+    "fhw"
+  ]
+}

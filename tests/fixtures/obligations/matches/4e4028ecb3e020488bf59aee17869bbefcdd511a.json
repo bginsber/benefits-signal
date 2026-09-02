@@ -1,0 +1,50 @@
+{
+  "document_id": "4e4028ecb3e020488bf59aee17869bbefcdd511a",
+  "source": "California DAS / DIR / CAC",
+  "title": "Equal Opportunity in Apprenticeship — August 12, 2026",
+  "link": "https://www.dir.ca.gov/DAS/DAS_MeetingAgenda/2026/August/2026-8-EEO-Notice.pdf",
+  "prompt_version": "triage@1",
+  "model": "fixture",
+  "matched_at": "2026-09-02T05:37:21.519Z",
+  "usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cache_read_input_tokens": 0
+  },
+  "summary": "The California Apprenticeship Council posted the notice and agenda for its Equal Opportunity in Apprenticeship committee meeting on August 12, 2026. The documents set out the meeting time and the items the committee will take up.",
+  "matches": [
+    {
+      "scan_id": "fhw",
+      "score": 0.03,
+      "in_scope": false,
+      "reason": "A state apprenticeship committee meeting; no federal health and welfare content."
+    },
+    {
+      "scan_id": "met",
+      "score": 0.3,
+      "in_scope": false,
+      "reason": "Training-fund governance may touch jointly administered funds, but the notice itself states no plan-level issue."
+    },
+    {
+      "scan_id": "ca9",
+      "score": 0.45,
+      "in_scope": false,
+      "reason": "A California administrative meeting notice, not a statute, DMHC/CDI action, or court decision the ca9 charter names."
+    },
+    {
+      "scan_id": "cyb",
+      "score": 0.01,
+      "in_scope": false,
+      "reason": "No cybersecurity or privacy content."
+    },
+    {
+      "scan_id": "atf",
+      "score": 0.72,
+      "in_scope": true,
+      "reason": "A California Apprenticeship Council committee notice on equal opportunity in apprenticeship is a CAC action the atf charter covers."
+    }
+  ],
+  "scan_ids": [
+    "atf"
+  ]
+}

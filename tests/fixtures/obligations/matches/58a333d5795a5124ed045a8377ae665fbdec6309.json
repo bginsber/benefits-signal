@@ -1,0 +1,50 @@
+{
+  "document_id": "58a333d5795a5124ed045a8377ae665fbdec6309",
+  "source": "Word on Benefits (IFEBP)",
+  "title": "PBMs and FTC Insulin Settlement Orders (Part 1): Drug Pricing Explainer",
+  "link": "https://blog.ifebp.org/pbms-and-ftc-insulin-settlement-orders-part-1-drug-pricing-explainer/",
+  "prompt_version": "triage@1",
+  "model": "fixture",
+  "matched_at": "2026-09-02T05:37:21.519Z",
+  "usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cache_read_input_tokens": 0
+  },
+  "summary": "A Word on Benefits explainer describes the FTC's settlement orders with the three largest pharmacy benefit managers over insulin pricing practices. It outlines what the orders require of PBMs and how rebate and formulary practices may change for plan sponsors.",
+  "matches": [
+    {
+      "scan_id": "fhw",
+      "score": 0.78,
+      "in_scope": true,
+      "reason": "PBM rebate and formulary practices affect group health plan pricing and the transparency obligations the fhw charter covers."
+    },
+    {
+      "scan_id": "met",
+      "score": 0.55,
+      "in_scope": false,
+      "reason": "Nothing in the document is specific to jointly administered plans beyond general plan-sponsor impact."
+    },
+    {
+      "scan_id": "ca9",
+      "score": 0.05,
+      "in_scope": false,
+      "reason": "No California or Ninth Circuit content."
+    },
+    {
+      "scan_id": "cyb",
+      "score": 0.03,
+      "in_scope": false,
+      "reason": "No cybersecurity or participant-data content."
+    },
+    {
+      "scan_id": "atf",
+      "score": 0.02,
+      "in_scope": false,
+      "reason": "No apprenticeship or training-fund content."
+    }
+  ],
+  "scan_ids": [
+    "fhw"
+  ]
+}

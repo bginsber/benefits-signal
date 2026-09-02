@@ -1,5 +1,8 @@
 import { useRef, useState } from "react";
 
+const formatObligationDate = (iso) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+
 function Metadata({ item }) {
   const [prepared, setPrepared] = useState(false);
 
@@ -127,6 +130,22 @@ export function Issue({ issue }) {
           ))}
         </section>
 
+        {issue.obligations?.length > 0 && (
+          <details className="briefing-disclosure obligations-disclosure">
+            <summary>Upcoming obligations</summary>
+            <dl className="obligations-list" aria-label="Upcoming obligations">
+              {issue.obligations.map((o) => (
+                <div className="obligation-row" key={`${o.date}-${o.url}-${o.kind}`}>
+                  <dt>{formatObligationDate(o.date)}</dt>
+                  <dd>
+                    <a href={o.url} target="_blank" rel="noreferrer">{o.label}</a>
+                    <span className="obligation-source">{o.source}</span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+        )}
         <footer className="digest-footer">
           <p>
             Curated from EBIA Weekly, Mercer, Segal, Groom, Trucker Huss, Wagner Law Group,

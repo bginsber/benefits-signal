@@ -20,7 +20,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { ROOT } from "./lib/sources.mjs";
 import { readCollected } from "./lib/triage.mjs";
-import { buildReviewTemplate, issueSummaryLine, nextIssueDate, readCandidates, renderHtml, renderMarkdown, renderReviewFeed } from "./lib/digest.mjs";
+import { buildReviewTemplate, issueSummaryLine, nextIssueDate, readCandidates, renderHtml, renderMarkdown, renderReviewFeed, renderTrusteeAgenda, trusteeAgendaItems } from "./lib/digest.mjs";
 
 const args = process.argv.slice(2);
 const flag = (name) => args.includes(name);
@@ -35,8 +35,17 @@ const ISSUE = opt("--issue", nextIssueDate());
 const FEED_URL = process.env.FEED_URL ? new URL("review.xml", process.env.FEED_URL).href : undefined;
 const DIGEST_URL = process.env.FEED_URL ? new URL(`digests/${ISSUE}.html`, process.env.FEED_URL).href : `file://${path.join(OUT, "digests", `${ISSUE}.html`)}`;
 
-let candidates = await readCandidates(CANDIDATES);
-if (flag("--trustee-agenda")) candidates = candidates.filter((c) => (c.metadata?.["Fiduciary duties"] ?? []).some((t) => t !== "None — Settlor or Administrative"));
+const candidates = await readCandidates(CANDIDATES);
+if (flag("--trustee-agenda")) {
+  // Handout only: no reviewer notes, no review template, no feed change.
+  const dir = path.join(OUT, "digests");
+  await mkdir(dir, { recursive: true });
+  const file = path.join(dir, `${ISSUE}-trustee-agenda.md`);
+  await writeFile(file, renderTrusteeAgenda(ISSUE, candidates));
+  const n = trusteeAgendaItems(candidates).length;
+  console.log(`trustee agenda for the issue of ${ISSUE}: ${n} of ${candidates.length} candidate(s) touch a fiduciary duty → ${file.startsWith(ROOT) ? path.relative(ROOT, file) : file}`);
+  process.exit(0);
+}
 let docsById = new Map();
 try { docsById = new Map((await readCollected(COLLECTED)).map((d) => [d.id, d])); } catch { /* no collected docs available */ }
 let omittedCount = null;

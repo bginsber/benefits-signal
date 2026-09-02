@@ -212,3 +212,29 @@ ${items}
 </rss>
 `;
 }
+
+// ---------- trustees' meeting handout (spec § 13 Phase 3; goal M7) ----------
+
+export const NONE_TAG = "None — Settlor or Administrative";
+
+/** Candidates carrying at least one fiduciary-duty tag other than None. */
+export function trusteeAgendaItems(candidates) {
+  return sortCandidates(candidates.filter((c) => (c.metadata?.["Fiduciary duties"] ?? []).some((t) => t !== NONE_TAG)));
+}
+
+/** A handout the attorneys may choose to use: what each item does to a trustee duty, and nothing the reviewer-only block carries. */
+export function renderTrusteeAgenda(issueDate, candidates) {
+  const items = trusteeAgendaItems(candidates);
+  const L = [`# Trustees' meeting agenda — items touching fiduciary duties`, "", `*Prepared from the Benefits Signal issue of ${longDate(issueDate)}. For attorney review before any use; not legal advice.*`, ""];
+  if (!items.length) { L.push("No development in this issue changes a trustee duty."); return L.join("\n") + "\n"; }
+  const byTag = new Map();
+  for (const c of items) for (const t of c.metadata["Fiduciary duties"]) if (t !== NONE_TAG) byTag.set(t, [...(byTag.get(t) ?? []), c]);
+  L.push(`Duties touched: ${[...byTag.keys()].join(" · ")}`, "");
+  items.forEach((c, i) => {
+    const just = new Map((c.pipeline?.fiduciary_justifications ?? []).map((j) => [j.tag, j.justification]));
+    L.push(`## ${i + 1}. ${c.headline}`, `**${c.status}** · ${c.lane}`, "");
+    for (const t of c.metadata["Fiduciary duties"].filter((t) => t !== NONE_TAG)) L.push(`- **${t}:** ${just.get(t) ?? "(justification not recorded)"}`);
+    L.push(`- **Who:** ${c.affected}`, `- **What:** ${c.action}`, `- **By when:** ${c.timing}`, `- **Suggested next step:** ${c.nextStep}`, `- **Authority:** [${c.authorityLabel}](${c.authorityUrl})`, "");
+  });
+  return L.join("\n") + "\n";
+}
