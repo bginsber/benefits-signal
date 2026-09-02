@@ -266,3 +266,6 @@ Blocked: credentials from Ben. To unblock, in the shell that runs this loop: `ex
 
 ## Iteration 9 · 2026-09-01 · waiting on credentials
 Same check as iteration 8; no key, token, profile, or `ant`. No change. Blocked on credentials from Ben (see iteration 8 for the exact steps).
+
+## Iteration 10 · 2026-09-01 · waiting on credentials
+Same check; nothing present. No change. Blocked on credentials from Ben.
