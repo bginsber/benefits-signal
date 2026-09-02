@@ -263,3 +263,6 @@ Blocked: nothing for M7. **Loop status:** M1, M2, M5, M6, M7 are complete. M3 an
 ## Iteration 8 · 2026-09-01 · waiting on credentials
 Slice: credential re-check only. `ANTHROPIC_API_KEY` unset, `ANTHROPIC_AUTH_TOKEN` unset, no `~/.config/anthropic`, no `ant` binary. No milestone can advance: M1, M2, M5, M6, M7 are done; M3 and M4 need a live model run. Nothing changed in the repo this iteration.
 Blocked: credentials from Ben. To unblock, in the shell that runs this loop: `export ANTHROPIC_API_KEY=...` (or install the `ant` CLI and run `ant auth login`), then let the next iteration run. For the weekly workflow, add the same key as the `ANTHROPIC_API_KEY` repository secret and uncomment the schedule in `.github/workflows/triage.yml`.
+
+## Iteration 9 · 2026-09-01 · waiting on credentials
+Same check as iteration 8; no key, token, profile, or `ant`. No change. Blocked on credentials from Ben (see iteration 8 for the exact steps).
