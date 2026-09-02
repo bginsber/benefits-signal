@@ -45,7 +45,7 @@ interpretation:
 
   - name: Wagner Law Group Law Alerts
     method: rss
-    url: https://www.wagnerlawgroup.com/feed/  # verified valid Aug 2026; since 2026-09-01 the whole site returns 403 (Cloudflare managed challenge, cf-mitigated: challenge) to non-browser clients incl. GitHub Actions — collector logs a warning and continues
+    url: https://www.wagnerlawgroup.com/feed/  # verified valid Aug 2026. Whole site is behind a Cloudflare managed challenge (cf-mitigated: challenge) that 403s some client IPs intermittently — blocked 2 of 3 Actions runs on 2026-09-01; collector logs a warning and continues
     notes: Includes general firm/media items — filter to law alerts / ERISA categories.
     scans: [fhw, met, cyb]
     active: true

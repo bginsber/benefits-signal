@@ -17,17 +17,41 @@ Outlook Classic subscribes to RSS by URL (right-click **RSS Feeds** in the folde
 
 **Option A — no infrastructure (works today).** Import `benefits-signal.opml` (File → Open & Export → Import/Export → Import RSS Feeds from an OPML file). Outlook subscribes directly to each source feed, including per-agency Federal Register feeds (the FR API's `.rss` variant is verified working). You get one Outlook folder per source rather than one collated feed, and no collation script needs to run anywhere.
 
-**Option B — one collated feed via GitHub Pages (set up; needs one push).** Everything is staged in this repo: `.github/workflows/collate.yml` runs the collector daily at ~5:17am Pacific (plus on demand via workflow_dispatch) and deploys `collated.xml` to GitHub Pages; the collector reads `FEED_URL` from the environment so the channel link self-configures to the Pages URL. To go live from this folder:
+**Option B — one collated feed via GitHub Pages (live).** The repo is public at `github.com/bginsber/benefits-signal`; `.github/workflows/collate.yml` runs the collector daily at ~5:17am Pacific (12:17 UTC, plus on demand via workflow_dispatch and on any push touching the collector or the workflow) and deploys `collated.xml` to GitHub Pages. The collector reads `FEED_URL` from the environment so the channel link self-configures to the Pages URL. It was brought up with:
 
 ```
 git init -b main && git add -A && git commit -m "Benefits Signal prototype + Phase 0 collector"
-gh repo create benefits-signal --private --source . --push
+gh repo create benefits-signal --public --source . --push
 gh api repos/bginsber/benefits-signal/pages -X POST -f build_type=workflow
 gh workflow run collate.yml
 ```
 
-(The Pages API call can also be done in the repo's Settings → Pages → Source: GitHub Actions. A private repo needs GitHub Pro for Pages; on a free plan make the repo public — the feed contains only public regulatory material.)
+(The Pages API call can also be done in the repo's Settings → Pages → Source: GitHub Actions. A private repo needs GitHub Pro for Pages; on a free plan the repo must be public — the feed contains only public regulatory material, and the feed URL has to be public for Outlook to reach it anyway.)
 
-The feed lands at `https://bginsber.github.io/benefits-signal/collated.xml` — add that one URL in Outlook (right-click **RSS Feeds** → **Add a New RSS Feed…**). Pages serves a proper XML content type; do not use raw.githubusercontent.com, which serves `text/plain` and Outlook sometimes rejects. Note the Actions runner starts fresh each run, so `data/` is per-run scratch there; the durable document store arrives with the pipeline's Postgres in Phase 1.
+A single dead source does not block publishing: the collector emits a GitHub warning annotation per failed source (Wagner Law Group sits behind a Cloudflare managed challenge that 403s some clients by IP reputation: it blocked the first two Actions runs and a local machine on 2026-09-01, then passed on the third run, so expect it to come and go) and only fails the job when it collected nothing at all. Note the Actions runner starts fresh each run, so `data/` is per-run scratch there; the durable document store arrives with the pipeline's Postgres in Phase 1.
 
-A sample `public/collated.xml` from a live 2026-09-01 run is committed for inspection; `data/` is runtime output and should not be committed (add `data/` to `.gitignore` when the pipeline repo is initialized).
+### Subscribing in Outlook Classic — walkthrough
+
+The live feed is:
+
+```
+https://bginsber.github.io/benefits-signal/collated.xml
+```
+
+This needs **Outlook Classic** (the desktop app with the classic ribbon). The "new Outlook" toggle and Outlook on the web have no RSS reader; if the folder pane has no **RSS Feeds** folder, switch the toggle in the top-right corner off.
+
+1. In the folder pane, right-click **RSS Feeds** and choose **Add a New RSS Feed…**.
+2. Paste the feed URL above and click **Add**.
+3. Outlook asks whether to add this feed. Click **Advanced…** before confirming to set the options below, or click **Yes** to accept the defaults.
+4. In the Advanced dialog:
+   - **Feed name:** `Benefits Signal — Collated Sources` (prefilled from the channel title).
+   - **Delivery location:** leave under **RSS Feeds**, or click **Change Folder…** to route it into a shared or reviewed folder.
+   - **Downloads:** leave *Automatically download enclosures* unchecked (the feed has none) and leave *Download the full article as an .html attachment* unchecked; each item's `<description>` already carries the summary and the link opens the source document.
+   - **Update limit:** leave *Update this feed with the publisher's recommendation* checked. The feed advertises a 12-hour `<ttl>`, and it only changes once a day after the 5:17am Pacific run, so that cadence is enough.
+5. Click **OK**, then **Yes**. Press **F9** (Send/Receive All) to pull the first batch instead of waiting for the next scheduled sync. The first sync loads all 100 items in the feed; later syncs add only new ones.
+
+Each item arrives as a mail-like message in the feed folder with the source name in the title, the publish date, a summary, and a **View article** link to the original. Federal Register items with a comment deadline carry it in the summary. Outlook rules, categories, flags, and forwarding work on the feed folder as they do for mail.
+
+If Outlook shows "Cannot download the RSS content," check the URL in a browser first: Pages serves `application/xml` with the feed as an RSS 2.0 document, so a browser will render or offer to download it. Do not use raw.githubusercontent.com, which serves `text/plain` and Outlook sometimes rejects. Outlook does not re-fetch a feed it has decided is broken until you remove and re-add it (right-click the feed folder → **Delete Folder**, then repeat the steps above).
+
+A sample output from a live 2026-09-01 run is committed at `spec/sample-collated.xml` for inspection; `data/` and `_site/` are runtime output and are gitignored.
