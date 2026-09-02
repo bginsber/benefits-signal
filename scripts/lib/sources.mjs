@@ -40,7 +40,7 @@ export async function loadScans(file = path.join(ROOT, "spec", "scans.yaml")) {
 }
 
 /** Collector kinds the pipeline implements today. Add to this list as collectors land (goal M2). */
-export const IMPLEMENTED = ["rss", "federal-register"];
+export const IMPLEMENTED = ["rss", "federal-register", "courtlistener", "segal-insights", "mercer-search", "ca-das"];
 
 /**
  * Decide how a source is collected.

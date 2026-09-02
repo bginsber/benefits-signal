@@ -1,0 +1,675 @@
+{
+ "meta": {
+  "page": {
+   "size": 8
+  }
+ },
+ "results": [
+  {
+   "collection_id": {
+    "raw": "prd-mercer-dotcom-glb-en"
+   },
+   "title": {
+    "raw": "Employee experience design"
+   },
+   "description": {
+    "raw": "Mercer\u2019s employee experience design uses design-thinking principles to define and shape solutions to meet your people\u2019s needs more effectively and to bring out the best in them."
+   },
+   "content_type": {
+    "raw": "Article"
+   },
+   "template_type": {
+    "raw": "Article"
+   },
+   "lines_of_business": {
+    "raw": [
+     "Cross-LOB"
+    ]
+   },
+   "location": {
+    "raw": [
+     "Global All",
+     "Mercer Regions",
+     "Geography",
+     "Mercer V2 Tags"
+    ]
+   },
+   "language": {
+    "raw": "English"
+   },
+   "language_code": {
+    "raw": "en"
+   },
+   "modification_date": {
+    "raw": 1759783930781.0
+   },
+   "publication_date": {
+    "raw": 2639624400000.0
+   },
+   "event_start_date": {
+    "raw": null
+   },
+   "event_end_date": {
+    "raw": null
+   },
+   "solutions": {
+    "raw": [
+     "Employee experience",
+     "Talent & rewards",
+     "Benefits design",
+     "Benefits consulting",
+     "Health & benefits",
+     "Benefits engagement",
+     "Flexible working",
+     "Workforce strategy",
+     "Transformation",
+     "Change management",
+     "Total rewards",
+     "Rewards strategy",
+     "Skills taxonomies",
+     "Talent Frameworks",
+     "EX design",
+     "Employee listening",
+     "Employee communications"
+    ]
+   },
+   "insights": {
+    "raw": [
+     "Reward trends",
+     "Total rewards",
+     "Benefit strategies",
+     "Employee well-being",
+     "Attract & retain\u202ftalent",
+     "Talent & transformation",
+     "Flexible working",
+     "Digital strategy",
+     "People strategy",
+     "HR function"
+    ]
+   },
+   "function": {
+    "raw": [
+     "Benefits",
+     "Job function",
+     "CHRO",
+     "Compensation",
+     "Digital Technology",
+     "Engagement",
+     "Reward",
+     "Talent",
+     "Wellness"
+    ]
+   },
+   "card": {
+    "raw": "{\"content_type\":\"topic\",\"content_label\":\"Article\",\"title\":\"Employee experience design\",\"uri\":\"https://www.mercer.com/solutions/talent-and-rewards/employee-experience/employee-experience-design/\",\"description\":\"Mercer\u2019s employee experience design uses design-thinking principles to define and shape solutions to meet your people\u2019s needs more effectively and to bring out the best in them.\",\"kicker\":null,\"data_points\":{},\"ui_settings\":{\"focalPoint\":\"center\"},\"asset\":{\"square\":{\"id\":\"1bc296ed952a1bfd40656a60c8302fd2d14e17f2\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-863497498-group-discussion-in-office-1536x1536.jpg\",\"title\":\"863497498\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1536,\"width\":1536,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-863497498-group-discussion-in-office-1536x1536.jpg.transform/mdotcom-promo-xs/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-863497498-group-discussion-in-office-1536x1536.jpg.transform/mdotcom-promo-sm/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-863497498-group-discussion-in-office-1536x1536.jpg.transform/mdotcom-promo-xl/image.jpg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"Shot of a group of businesspeople sitting together in a meeting\"},\"sixteen_nine\":{\"id\":\"54941ae73a842de92c7b215eeeda233cf891d8e2\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-863497498-group-discussion-in-office-2880x1620.jpg\",\"title\":\"863497498\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1620,\"width\":2880,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-863497498-group-discussion-in-office-2880x1620.jpg.transform/mdotcom-promo-xs/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-863497498-group-discussion-in-office-2880x1620.jpg.transform/mdotcom-promo-sm/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-863497498-group-discussion-in-office-2880x1620.jpg.transform/mdotcom-promo-xl/image.jpg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"Shot of a group of businesspeople sitting together in a meeting\"}},\"cta\":{\"path\":\"https://www.mercer.com/solutions/talent-and-rewards/employee-experience/employee-experience-design/\",\"label\":\"Employee experience design\",\"title\":\"Employee experience design\",\"target\":\"_self\",\"icon\":\"right-arrow-large\",\"display\":\"text-link\",\"accessibility_label\":\"Employee experience design\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":false},\"internal\":true,\"empty\":false}"
+   },
+   "country_code": {
+    "raw": "mercer-dotcom:geography/locations/global-all"
+   },
+   "id": {
+    "raw": "cbdbab36f26d310379795a2ee584f46e9d373debb193bbe67b8c0821a94b8450"
+   }
+  },
+  {
+   "collection_id": {
+    "raw": "prd-mercer-dotcom-glb-en"
+   },
+   "title": {
+    "raw": "Risk management"
+   },
+   "description": {
+    "raw": "We can help you analyze your investment risk framework and portfolio performance to help you  understand your portfolio's potential to adapt to market challenges."
+   },
+   "content_type": {
+    "raw": "Article"
+   },
+   "template_type": {
+    "raw": "Article"
+   },
+   "lines_of_business": {
+    "raw": [
+     "Wealth"
+    ]
+   },
+   "location": {
+    "raw": [
+     "Global All",
+     "Mercer Regions",
+     "Geography",
+     "Mercer V2 Tags"
+    ]
+   },
+   "language": {
+    "raw": "English"
+   },
+   "language_code": {
+    "raw": "en"
+   },
+   "modification_date": {
+    "raw": 1696238104575.0
+   },
+   "publication_date": {
+    "raw": 2638843200000.0
+   },
+   "event_start_date": {
+    "raw": null
+   },
+   "event_end_date": {
+    "raw": null
+   },
+   "solutions": {
+    "raw": [
+     "Investment risk",
+     "Investments governance",
+     "Investments",
+     "Outsourced CIO",
+     "Mercer Sentinel",
+     "Insurance companies",
+     "NFP organizations",
+     "Wealth managers",
+     "Family offices"
+    ]
+   },
+   "insights": {
+    "raw": []
+   },
+   "function": {
+    "raw": [
+     "CEO",
+     "Job function",
+     "CFO",
+     "CHRO",
+     "CIO",
+     "COO",
+     "Finance",
+     "Investment"
+    ]
+   },
+   "card": {
+    "raw": "{\"content_type\":\"topic\",\"content_label\":\"Article\",\"title\":\"Risk management\",\"uri\":\"https://www.mercer.com/solutions/investments/investment-solutions-and-ocio/risk-management/\",\"description\":\"We can help you analyze your investment risk framework and portfolio performance to help you  understand your portfolio's potential to adapt to market challenges.\",\"kicker\":null,\"data_points\":{},\"ui_settings\":{\"focalPoint\":\"center\"},\"asset\":{\"square\":{\"id\":\"beae52ca83d3f16996d596a85ace6ec88e0ce6db\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-1070958816-post-it-note-meeting-1536x1536.jpg\",\"title\":\"1070958816\",\"credit\":\"Gary Burchell\",\"type\":\"image/jpeg\",\"height\":1536,\"width\":1536,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-1070958816-post-it-note-meeting-1536x1536.jpg.transform/mdotcom-promo-xs/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-1070958816-post-it-note-meeting-1536x1536.jpg.transform/mdotcom-promo-sm/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-1070958816-post-it-note-meeting-1536x1536.jpg.transform/mdotcom-promo-xl/image.jpg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"Businessman mentoring female colleague, discussing business strategy, using sticky notes to plan and solve problems, brainstorming, innovation\"},\"sixteen_nine\":{\"id\":\"ed54c0948709a414d9ad6e43d75e768186272518\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-1070958816-post-it-note-meeting-2880x1620.jpg\",\"title\":\"1070958816\",\"credit\":\"Gary Burchell\",\"type\":\"image/jpeg\",\"height\":1620,\"width\":2880,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-1070958816-post-it-note-meeting-2880x1620.jpg.transform/mdotcom-promo-xs/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-1070958816-post-it-note-meeting-2880x1620.jpg.transform/mdotcom-promo-sm/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-1070958816-post-it-note-meeting-2880x1620.jpg.transform/mdotcom-promo-xl/image.jpg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"Businessman mentoring female colleague, discussing business strategy, using sticky notes to plan and solve problems, brainstorming, innovation\"}},\"cta\":{\"path\":\"https://www.mercer.com/solutions/investments/investment-solutions-and-ocio/risk-management/\",\"label\":\"Risk management\",\"title\":\"Risk management\",\"target\":\"_self\",\"icon\":\"right-arrow-large\",\"display\":\"text-link\",\"accessibility_label\":\"Risk management\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":false},\"internal\":true,\"empty\":false}"
+   },
+   "country_code": {
+    "raw": "mercer-dotcom:geography/locations/global-all"
+   },
+   "id": {
+    "raw": "d0ed8c37088ce3b34bd389d1dab66dbb7306b2d401ce9ccd31d41d7b58ef3136"
+   }
+  },
+  {
+   "collection_id": {
+    "raw": "prd-mercer-dotcom-glb-en"
+   },
+   "title": {
+    "raw": "Executive compensation"
+   },
+   "description": {
+    "raw": "Designing competitive executive compensation and policies that align with business strategy while incentivizing top talent can be challenging.\r\nWe can help you factor in all the critical considerations, so you can achieve the most compelling and effective executive compensation and reward plans.   "
+   },
+   "content_type": {
+    "raw": "Image"
+   },
+   "template_type": {
+    "raw": "Image"
+   },
+   "lines_of_business": {
+    "raw": [
+     "Career"
+    ]
+   },
+   "location": {
+    "raw": [
+     "Global All",
+     "Mercer Regions",
+     "Geography",
+     "Mercer V2 Tags"
+    ]
+   },
+   "language": {
+    "raw": "English"
+   },
+   "language_code": {
+    "raw": "en"
+   },
+   "modification_date": {
+    "raw": 1778540912712.0
+   },
+   "publication_date": {
+    "raw": 2637032400000.0
+   },
+   "event_start_date": {
+    "raw": null
+   },
+   "event_end_date": {
+    "raw": null
+   },
+   "solutions": {
+    "raw": [
+     "Executive compensation",
+     "Talent & rewards",
+     "Pay equity",
+     "Rewards strategy",
+     "Compensation data",
+     "Employee retention"
+    ]
+   },
+   "insights": {
+    "raw": [
+     "Exec comp trends",
+     "Total rewards",
+     "Attract & retain\u202ftalent",
+     "Talent & transformation"
+    ]
+   },
+   "function": {
+    "raw": [
+     "CEO",
+     "Job function",
+     "CFO",
+     "CHRO",
+     "Compensation",
+     "Corporate Social Responsibility",
+     "Corporate Strategy",
+     "Diversity and Inclusion",
+     "Finance",
+     "Human Resources",
+     "Legal",
+     "Mobility",
+     "Remuneration Committee",
+     "Reward"
+    ]
+   },
+   "card": {
+    "raw": "{\"content_type\":\"collection\",\"content_label\":\"Image\",\"title\":\"Executive compensation\",\"uri\":\"https://www.mercer.com/solutions/talent-and-rewards/executive-compensation/\",\"description\":\"Designing competitive executive compensation and policies that align with business strategy while incentivizing top talent can be challenging.\\r\\nWe can help you factor in all the critical considerations, so you can achieve the most compelling and effective executive compensation and reward plans.   \",\"kicker\":null,\"data_points\":{},\"ui_settings\":{\"focalPoint\":\"center\"},\"asset\":{\"square\":{\"id\":\"97d7275aeeb265b29bd565eeeca04dd2cfbed2cb\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-539253365-close-up-candid-office-worker-shallow-depth-of-field-1536x1536.jpg\",\"title\":\"539253365\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1536,\"width\":1536,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-539253365-close-up-candid-office-worker-shallow-depth-of-field-1536x1536.jpg.transform/mdotcom-promo-xs/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-539253365-close-up-candid-office-worker-shallow-depth-of-field-1536x1536.jpg.transform/mdotcom-promo-sm/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-539253365-close-up-candid-office-worker-shallow-depth-of-field-1536x1536.jpg.transform/mdotcom-promo-xl/image.jpg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":null},\"sixteen_nine\":{\"id\":\"d530ff34c331cdecea2a5e9a6be69f918d38a604\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-539253365-close-up-candid-office-worker-shallow-depth-of-field-2880x1620.jpg\",\"title\":\"539253365\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1620,\"width\":2880,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-539253365-close-up-candid-office-worker-shallow-depth-of-field-2880x1620.jpg.transform/mdotcom-promo-xs/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-539253365-close-up-candid-office-worker-shallow-depth-of-field-2880x1620.jpg.transform/mdotcom-promo-sm/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-539253365-close-up-candid-office-worker-shallow-depth-of-field-2880x1620.jpg.transform/mdotcom-promo-xl/image.jpg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":null}},\"cta\":{\"path\":\"https://www.mercer.com/solutions/talent-and-rewards/executive-compensation/\",\"label\":\"Executive compensation\",\"title\":\"Executive compensation\",\"target\":\"_self\",\"icon\":\"right-arrow-large\",\"display\":\"text-link\",\"accessibility_label\":\"Executive compensation\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":false},\"internal\":true,\"empty\":false}"
+   },
+   "country_code": {
+    "raw": "mercer-dotcom:geography/locations/global-all"
+   },
+   "id": {
+    "raw": "2107e14ef059be8d25c545e09892b27bb3362b97dae42214faf015bd0cc1d6fb"
+   }
+  },
+  {
+   "collection_id": {
+    "raw": "prd-mercer-dotcom-glb-en"
+   },
+   "title": {
+    "raw": "Roundup: Global employer resources on artificial intelligence"
+   },
+   "description": {
+    "raw": "Artificial intelligence is becoming a permanent feature of the workplace and poses challenges/considerations as it reshapes work. This roundup provides general information about AI."
+   },
+   "content_type": {
+    "raw": "Article"
+   },
+   "template_type": {
+    "raw": "Article"
+   },
+   "lines_of_business": {
+    "raw": [
+     "Cross-LOB"
+    ]
+   },
+   "location": {
+    "raw": [
+     "Global All",
+     "Mercer Regions",
+     "Geography",
+     "Mercer V2 Tags"
+    ]
+   },
+   "language": {
+    "raw": "English"
+   },
+   "language_code": {
+    "raw": "en"
+   },
+   "modification_date": {
+    "raw": 1787543550490.0
+   },
+   "publication_date": {
+    "raw": 1786905000000.0
+   },
+   "event_start_date": {
+    "raw": null
+   },
+   "event_end_date": {
+    "raw": null
+   },
+   "solutions": {
+    "raw": [
+     "Workforce strategy",
+     "Transformation"
+    ]
+   },
+   "insights": {
+    "raw": [
+     "Law & Policy",
+     "Global",
+     "Future of work",
+     "People strategy",
+     "Digital strategy",
+     "Career",
+     "Wealth",
+     "Health"
+    ]
+   },
+   "function": {
+    "raw": [
+     "Communications",
+     "Job function",
+     "Digital Technology"
+    ]
+   },
+   "card": {
+    "raw": "{\"content_type\":\"insight-article\",\"content_label\":\"Article\",\"title\":\"Roundup: Global employer resources on artificial intelligence\",\"uri\":\"https://www.mercer.com/insights/law-and-policy/roundup-global-employer-resources-on-artificial-intelligence/\",\"description\":\"Artificial intelligence is becoming a permanent feature of the workplace and poses challenges/considerations as it reshapes work. This roundup provides general information about AI.\",\"kicker\":{\"path\":\"https://www.mercer.com/insights/law-and-policy/\",\"label\":\"Law & Policy\",\"title\":\"Law & Policy\",\"target\":\"_self\",\"icon\":null,\"display\":\"text-link\",\"accessibility_label\":\"Law & Policy\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":true},\"data_points\":{\"contributorJob\":\"Principal, Mercer\u2019s Law & Policy Group\",\"readTime\":null,\"contributorBioPage\":\"https://www.linkedin.com/in/stephanie-rosseau-27528441\",\"publicationDate\":\"16 August 2026\",\"contributorName\":\"Stephanie Rosseau\"},\"ui_settings\":{\"focalPoint\":\"center\"},\"asset\":{\"square\":{\"id\":\"2989a84808a9cf75f3bacf54f1d23f5bedbc5b03\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-1677544360-robots-working-on-a-semiconductor-wafer-in-a-lab-setting-1536x1536.jpeg\",\"title\":\"1677544360\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1536,\"width\":1536,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-1677544360-robots-working-on-a-semiconductor-wafer-in-a-lab-setting-1536x1536.jpeg.transform/mdotcom-promo-xs/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-1677544360-robots-working-on-a-semiconductor-wafer-in-a-lab-setting-1536x1536.jpeg.transform/mdotcom-promo-sm/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-1677544360-robots-working-on-a-semiconductor-wafer-in-a-lab-setting-1536x1536.jpeg.transform/mdotcom-promo-xl/image.jpeg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"robots-working-on-a-semiconductor-wafer-in-a-lab-setting\"},\"sixteen_nine\":{\"id\":\"087f51c764968f5e2880da0b3cf7026d9faf0619\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-1677544360-robots-working-on-a-semiconductor-wafer-in-a-lab-setting-2880x1620.jpeg\",\"title\":\"1677544360\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1620,\"width\":2880,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-1677544360-robots-working-on-a-semiconductor-wafer-in-a-lab-setting-2880x1620.jpeg.transform/mdotcom-promo-xs/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-1677544360-robots-working-on-a-semiconductor-wafer-in-a-lab-setting-2880x1620.jpeg.transform/mdotcom-promo-sm/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-1677544360-robots-working-on-a-semiconductor-wafer-in-a-lab-setting-2880x1620.jpeg.transform/mdotcom-promo-xl/image.jpeg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"robots-working-on-a-semiconductor-wafer-in-a-lab-setting\"}},\"cta\":{\"path\":\"https://www.mercer.com/insights/law-and-policy/roundup-global-employer-resources-on-artificial-intelligence/\",\"label\":\"Roundup: Global employer resources on artificial intelligence\",\"title\":\"Roundup: Global employer resources on artificial intelligence\",\"target\":\"_self\",\"icon\":\"right-arrow-large\",\"display\":\"text-link\",\"accessibility_label\":\"Roundup: Global employer resources on artificial intelligence\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":false},\"internal\":true,\"empty\":false}"
+   },
+   "country_code": {
+    "raw": "mercer-dotcom:geography/locations/global-all"
+   },
+   "id": {
+    "raw": "3c09d0fdec35175d576303a9241972150d55ce96e7734acab49c46ad257a1397"
+   }
+  },
+  {
+   "collection_id": {
+    "raw": "prd-mercer-dotcom-glb-en"
+   },
+   "title": {
+    "raw": "Roundup: Employer resources on EU\u2019s Pay Transparency Directive "
+   },
+   "description": {
+    "raw": "European Union Directive 2023/970 aims to improve pay transparency, encourage organizations to review their pay structures, and enable individuals to enforce their equal pay rights. Under the directive, employers with 100 or more employees must publish an annual gender pay gap report."
+   },
+   "content_type": {
+    "raw": "Legal content"
+   },
+   "template_type": {
+    "raw": "Legal content"
+   },
+   "lines_of_business": {
+    "raw": []
+   },
+   "location": {
+    "raw": [
+     "Global All",
+     "Mercer Regions",
+     "Geography",
+     "Mercer V2 Tags"
+    ]
+   },
+   "language": {
+    "raw": "English"
+   },
+   "language_code": {
+    "raw": "en"
+   },
+   "modification_date": {
+    "raw": 1787037739992.0
+   },
+   "publication_date": {
+    "raw": 1786905000000.0
+   },
+   "event_start_date": {
+    "raw": null
+   },
+   "event_end_date": {
+    "raw": null
+   },
+   "solutions": {
+    "raw": [
+     "Total rewards",
+     "Rewards strategy",
+     "Talent & rewards"
+    ]
+   },
+   "insights": {
+    "raw": [
+     "Law & Policy",
+     "Career"
+    ]
+   },
+   "function": {
+    "raw": [
+     "Compliance",
+     "Job function",
+     "Benefits",
+     "Legal",
+     "Administration",
+     "Pension - Corporate",
+     "Pension - Trustee"
+    ]
+   },
+   "card": {
+    "raw": "{\"content_type\":\"insight-legal-content\",\"content_label\":\"Legal content\",\"title\":\"Roundup: Employer resources on EU\u2019s Pay Transparency Directive \",\"uri\":\"https://www.mercer.com/insights/law-and-policy/roundup-employer-resources-on-eus-pay-transparency-directive/\",\"description\":\"European Union Directive 2023/970 aims to improve pay transparency, encourage organizations to review their pay structures, and enable individuals to enforce their equal pay rights. Under the directive, employers with 100 or more employees must publish an annual gender pay gap report.\",\"kicker\":{\"path\":\"https://www.mercer.com/insights/law-and-policy/\",\"label\":\"Law & Policy\",\"title\":\"Law & Policy\",\"target\":\"_self\",\"icon\":null,\"display\":\"text-link\",\"accessibility_label\":\"Law & Policy\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":true},\"data_points\":{\"contributorJob\":\"Principal, Mercer\u2019s Law & Policy Group\",\"readTime\":null,\"contributorBioPage\":\"https://www.linkedin.com/in/fionawebster/\",\"publicationDate\":\"16 August 2026\",\"contributorName\":\"Fiona Webster\"},\"ui_settings\":{\"focalPoint\":\"center\"},\"asset\":{\"square\":{\"id\":\"c2b5506ac5a881973c7852dde98a33504699c89f\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-2161843361-business-meeting-in-a-modern-office-space-during-the-day-1536x1536.jpeg\",\"title\":\"2161843361\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1536,\"width\":1536,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-2161843361-business-meeting-in-a-modern-office-space-during-the-day-1536x1536.jpeg.transform/mdotcom-promo-xs/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-2161843361-business-meeting-in-a-modern-office-space-during-the-day-1536x1536.jpeg.transform/mdotcom-promo-sm/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-2161843361-business-meeting-in-a-modern-office-space-during-the-day-1536x1536.jpeg.transform/mdotcom-promo-xl/image.jpeg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"Business meeting in a modern office space during the day\"},\"sixteen_nine\":{\"id\":\"3440ed96da50c9edaf1ffe5284ff15ac75edfd85\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-2161843361-business-meeting-in-a-modern-office-space-during-the-day-2880x1620.jpeg\",\"title\":\"2161843361\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1620,\"width\":2880,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-2161843361-business-meeting-in-a-modern-office-space-during-the-day-2880x1620.jpeg.transform/mdotcom-promo-xs/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-2161843361-business-meeting-in-a-modern-office-space-during-the-day-2880x1620.jpeg.transform/mdotcom-promo-sm/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-2161843361-business-meeting-in-a-modern-office-space-during-the-day-2880x1620.jpeg.transform/mdotcom-promo-xl/image.jpeg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"Business meeting in a modern office space during the day\"}},\"cta\":{\"path\":\"https://www.mercer.com/insights/law-and-policy/roundup-employer-resources-on-eus-pay-transparency-directive/\",\"label\":\"Roundup: Employer resources on EU\u2019s Pay Transparency Directive \",\"title\":\"Roundup: Employer resources on EU\u2019s Pay Transparency Directive \",\"target\":\"_self\",\"icon\":\"right-arrow-large\",\"display\":\"text-link\",\"accessibility_label\":\"Roundup: Employer resources on EU\u2019s Pay Transparency Directive \",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":false},\"internal\":true,\"empty\":false}"
+   },
+   "country_code": {
+    "raw": "mercer-dotcom:geography/locations/global-all"
+   },
+   "id": {
+    "raw": "0343799b90ffb44e65e76df27869dd7ee3a86b888849716e2bb865ee3199012c"
+   }
+  },
+  {
+   "collection_id": {
+    "raw": "prd-mercer-dotcom-glb-en"
+   },
+   "title": {
+    "raw": "Roundup: Employer resources on the changing landscape of DEI"
+   },
+   "description": {
+    "raw": "President Trump\u2019s administration has adopted a firm stance against DEI programs in both the federal government and private sectors. This roundup provides links to government information and other viewpoints."
+   },
+   "content_type": {
+    "raw": "Article"
+   },
+   "template_type": {
+    "raw": "Article"
+   },
+   "lines_of_business": {
+    "raw": []
+   },
+   "location": {
+    "raw": [
+     "Global All",
+     "Mercer Regions",
+     "Geography",
+     "Mercer V2 Tags"
+    ]
+   },
+   "language": {
+    "raw": "English"
+   },
+   "language_code": {
+    "raw": "en"
+   },
+   "modification_date": {
+    "raw": 1787121723588.0
+   },
+   "publication_date": {
+    "raw": 1786905000000.0
+   },
+   "event_start_date": {
+    "raw": null
+   },
+   "event_end_date": {
+    "raw": null
+   },
+   "solutions": {
+    "raw": []
+   },
+   "insights": {
+    "raw": [
+     "Law & Policy",
+     "Global",
+     "Career",
+     "Diversity & inclusion",
+     "Federal laws and regulations"
+    ]
+   },
+   "function": {
+    "raw": [
+     "Benefits",
+     "Job function",
+     "Talent"
+    ]
+   },
+   "card": {
+    "raw": "{\"content_type\":\"insight-article\",\"content_label\":\"Article\",\"title\":\"Roundup: Employer resources on the changing landscape of DEI\",\"uri\":\"https://www.mercer.com/insights/law-and-policy/roundup-employer-dei-resources-after-scotus-ruling-on-affirmative-action/\",\"description\":\"President Trump\u2019s administration has adopted a firm stance against DEI programs in both the federal government and private sectors. This roundup provides links to government information and other viewpoints.\",\"kicker\":{\"path\":\"https://www.mercer.com/insights/law-and-policy/\",\"label\":\"Law & Policy\",\"title\":\"Law & Policy\",\"target\":\"_self\",\"icon\":null,\"display\":\"text-link\",\"accessibility_label\":\"Law & Policy\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":true},\"data_points\":{\"contributorJob\":\"Principal, Mercer\u2019s Law & Policy Group\",\"readTime\":null,\"contributorBioPage\":\"https://www.linkedin.com/in/stephanie-rosseau-27528441\",\"publicationDate\":\"16 August 2026\",\"contributorName\":\"Stephanie Rosseau\"},\"ui_settings\":{\"focalPoint\":\"center\"},\"asset\":{\"square\":{\"id\":\"3a4087a8bc7ba27b69df5ba0025c3d09d732a7bd\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-900217040-family-time-at-a-cafe-with-child-enjoying-snacks-1536x1536.jpg\",\"title\":\"900217040\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1536,\"width\":1536,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-900217040-family-time-at-a-cafe-with-child-enjoying-snacks-1536x1536.jpg.transform/mdotcom-promo-xs/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-900217040-family-time-at-a-cafe-with-child-enjoying-snacks-1536x1536.jpg.transform/mdotcom-promo-sm/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-900217040-family-time-at-a-cafe-with-child-enjoying-snacks-1536x1536.jpg.transform/mdotcom-promo-xl/image.jpg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"Family time at cafe\"},\"sixteen_nine\":{\"id\":\"a4f93fdb26b0d132a99e2042ecc6204097edc442\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-900217040-family-time-at-a-cafe-with-child-enjoying-snacks-2880x1620.jpg\",\"title\":\"900217040\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1620,\"width\":2880,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-900217040-family-time-at-a-cafe-with-child-enjoying-snacks-2880x1620.jpg.transform/mdotcom-promo-xs/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-900217040-family-time-at-a-cafe-with-child-enjoying-snacks-2880x1620.jpg.transform/mdotcom-promo-sm/image.jpg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-900217040-family-time-at-a-cafe-with-child-enjoying-snacks-2880x1620.jpg.transform/mdotcom-promo-xl/image.jpg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"Family time at cafe\"}},\"cta\":{\"path\":\"https://www.mercer.com/insights/law-and-policy/roundup-employer-dei-resources-after-scotus-ruling-on-affirmative-action/\",\"label\":\"Roundup: Employer resources on the changing landscape of DEI\",\"title\":\"Roundup: Employer resources on the changing landscape of DEI\",\"target\":\"_self\",\"icon\":\"right-arrow-large\",\"display\":\"text-link\",\"accessibility_label\":\"Roundup: Employer resources on the changing landscape of DEI\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":false},\"internal\":true,\"empty\":false}"
+   },
+   "country_code": {
+    "raw": "mercer-dotcom:geography/locations/global-all"
+   },
+   "id": {
+    "raw": "0baa6b147440c2b48585eaa2bc7f007e33c308baae363c2335e70c5d3560d634"
+   }
+  },
+  {
+   "collection_id": {
+    "raw": "prd-mercer-dotcom-glb-en"
+   },
+   "title": {
+    "raw": "Workday rising conference 2026"
+   },
+   "description": {
+    "raw": "Join us at Workday Rising 2026 in Las Vegas (Oct 12\u201315) for AI innovation, practical insights, and networking to maximize your Workday investment."
+   },
+   "content_type": {
+    "raw": null
+   },
+   "template_type": {
+    "raw": null
+   },
+   "lines_of_business": {
+    "raw": [
+     "Career"
+    ]
+   },
+   "location": {
+    "raw": [
+     "United States",
+     "United States + Canada",
+     "Mercer Regions",
+     "Geography",
+     "Mercer V2 Tags"
+    ]
+   },
+   "language": {
+    "raw": "English (United States)"
+   },
+   "language_code": {
+    "raw": "en_US"
+   },
+   "modification_date": {
+    "raw": 1786739571207.0
+   },
+   "publication_date": {
+    "raw": 1786734660000.0
+   },
+   "event_start_date": {
+    "raw": null
+   },
+   "event_end_date": {
+    "raw": null
+   },
+   "solutions": {
+    "raw": []
+   },
+   "insights": {
+    "raw": []
+   },
+   "function": {
+    "raw": []
+   },
+   "card": {
+    "raw": "{\"content_type\":\"event-detail\",\"content_label\":null,\"title\":\"Workday rising conference 2026\",\"uri\":\"https://www.mercer.com/en-us/insights/events/workday-rising-conference-2026/\",\"description\":\"Join us at Workday Rising 2026 in Las Vegas (Oct 12\u201315) for AI innovation, practical insights, and networking to maximize your Workday investment.\",\"kicker\":null,\"data_points\":{\"displayTime\":null,\"displayLocation\":null,\"displayDate\":null},\"ui_settings\":{\"focalPoint\":\"center\"},\"asset\":{\"square\":{\"id\":\"b904b35130b73804c1cb3e4e7df145556a5286e4\",\"uri\":\"https://www.mercer.com/assets/us/en_us/mercer-brand/full-bleed-images/1536x1536/People-walk-in-hallway-AdobeStock-332175808-1536x1536.jpeg\",\"title\":null,\"credit\":null,\"type\":\"image/jpeg\",\"height\":1536,\"width\":1536,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/us/en_us/mercer-brand/full-bleed-images/1536x1536/People-walk-in-hallway-AdobeStock-332175808-1536x1536.jpeg.transform/mdotcom-promo-xs/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/us/en_us/mercer-brand/full-bleed-images/1536x1536/People-walk-in-hallway-AdobeStock-332175808-1536x1536.jpeg.transform/mdotcom-promo-sm/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/us/en_us/mercer-brand/full-bleed-images/1536x1536/People-walk-in-hallway-AdobeStock-332175808-1536x1536.jpeg.transform/mdotcom-promo-xl/image.jpeg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":null},\"sixteen_nine\":{\"id\":\"199ac078084da0ffa172060704c941537bf81b23\",\"uri\":\"https://www.mercer.com/assets/us/en_us/mercer-brand/full-bleed-images/2880x1620/People-walk-in-hallway-AdobeStock-332175808-2880x1620.jpeg\",\"title\":null,\"credit\":null,\"type\":\"image/jpeg\",\"height\":1620,\"width\":2880,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/us/en_us/mercer-brand/full-bleed-images/2880x1620/People-walk-in-hallway-AdobeStock-332175808-2880x1620.jpeg.transform/mdotcom-promo-xs/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/us/en_us/mercer-brand/full-bleed-images/2880x1620/People-walk-in-hallway-AdobeStock-332175808-2880x1620.jpeg.transform/mdotcom-promo-sm/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/us/en_us/mercer-brand/full-bleed-images/2880x1620/People-walk-in-hallway-AdobeStock-332175808-2880x1620.jpeg.transform/mdotcom-promo-xl/image.jpeg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":null}},\"cta\":{\"path\":\"https://www.mercer.com/en-us/insights/events/workday-rising-conference-2026/\",\"label\":\"Workday rising conference 2026\",\"title\":\"Workday rising conference 2026\",\"target\":\"_self\",\"icon\":\"right-arrow-large\",\"display\":\"text-link\",\"accessibility_label\":\"Workday rising conference 2026\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":false},\"internal\":true,\"empty\":false}"
+   },
+   "country_code": {
+    "raw": "mercer-dotcom:geography/locations/united-states"
+   },
+   "id": {
+    "raw": "82279297cfaf7c06d29c1f9ee693be64c306d06cb645a285e29f3ea7add4e683"
+   }
+  },
+  {
+   "collection_id": {
+    "raw": "prd-mercer-dotcom-glb-en"
+   },
+   "title": {
+    "raw": "Latest pension risk transfer ruling finds for sponsor"
+   },
+   "description": {
+    "raw": "The latest district court ruling in the recent spate of lawsuits challenging defined benefit plan pension risk transfers went in favor of the plan sponsor."
+   },
+   "content_type": {
+    "raw": "Legal content"
+   },
+   "template_type": {
+    "raw": "Legal content"
+   },
+   "lines_of_business": {
+    "raw": []
+   },
+   "location": {
+    "raw": [
+     "Global All",
+     "Mercer Regions",
+     "Geography",
+     "Mercer V2 Tags"
+    ]
+   },
+   "language": {
+    "raw": "English"
+   },
+   "language_code": {
+    "raw": "en"
+   },
+   "modification_date": {
+    "raw": 1786948125757.0
+   },
+   "publication_date": {
+    "raw": 1786645800000.0
+   },
+   "event_start_date": {
+    "raw": null
+   },
+   "event_end_date": {
+    "raw": null
+   },
+   "solutions": {
+    "raw": [
+     "Retirement",
+     "Pension Risk management",
+     "Employee pensions & savings"
+    ]
+   },
+   "insights": {
+    "raw": [
+     "Law & Policy",
+     "US wealth",
+     "Wealth",
+     "Federal laws and regulations"
+    ]
+   },
+   "function": {
+    "raw": [
+     "Compliance",
+     "Job function",
+     "Benefits",
+     "Legal",
+     "Administration",
+     "Pension - Corporate",
+     "Pension - Trustee"
+    ]
+   },
+   "card": {
+    "raw": "{\"content_type\":\"insight-legal-content\",\"content_label\":\"Legal content\",\"title\":\"Latest pension risk transfer ruling finds for sponsor\",\"uri\":\"https://www.mercer.com/insights/law-and-policy/latest-pension-risk-transfer-ruling-finds-for-sponsor/\",\"description\":\"The latest district court ruling in the recent spate of lawsuits challenging defined benefit plan pension risk transfers went in favor of the plan sponsor.\",\"kicker\":{\"path\":\"https://www.mercer.com/insights/law-and-policy/\",\"label\":\"Law & Policy\",\"title\":\"Law & Policy\",\"target\":\"_self\",\"icon\":null,\"display\":\"text-link\",\"accessibility_label\":\"Law & Policy\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":true},\"data_points\":{\"contributorJob\":\"Partner, Mercer\u2019s Law & Policy Group\",\"readTime\":null,\"contributorBioPage\":\"https://www.linkedin.com/in/margaret-berger-60568726/\",\"publicationDate\":\"13 August 2026\",\"contributorName\":\"Margaret Berger\"},\"ui_settings\":{\"focalPoint\":\"center\"},\"asset\":{\"square\":{\"id\":\"29a683e6b7c89521ff0d61dcd68b72d569b31be1\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-2275152803-woman-talking-to-colleagues-in-office-1536x1536.jpeg\",\"title\":\"2275152803\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1536,\"width\":1536,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-2275152803-woman-talking-to-colleagues-in-office-1536x1536.jpeg.transform/mdotcom-promo-xs/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-2275152803-woman-talking-to-colleagues-in-office-1536x1536.jpeg.transform/mdotcom-promo-sm/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/1536x1536/editorial-2275152803-woman-talking-to-colleagues-in-office-1536x1536.jpeg.transform/mdotcom-promo-xl/image.jpeg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"Woman talking to colleagues in office\"},\"sixteen_nine\":{\"id\":\"c58b2f94328d8223fde62db6e07d604aa5824791\",\"uri\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-2275152803-woman-talking-to-colleagues-in-office-2880x1620.jpeg\",\"title\":\"2275152803\",\"credit\":null,\"type\":\"image/jpeg\",\"height\":1620,\"width\":2880,\"renditions\":[{\"name\":\"mdotcom-promo-xs\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-2275152803-woman-talking-to-colleagues-in-office-2880x1620.jpeg.transform/mdotcom-promo-xs/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-sm\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-2275152803-woman-talking-to-colleagues-in-office-2880x1620.jpeg.transform/mdotcom-promo-sm/image.jpeg\",\"mime_type\":\"image/jpeg\"},{\"name\":\"mdotcom-promo-xl\",\"path\":\"https://www.mercer.com/assets/global/en/mercer-brand/full-bleed-images/2880x1620/editorial-2275152803-woman-talking-to-colleagues-in-office-2880x1620.jpeg.transform/mdotcom-promo-xl/image.jpeg\",\"mime_type\":\"image/jpeg\"}],\"alt_text\":\"Woman talking to colleagues in office\"}},\"cta\":{\"path\":\"https://www.mercer.com/insights/law-and-policy/latest-pension-risk-transfer-ruling-finds-for-sponsor/\",\"label\":\"Latest pension risk transfer ruling finds for sponsor\",\"title\":\"Latest pension risk transfer ruling finds for sponsor\",\"target\":\"_self\",\"icon\":\"right-arrow-large\",\"display\":\"text-link\",\"accessibility_label\":\"Latest pension risk transfer ruling finds for sponsor\",\"tracking_codes\":[],\"isInternal\":true,\"isKicker\":false},\"internal\":true,\"empty\":false}"
+   },
+   "country_code": {
+    "raw": "mercer-dotcom:geography/locations/global-all"
+   },
+   "id": {
+    "raw": "77865b5e980878831e3c345b41b1aefaf448f4c34afd8426f82eddf97dc404f3"
+   }
+  }
+ ]
+}

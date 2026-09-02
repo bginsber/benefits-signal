@@ -17,8 +17,14 @@ interpretation:
 
   - name: Mercer Law & Policy Group
     id: mercer
-    method: scrape                    # no RSS declared
+    method: scrape                    # no RSS declared; listing is JS-rendered
     url: https://www.mercer.com/insights/law-and-policy/
+    collector: mercer-search          # the page's own search backend (Elastic App Search), verified 2026-09-01
+    search_endpoint: https://mer-us-ue1-elastic-prd-dotcom.ent.us-east-1.aws.found.io
+    search_engine: prd-mercer-dotcom-glb-en
+    search_key: search-g6unhkn3scaaybwpwtq3qfq2   # public read-only search key embedded in the page for every visitor; not a secret
+    query: law and policy
+    path_prefix: /insights/law-and-policy/       # keep only law-and-policy articles from the search results
     notes: Listing may be partly JS-loaded — verify the scraper sees article cards.
            Backup: monthly Global Legislative Update email signup on the same page.
     scans: [fhw]
@@ -28,6 +34,8 @@ interpretation:
     id: segal
     method: scrape-js                 # raw HTML shows zero articles; JS-rendered listing
     url: https://www.segalco.com/consulting-insights/compliance-news/
+    collector: segal-insights         # the listing's own JSON endpoint (Umbraco), verified 2026-09-01; startNode 1192 = Compliance News
+    api: https://www.segalco.com/Umbraco/Api/getinsights/getInsights?startNode=1192
     notes: Needs headless rendering or the underlying XHR/JSON endpoint (find during Phase 0).
            Pre-Sep-2024 content lives in a separate insights archive.
     scans: [fhw, met]
@@ -105,6 +113,9 @@ primary:
     id: courtlistener
     method: api
     url: https://www.courtlistener.com/api/rest/v4/search/
+    collector: courtlistener          # anonymous search works; COURTLISTENER_TOKEN env var is sent when present
+    court: ca9
+    query: ERISA OR "employee benefit plan" OR "Taft-Hartley" OR "Mental Health Parity"
     auth: none-for-search               # docket alerts endpoint requires a free account token
     notes: >
       Verified: ?q=ERISA&type=o&court=ca9&order_by=dateFiled+desc returns Ninth Circuit
@@ -168,6 +179,7 @@ primary:
   - name: California DAS / DIR / CAC
     id: ca-das
     method: scrape
+    collector: ca-das                 # DIR "What's New" table and CAC meeting tables; plain HTML
     urls:
       - https://www.dir.ca.gov/das/das.html                # DAS home (verified)
       - https://www.dir.ca.gov/das/publicworks.html        # public-works apprenticeship (verified)

@@ -7,7 +7,7 @@ Companion to `spec/horizon-scanning-goal.md`. The loop appends one entry per ite
 | Milestone | Status | Last verified |
 |---|---|---|
 | M1 · Scans and sources become data | done | iteration 1, 2026-09-01 |
-| M2 · Close the source gaps | not started | |
+| M2 · Close the source gaps | done | iteration 2, 2026-09-01 |
 | M3 · Normalize and scan-match | not started | |
 | M4 · Cluster, verify, assess | not started | |
 | M5 · Weekly candidate digest | not started | |
@@ -55,4 +55,37 @@ Follow-ups (left alone):
 - `spec/README-collector.md` still says the collected subset is "mirrored" in the script; now it is read from config. One-line doc update when M2 changes that section anyway.
 - `node_modules` was not installed locally; `npm ci` was needed before `npm run build` worked. Not a repo defect.
 - Wagner 403 (Cloudflare challenge) persists locally; retry-and-backoff is scheduled for M2.
+Blocked: nothing.
+
+## Iteration 2 · 2026-09-01 · Milestone M2
+Slice: collectors for CourtListener, California DAS/CAC, Mercer, Segal; retry-and-backoff; source-silent notice.
+Done:
+- `scripts/lib/collectors.mjs` (new): `fetchText` with two retries and 1s/3s backoff on 403/408/425/429/5xx and network errors; `parseRss`, `fetchFederalRegister` moved here from collect.mjs; new pure parsers `parseCourtListener`, `parseSegalInsights`, `parseMercerSearch`, `parseDasPage`; fetchers; `collectSource(source, kind, window)` dispatch.
+- Endpoints found without a browser (all verified live 2026-09-01):
+  - CourtListener v4: `GET /api/rest/v4/search/?q=<query>&type=o&court=ca9&order_by=dateFiled desc&filed_after=YYYY-MM-DD`, anonymous OK, paginates via `next`; `COURTLISTENER_TOKEN` sent as `Authorization: Token …` when set. Query in config: `ERISA OR "employee benefit plan" OR "Taft-Hartley" OR "Mental Health Parity"`. Structured fields kept: docket_number, date_filed, cluster_id, court, citation, download_url (opinion PDF).
+  - Segal: the compliance-news page's own loader calls `GET https://www.segalco.com/Umbraco/Api/getinsights/getInsights?startNode=1192` (1192 = `#grid[data-cat]` on the page) → JSON list of {Name, Teaser, InsightDate "August 18, 2026", InsightUrl, FooterTags, InsightCat}. 66 items live.
+  - Mercer: `/insights/law-and-policy/` and `/health/` are JS-rendered; the page embeds an Elastic App Search endpoint (`data-endpoint-url`, `data-engine-name` prd-mercer-dotcom-glb-en, public read-only `data-api-key`). `POST {endpoint}/api/as/v1/engines/{engine}/search` with `{query:"law and policy", page:{size:100}, sort:[{publication_date:"desc"}]}`; each result's `card.raw` JSON carries `uri`; keep English results whose uri contains `/insights/law-and-policy/`. `publication_date.raw` is epoch ms.
+  - DAS/DIR: `das.html` "What's New" table rows `<td class="nowrap">DATE</td><td><a href=…>TITLE</a>`; `DAS_CACMeetings.html` meeting tables where a `Date:` row sets the date for following rows; name falls back to the last h2/h3 heading. `publicworks.html` and `cac.html` yield no dated items (reference pages) and stay configured.
+- `spec/sources.yaml`: `collector:` plus parameters on mercer (mercer-search), segal (segal-insights), courtlistener (courtlistener, court, query), ca-das (ca-das). The Mercer search key is the public browser key served to every visitor, noted as not a secret.
+- `scripts/lib/sources.mjs`: IMPLEMENTED now lists six collector kinds.
+- `scripts/lib/runlog.mjs` (new): `carryFailureCounts(runLog, previous, today)` adds `consecutive_failures` and `silent_since`; `SILENT_AFTER = 3`. collect.mjs reads the previous run log from `${FEED_URL dir}/run-log.json` when FEED_URL is set, else local `data/run-log.json`; emits `::warning title=Source silent::` at ≥3, `Source failed` below that. Run log is now written after counts are computed (first draft wrote it before; caught in the live run).
+- `.github/workflows/collate.yml`: copies `data/run-log.json` into `_site/` so the next run can read it from Pages.
+- `spec/README-collector.md`: "What it does" and "not yet collected" paragraphs rewritten for the config-driven collector.
+- Tests: `tests/collectors.test.mjs` (6 tests over fixtures `tests/fixtures/{courtlistener.json, segal-insights.json, mercer-search.json, das-whats-new.html, cac-meetings.html}`), `tests/runlog.test.mjs` (1). Fixtures are trimmed live responses.
+Evidence:
+```
+$ npm test                       → ℹ tests 16  ℹ pass 16  ℹ fail 0
+$ npm run test:sites             → ℹ pass 4  ℹ fail 0
+$ npm run build                  → ✓ built; Prepared Sites build; dist/ unchanged in git
+$ node scripts/collect.mjs --days 30
+ok Mercer Law & Policy Group: 12 / ok Segal Compliance News: 3 / ok Groom: 10 / ok Trucker Huss: 3 / FAIL Wagner: HTTP 403 (after 2 retries) / ok Word on Benefits: 9 / ok Federal Register API: 276 / ok CourtListener API: 2 / ok California DAS / DIR / CAC: 8
+323 unique items in window (25 newly stored)
+$ node scripts/collect.mjs --days 7 → run-log wagner row: {"ok":false,"error":"HTTP 403","consecutive_failures":1,"silent_since":"2026-09-02"}
+```
+Decisions taken by default: none reached yet.
+Assumptions: the CourtListener query terms stand in for the ca9 charter until scan-match (M3) can judge relevance; the search is deliberately broad and the matcher narrows. Future-dated CAC meeting notices pass the window filter on purpose (a notice is timely before the meeting). Wagner's Cloudflare challenge is not worked around; the silent notice will surface it if it persists.
+Follow-ups (left alone):
+- IRS and CMS newsrooms (`method: scrape`) still have no collector; not in M2's list.
+- Mercer's App Search returns some `solutions/` pages with far-future publication dates; the path-prefix filter drops them, but the epoch-date sort means a bad date could bury real items. Watch in M3 counts.
+- `data/run-log.json` rows from before this iteration lack `consecutive_failures`, so Wagner's count restarted at 1 today.
 Blocked: nothing.

@@ -35,6 +35,7 @@ jobs:
           FEED_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/collated.xml
         run: |
           node scripts/collect.mjs --days 30 --out _site/collated.xml
+          cp data/run-log.json _site/run-log.json
           cat > _site/index.html <<'EOF'
           <!doctype html><meta charset="utf-8"><title>Benefits Signal feed</title>
           <p>Benefits Signal collated source feed: <a href="collated.xml">collated.xml</a>.
