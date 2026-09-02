@@ -1,0 +1,46 @@
+{
+ "recorded": false,
+ "note": "hand-authored fixture in the model's output shape; re-record with `node scripts/triage.mjs --record --in tests/fixtures/collected` once credentials exist",
+ "model": "fixture",
+ "stop_reason": "end_turn",
+ "usage": {
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cache_read_input_tokens": 0
+ },
+ "data": {
+  "summary": "The IRS published a Paperwork Reduction Act notice requesting comment on the information-collection burden of the U.S. trust and estate income tax return forms. It states the estimated burden and the comment deadline.",
+  "matches": [
+   {
+    "scan_id": "fhw",
+    "score": 0.1,
+    "in_scope": false,
+    "reason": "A routine information-collection notice about trust and estate income tax forms; no welfare-plan rule, guidance, or obligation."
+   },
+   {
+    "scan_id": "met",
+    "score": 0.03,
+    "in_scope": false,
+    "reason": "Routine agency housekeeping unrelated to jointly administered plans."
+   },
+   {
+    "scan_id": "ca9",
+    "score": 0.01,
+    "in_scope": false,
+    "reason": "No California or Ninth Circuit content."
+   },
+   {
+    "scan_id": "cyb",
+    "score": 0.01,
+    "in_scope": false,
+    "reason": "No cybersecurity or privacy content."
+   },
+   {
+    "scan_id": "atf",
+    "score": 0.02,
+    "in_scope": false,
+    "reason": "No apprenticeship or training-fund content."
+   }
+  ]
+ }
+}

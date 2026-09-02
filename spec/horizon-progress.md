@@ -8,7 +8,7 @@ Companion to `spec/horizon-scanning-goal.md`. The loop appends one entry per ite
 |---|---|---|
 | M1 · Scans and sources become data | done | iteration 1, 2026-09-01 |
 | M2 · Close the source gaps | done | iteration 2, 2026-09-01 |
-| M3 · Normalize and scan-match | not started | |
+| M3 · Normalize and scan-match | built; live run blocked on credentials | iteration 3, 2026-09-01 |
 | M4 · Cluster, verify, assess | not started | |
 | M5 · Weekly candidate digest | not started | |
 | M6 · Front end reads data | not started | |
@@ -89,3 +89,40 @@ Follow-ups (left alone):
 - Mercer's App Search returns some `solutions/` pages with far-future publication dates; the path-prefix filter drops them, but the epoch-date sort means a bad date could bury real items. Watch in M3 counts.
 - `data/run-log.json` rows from before this iteration lack `consecutive_failures`, so Wagner's count restarted at 1 today.
 Blocked: nothing.
+
+## Iteration 3 · 2026-09-01 · Milestone M3
+Slice: triage stage (normalize + scan match) with live / fixture / record model modes; fixture-mode tests; live run attempted.
+Done:
+- `@anthropic-ai/sdk` 0.123.0 added (first of the two allowed runtime dependencies).
+- `prompts/triage.md` (version 1): intake-reader prompt with the § 6.3 scope rules, "marking nothing in scope is normal," one-sentence checkable reasons, no count language. Loaded by `loadPrompt()`; outputs record `prompt_version: "triage@1"`.
+- `scripts/lib/model.mjs`: `createModelClient({mode: live|fixture|record})`. Live calls use `client.messages.create` with `model: claude-opus-5`, `output_config: { effort, format: { type: "json_schema", schema } }`, `system` as text blocks with `cache_control: ephemeral` on the last block, and check `stop_reason` before reading content (refusal → recorded, not retried). Usage totals (input, output, cache read, cache creation, refusals) accumulate per run. Fixture mode replays `tests/fixtures/model/<stage>/<key>.json`; record mode writes them.
+- `scripts/lib/triage.mjs`: `matchSchema(scanIds)` (scan_id enum, score, in_scope, reason; additionalProperties false), `buildSystem` (prompt body + five charters, stable for caching), `buildUser` (stored fields only), `decide()` applies `IN_SCOPE_THRESHOLD = 0.6` in code: in scope only when the model says so AND score ≥ 0.6; omission reason is the model's sentence for the closest scan, verbatim; missing scan rows are filled with "no row returned for this scan".
+- `scripts/triage.mjs` CLI: one call per document, 4-way concurrency, idempotent per prompt version (`--force` to redo), writes `data/matches/<id>.json` and `data/omitted/<id>.json`, adds a `triage` block (counts per scan, omissions, refusals, usage) to `data/run-log.json` without discarding the collector's rows. `scripts/collect.mjs` now spreads the previous log's other top-level blocks when it rewrites the file.
+- Fixtures: `tests/fixtures/collected/` holds five real collected documents (IFEBP PBM explainer, Ninth Circuit Liu v. Kaiser opinion, Groom "Best Lawyers" post, IRS information-collection notice, CAC EEO committee notice). `tests/fixtures/model/triage/triage@1-<id>.json` holds their responses. **These five responses are hand-authored in the model's output shape** (marked `recorded: false` with a note); re-record with `node scripts/triage.mjs --record --in tests/fixtures/collected` once credentials exist.
+- `tests/triage.test.mjs` (4 tests): fixture-mode CLI end to end (3 matched / 2 omitted, one row per scan in charter order, in-scope rows above threshold, omission reason verbatim, inputs untouched, per-scan counts in the log); `decide()` threshold and closest-scan reason; schema enum and user-message fields; prompt header and the no-fixture skip path.
+Evidence:
+```
+$ npm test                       → ℹ tests 20  ℹ pass 20  ℹ fail 0
+$ npm run test:sites             → ℹ pass 4  ℹ fail 0
+$ npm run build                  → Prepared Sites build; dist/ unchanged in git
+$ node scripts/triage.mjs --fixture --out <scratch>
+omit 035840fb / omit 0ebc9b8c / match 4e4028ec atf / match 58a333d5 fhw / match ab1447e3 ca9
+assessed 5: 3 matched, 2 omitted (0 refusals), 0 skipped · per scan: fhw=1 met=0 ca9=1 cyb=0 atf=1
+$ node scripts/collect.mjs --days 7   → 80 unique items; Wagner HTTP 403 (consecutive_failures now 2)
+```
+Live run (acceptance, second half): **not possible in this environment.** `ant` is not installed, `ANTHROPIC_API_KEY` and `ANTHROPIC_AUTH_TOKEN` are unset, and `~/.config/anthropic` does not exist. Attempted anyway so the failure mode is on record:
+```
+$ node scripts/triage.mjs --limit 1
+FAIL  007087b4 Could not resolve authentication method. Expected one of apiKey, authToken, credentials, config, or profile to be set. Or for one of the "X-Api-Key" or "Authorization" headers to be explicitly omitted
+assessed 0: 0 matched, 0 omitted (0 refusals), 1 skipped
+```
+Decisions taken by default: none of the § 14 items are reached by triage.
+Assumptions:
+- Normalize and match are one model call per document (summary + rows together) rather than two passes; halves the calls and the summary is still never shown to readers.
+- Matching runs on the fields the collector stored (title, abstract/teaser/snippet ≤ 600 chars, categories, structured fields), not on fetched full text. Full-text extraction (spec § 6.2 HTML/PDF/email) is not in M3's wording; listed as a follow-up.
+- Effort `low` and `claude-opus-5` for triage per goal § 5; no second model until measured.
+Follow-ups (left alone):
+- Full-text normalization (boilerplate stripping, citation and date extraction) per spec § 6.2 before M4's verify stage needs quotable passages; the supporting passage must be verbatim from the original.
+- Once credentials exist: run `node scripts/triage.mjs --record --in tests/fixtures/collected --out <scratch>` to replace the hand-authored fixtures, then `node scripts/triage.mjs` over `data/collected/` (~323 docs) and record per-scan counts here; confirm `cache_read_input_tokens` > 0 on the second call.
+- Consider a `triage.yml` step in Actions once a key is stored as a repository secret; not added now because the run would fail without it.
+Blocked: live model run needs credentials from Ben — either `ANTHROPIC_API_KEY` in the shell (and as a GitHub Actions secret for later milestones) or `ant auth login` on this machine. Everything else in M3 is done; the milestone's acceptance is half met until that run is recorded.

@@ -1,0 +1,46 @@
+{
+ "recorded": false,
+ "note": "hand-authored fixture in the model's output shape; re-record with `node scripts/triage.mjs --record --in tests/fixtures/collected` once credentials exist",
+ "model": "fixture",
+ "stop_reason": "end_turn",
+ "usage": {
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cache_read_input_tokens": 0
+ },
+ "data": {
+  "summary": "The Ninth Circuit issued a published opinion in Liu v. Kaiser Permanente Employees Pension Plan, an ERISA benefits dispute appealed from a district court in the circuit. The opinion addresses the plan's benefit determination and the standard applied on review.",
+  "matches": [
+   {
+    "scan_id": "fhw",
+    "score": 0.35,
+    "in_scope": false,
+    "reason": "An ERISA pension benefits appeal; the fhw charter covers federal health and welfare regulation, not pension litigation."
+   },
+   {
+    "scan_id": "met",
+    "score": 0.2,
+    "in_scope": false,
+    "reason": "Single-employer pension plan; no multiemployer or Taft-Hartley issue is stated."
+   },
+   {
+    "scan_id": "ca9",
+    "score": 0.82,
+    "in_scope": true,
+    "reason": "A published Ninth Circuit ERISA opinion on benefit claims and the standard of review falls squarely within the ca9 charter."
+   },
+   {
+    "scan_id": "cyb",
+    "score": 0.02,
+    "in_scope": false,
+    "reason": "No cybersecurity or privacy content."
+   },
+   {
+    "scan_id": "atf",
+    "score": 0.02,
+    "in_scope": false,
+    "reason": "No apprenticeship or training-fund content."
+   }
+  ]
+ }
+}

@@ -100,7 +100,8 @@ const since = new Date(Date.now() - DAYS * 86400000);
 const sinceISO = since.toISOString().slice(0, 10);
 const runLog = [];
 let all = [];
-const previous = new Map(((await loadPreviousRunLog())?.sources ?? []).map((r) => [r.id ?? r.source, r]));
+const previousLog = await loadPreviousRunLog();
+const previous = new Map((previousLog?.sources ?? []).map((r) => [r.id ?? r.source, r]));
 
 const sources = await loadSources();
 const collected = [];
@@ -143,7 +144,7 @@ console.log(`\n${all.length} unique items in window (${stored} newly stored) →
 const { attempted, failed } = carryFailureCounts(runLog, previous);
 await mkdir(path.join(ROOT, "data"), { recursive: true });
 await writeFile(path.join(ROOT, "data", "run-log.json"),
-  JSON.stringify({ ran_at: new Date().toISOString(), window_days: DAYS, total_items: all.length, newly_stored: stored, sources: runLog }, null, 2));
+  JSON.stringify({ ...(previousLog ?? {}), ran_at: new Date().toISOString(), window_days: DAYS, total_items: all.length, newly_stored: stored, sources: runLog }, null, 2));
 for (const r of failed) {
   if (r.consecutive_failures >= SILENT_AFTER) {
     console.error(`::warning title=Source silent::${r.source} has failed ${r.consecutive_failures} consecutive runs (since ${r.silent_since}): ${r.error}`);
