@@ -299,3 +299,6 @@ Same check; nothing present. No change. Blocked on credentials from Ben.
 
 ## Iteration 20 · 2026-09-01 · waiting on credentials
 Same check; nothing present. No change. Blocked on credentials from Ben.
+
+## Iteration 21 · 2026-09-01 · waiting on credentials
+Same check; nothing present. No change. Blocked on credentials from Ben.
