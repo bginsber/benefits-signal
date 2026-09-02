@@ -9,7 +9,7 @@ Companion to `spec/horizon-scanning-goal.md`. The loop appends one entry per ite
 | M1 · Scans and sources become data | done | iteration 1, 2026-09-01 |
 | M2 · Close the source gaps | done | iteration 2, 2026-09-01 |
 | M3 · Normalize and scan-match | built; live run blocked on credentials | iteration 3, 2026-09-01 |
-| M4 · Cluster, verify, assess | not started | |
+| M4 · Cluster, verify, assess | built; live run blocked on credentials | iteration 4, 2026-09-01 |
 | M5 · Weekly candidate digest | not started | |
 | M6 · Front end reads data | not started | |
 | M7 · Obligations and trustee agenda | not started | |
@@ -126,3 +126,42 @@ Follow-ups (left alone):
 - Once credentials exist: run `node scripts/triage.mjs --record --in tests/fixtures/collected --out <scratch>` to replace the hand-authored fixtures, then `node scripts/triage.mjs` over `data/collected/` (~323 docs) and record per-scan counts here; confirm `cache_read_input_tokens` > 0 on the second call.
 - Consider a `triage.yml` step in Actions once a key is stored as a repository secret; not added now because the run would fail without it.
 Blocked: live model run needs credentials from Ben — either `ANTHROPIC_API_KEY` in the shell (and as a GitHub Actions secret for later milestones) or `ant auth login` on this machine. Everything else in M3 is done; the milestone's acceptance is half met until that run is recorded.
+
+## Iteration 4 · 2026-09-01 · Milestone M4
+Slice: cluster → verify → assess into schema-valid Development candidates, rules enforced in code, fixture-mode tests. Credentials re-checked first: still none (no key, no token, no profile, no `ant`), so M3's live half stays blocked and M4 was built in fixture mode.
+Done:
+- `scripts/lib/schema.mjs`: zero-dependency JSON Schema validator for the subset `spec/issue-schema.json` uses (type, required, properties, additionalProperties, enum, items, min/maxItems, `$ref` to `#/$defs`). `tests/schema.test.mjs` proves it rejects eight distinct contract violations and accepts a zero-development issue.
+- Prompts (all `version: 1`): `prompts/cluster.md` (same development, not same topic; attach to open developments; every id in exactly one cluster), `prompts/verify.md` (status/dates/posture from the supplied primary only; "recognizing a rule is not knowing its status"; unconfirmed when the primary does not state it), `prompts/assess.md` (field rules from spec § 6.6, the closed lists, "quote, don't reproduce" with one complete worked example and rationale, no count language, lower when unsure).
+- `scripts/lib/assess.mjs`:
+  - `clusterDocuments`: one structured call over the window's in-scope documents plus open developments; documents the model leaves out become their own cluster (nothing dropped); cluster id = hash of sorted member ids.
+  - `locatePrimary`: primary-layer members first (Federal Register, CourtListener, California DAS); else Federal Register document numbers or `federalregister.gov/documents/...` links found in commentary → `GET /api/v1/documents/<num>.json` for structured fields; skipped when offline (fixture mode).
+  - `verifyCluster`: no primary → `unconfirmed` on all three fields **without a model call**; else a structured verify call; overall result computed in code from the three fields.
+  - `assessCluster` + `enforce()`: the spec's rules applied to the model's draft, each violation recorded in `pipeline.defects`: NOW/NEXT need dates confirmed (else WATCH + an uncertainty note); NOW additionally needs a confirmed deadline within 60 days or a confirmed status change (else NEXT); confidence capped by verification (confirmed → High; status-only or commentary → Medium; single unverified source → Low; never raised); passage must be a verbatim substring of one member's stored text (misattribution corrected; non-verbatim replaced by the document's own stored text and flagged); fiduciary tags from the taxonomy, each needing a justification, None exclusive; nextStep from the closed list; cue derived from tier and date.
+  - Output = issue-schema development fields + `pipeline` block (cluster, members, verification record, justifications, passage document, operative date, tier rationale, model's original tier/confidence, defects, prompt version, usage, `review_state: pending`).
+- `scripts/assess.mjs` CLI: joins `matches/` to `collected/`, applies the 30-day window, runs the three stages, validates every candidate against `spec/issue-schema.json`, writes `candidates/<slug>.json`, `clusters.json`, and an `assess` block in `run-log.json`. `--open issue.json` feeds open developments; `--today` pins the clock for tests. Model failures are reported in one line, not a stack trace.
+- Fixtures: `tests/fixtures/matches/` (the three triage fixture outputs); `tests/fixtures/model/cluster/cluster@1-97bd9e7493c67248.json` (three single-document clusters); `verify/verify@1-{3e7725bda2682f14, 662b402a69889a7f}.json` (CAC notice partially confirmed; Liu opinion confirmed); `assess/assess@1-{3e7725…, 9eef35b03baaff53, 662b40…}.json`. The PBM assess fixture deliberately overclaims (NEXT, High, paraphrased passage, unjustified second tag) so the test proves enforcement lowers it. All hand-authored and marked `recorded: false`.
+- `tests/assess.test.mjs` (4 tests): fixture CLI end to end with every candidate and a whole assembled issue validating against the schema; tier rule with cases that must fail; confidence rule including never-raise; closed-list rules.
+Evidence:
+```
+$ npm test                       → ℹ tests 25  ℹ pass 25  ℹ fail 0
+$ npm run test:sites             → ℹ pass 4  ℹ fail 0
+$ npm run build                  → Prepared Sites build; dist/ unchanged in git
+$ node scripts/assess.mjs --fixture --out <scratch> --today 2026-09-01
+WATCH Medium partially_confirmed  California Apprenticeship Council EEO committee met on August 12 …
+WATCH Low    unconfirmed          FTC insulin settlement orders bar PBMs … (4 defects: tier NEXT→WATCH; confidence High→Low; passage replaced; unjustified tag dropped)
+WATCH High   confirmed            Ninth Circuit issues published opinion in Liu v. Kaiser …
+3 candidates from 3 clusters (0 unassessed): NOW 0 · NEXT 0 · WATCH 3; verification confirmed 1 / partial 1 / unconfirmed 1; 4 rule defects; 0 schema errors
+$ node scripts/assess.mjs --matches tests/fixtures/matches --collected tests/fixtures/collected   (live)
+FATAL: cluster stage could not call the model: Could not resolve authentication method. Expected one of apiKey, authToken, credentials, config, or profile to be set …
+```
+Decisions taken by default: § 14 item 1 (taxonomy): the two training-fund tags stay separate as the spec recommends; the attorney gate on Contribution Collection items is a review-stage (M5) concern and is noted there. No other § 14 item is reached by assessment.
+Assumptions:
+- Verification with no primary authority is decided in code (unconfirmed) rather than asked of the model; the spec says commentary never substitutes for primary verification, so there is nothing for the model to judge.
+- "Single-source unverified → Low" is applied when the cluster has one member and no primary; two commentary sources with no primary cap at Medium (spec: "the only source is reputable commentary").
+- Passage verbatim check runs against the collector's stored text (title + abstract/teaser/snippet), the same limit noted in M3. Full-text normalization remains the follow-up that will let passages come from the body of a rule or opinion.
+- Regulations.gov and CourtListener docket lookups (spec § 6.5) are not implemented in `locatePrimary`; CourtListener opinions arrive as primary members already, and regulations.gov needs an API key Ben would have to provision. Federal Register lookup by document number is implemented.
+Follow-ups (left alone):
+- Full-text extraction (spec § 6.2) before real passages are quotable from primary documents.
+- regulations.gov docket lookup (DEMO_KEY works for testing) and CourtListener docket lookup for watch-list cases.
+- Re-record the eleven hand-authored model fixtures (triage 5, cluster 1, verify 2, assess 3) once credentials exist, then re-run the fixture tests; hand-authored content may differ from real model output in ways the enforcement layer will surface as defects.
+Blocked: live triage (M3) and live assess (M4) both need credentials from Ben: `ANTHROPIC_API_KEY` exported in the shell that runs the loop, or `ant auth login` on this machine. When present, run in order: `node scripts/triage.mjs` (≈323 docs), then `node scripts/assess.mjs --today <date>`, and record per-scan counts, candidate list, tiers, verification results, and `cache_read_input_tokens` here.

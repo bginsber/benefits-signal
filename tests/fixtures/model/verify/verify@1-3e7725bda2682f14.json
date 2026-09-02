@@ -1,0 +1,18 @@
+{
+ "recorded": false,
+ "note": "hand-authored fixture in the model's output shape; re-record with `node scripts/assess.mjs --record --matches tests/fixtures/matches --collected tests/fixtures/collected` once credentials exist",
+ "model": "fixture",
+ "stop_reason": "end_turn",
+ "usage": {
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cache_read_input_tokens": 0
+ },
+ "data": {
+  "status": "confirmed",
+  "dates": "confirmed",
+  "posture": "partially_confirmed",
+  "result": "partially_confirmed",
+  "notes": "The primary document is the CAC committee's own notice: meeting_date 2026-08-12 and documents Notice and Agenda are stated. The notice does not state what the committee decided or any rule change, so posture beyond 'meeting noticed with an agenda' is not established."
+ }
+}

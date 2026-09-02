@@ -1,0 +1,39 @@
+{
+ "recorded": false,
+ "note": "hand-authored fixture in the model's output shape; re-record with `node scripts/assess.mjs --record --matches tests/fixtures/matches --collected tests/fixtures/collected` once credentials exist",
+ "model": "fixture",
+ "stop_reason": "end_turn",
+ "usage": {
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cache_read_input_tokens": 0
+ },
+ "data": {
+  "clusters": [
+   {
+    "label": "CAC Equal Opportunity in Apprenticeship committee meeting, August 12, 2026",
+    "document_ids": [
+     "4e4028ecb3e020488bf59aee17869bbefcdd511a"
+    ],
+    "existing_development_id": null,
+    "why_same": "A single meeting notice; no other document describes this meeting."
+   },
+   {
+    "label": "FTC insulin settlement orders with the three largest PBMs",
+    "document_ids": [
+     "58a333d5795a5124ed045a8377ae665fbdec6309"
+    ],
+    "existing_development_id": null,
+    "why_same": "One explainer post about the FTC orders; no other document in the set covers them."
+   },
+   {
+    "label": "Liu v. Kaiser Permanente Employees Pension Plan, Ninth Circuit opinion of August 31, 2026",
+    "document_ids": [
+     "ab1447e3ec7f3e9f4afe1a585cf553fbc194473b"
+    ],
+    "existing_development_id": null,
+    "why_same": "One published opinion; no commentary about it is in the set."
+   }
+  ]
+ }
+}

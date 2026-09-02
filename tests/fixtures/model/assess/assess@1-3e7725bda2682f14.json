@@ -1,0 +1,56 @@
+{
+ "recorded": false,
+ "note": "hand-authored fixture in the model's output shape; re-record with `node scripts/assess.mjs --record --matches tests/fixtures/matches --collected tests/fixtures/collected` once credentials exist",
+ "model": "fixture",
+ "stop_reason": "end_turn",
+ "usage": {
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cache_read_input_tokens": 0
+ },
+ "data": {
+  "headline": "California Apprenticeship Council EEO committee met on August 12 with a noticed agenda",
+  "status": "Committee meeting held \u00b7 August 12, 2026",
+  "summary": [
+   "The California Apprenticeship Council's Equal Opportunity in Apprenticeship committee met on August 12, 2026 under a posted notice and agenda.",
+   "The agenda is the only collected document; any action the committee took on equal-opportunity standards for registered programs is not yet known."
+  ],
+  "uncertainty": "",
+  "affected": "Training trusts and apprenticeship funds that sponsor California registered programs",
+  "action": "Obtain the agenda and any minutes to see whether equal-opportunity standards or program requirements changed.",
+  "timing": "No action until the minutes show a decision",
+  "tier": "WATCH",
+  "operative_date": "2026-08-12",
+  "tier_rationale": "A meeting notice records that the committee met; nothing in the collected documents states a decision that changes program obligations, so the item stays in WATCH.",
+  "confidence": "Medium",
+  "confidenceNote": "The CAC's own notice confirms the meeting and its date; it does not state what the committee decided.",
+  "plan_types": [
+   "Training trust / apprenticeship fund"
+  ],
+  "jurisdiction": [
+   "California"
+  ],
+  "topics": [
+   "Apprenticeship",
+   "Equal opportunity",
+   "CAC"
+  ],
+  "fiduciary_duties": [
+   "Program & Funding Compliance"
+  ],
+  "fiduciary_justifications": [
+   {
+    "tag": "Program & Funding Compliance",
+    "justification": "Committee action on equal-opportunity standards would change what a registered program must do to keep its regulatory standing."
+   }
+  ],
+  "nextStep": "Create monitoring follow-up",
+  "completion": "Monitoring follow-up prepared; re-check when the minutes post.",
+  "passage": "Equal Opportunity in Apprenticeship \u2014 August 12, 2026",
+  "passage_document_id": "4e4028ecb3e020488bf59aee17869bbefcdd511a",
+  "articleLabel": "California DAS / CAC meeting page",
+  "article_document_id": "4e4028ecb3e020488bf59aee17869bbefcdd511a",
+  "authorityLabel": "California Apprenticeship Council notice",
+  "authority_document_id": "4e4028ecb3e020488bf59aee17869bbefcdd511a"
+ }
+}

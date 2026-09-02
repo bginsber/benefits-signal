@@ -1,0 +1,56 @@
+{
+ "recorded": false,
+ "note": "hand-authored fixture in the model's output shape; re-record with `node scripts/assess.mjs --record --matches tests/fixtures/matches --collected tests/fixtures/collected` once credentials exist",
+ "model": "fixture",
+ "stop_reason": "end_turn",
+ "usage": {
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cache_read_input_tokens": 0
+ },
+ "data": {
+  "headline": "Ninth Circuit issues published opinion in Liu v. Kaiser Permanente Employees Pension Plan",
+  "status": "Decided \u00b7 Filed August 31, 2026",
+  "summary": [
+   "The Ninth Circuit filed a published opinion on August 31, 2026 in an ERISA benefits appeal against the Kaiser Permanente Employees Pension Plan, appeal number 24-4303.",
+   "The holding is not in the collected text; the opinion is published, so it will bind district courts in the circuit on whatever benefit-claims question it decides."
+  ],
+  "uncertainty": "The collected record gives the docket and filing date but not the holding; read the opinion before relying on it.",
+  "affected": "Funds in the Ninth Circuit that administer benefit claims and appeals",
+  "action": "Have an attorney read the opinion and note any change to the claims standard of review.",
+  "timing": "No deadline; review at the next claims-procedure check",
+  "tier": "WATCH",
+  "operative_date": "2026-08-31",
+  "tier_rationale": "A decided case with no deadline and a holding not yet read belongs in WATCH.",
+  "confidence": "High",
+  "confidenceNote": "CourtListener's record confirms the court, docket number, filing date, and that the opinion is published; the holding was not checked.",
+  "plan_types": [
+   "All welfare plans"
+  ],
+  "jurisdiction": [
+   "Ninth Circuit"
+  ],
+  "topics": [
+   "ERISA litigation",
+   "Claims and appeals",
+   "Ninth Circuit"
+  ],
+  "fiduciary_duties": [
+   "Claims & Appeals Procedure"
+  ],
+  "fiduciary_justifications": [
+   {
+    "tag": "Claims & Appeals Procedure",
+    "justification": "A published benefits-appeal opinion can change the standard of review applied to the fund's claim determinations."
+   }
+  ],
+  "nextStep": "Prepare internal research assignment",
+  "completion": "Research assignment prepared for attorney review.",
+  "passage": "FOR PUBLICATION UNITED STATES COURT OF APPEALS FOR THE NINTH CIRCUIT SHERRY YALI LIU, No. 24-4303",
+  "passage_document_id": "ab1447e3ec7f3e9f4afe1a585cf553fbc194473b",
+  "articleLabel": "CourtListener opinion record",
+  "article_document_id": "ab1447e3ec7f3e9f4afe1a585cf553fbc194473b",
+  "authorityLabel": "Ninth Circuit opinion (PDF via CourtListener)",
+  "authority_document_id": "ab1447e3ec7f3e9f4afe1a585cf553fbc194473b"
+ }
+}

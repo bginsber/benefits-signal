@@ -1,0 +1,18 @@
+{
+ "recorded": false,
+ "note": "hand-authored fixture in the model's output shape; re-record with `node scripts/assess.mjs --record --matches tests/fixtures/matches --collected tests/fixtures/collected` once credentials exist",
+ "model": "fixture",
+ "stop_reason": "end_turn",
+ "usage": {
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cache_read_input_tokens": 0
+ },
+ "data": {
+  "status": "confirmed",
+  "dates": "confirmed",
+  "posture": "confirmed",
+  "result": "confirmed",
+  "notes": "The CourtListener record states court ca9, docket_number 24-4303, date_filed 2026-08-31, and a published opinion (FOR PUBLICATION) with a download_url. There is no commentary to compare; the opinion's holding is not in the collected text and is not asserted here."
+ }
+}
