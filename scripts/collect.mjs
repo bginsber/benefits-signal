@@ -28,6 +28,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { ROOT, loadSources, resolveCollector } from "./lib/sources.mjs";
 import { collectSource, displayDate, fetchText } from "./lib/collectors.mjs";
+import { keepForFeed, loadFeedRules, renderItemHtml } from "./lib/feed.mjs";
 import { SILENT_AFTER, carryFailureCounts } from "./lib/runlog.mjs";
 
 const DATA_DIR = path.join(ROOT, "data", "collected");
@@ -85,7 +86,7 @@ function buildRss(items, sourceNames) {
       <guid isPermaLink="true">${esc(it.link)}</guid>
       <pubDate>${d}</pubDate>
       <category>${esc(it.source)}</category>
-      <description>${esc(it.summary || it.title)}</description>
+      <description>${esc(renderItemHtml(it))}</description>
       <source url="${esc(it.link)}">${esc(it.source)}</source>
     </item>`;
   }).join("\n");
@@ -129,6 +130,7 @@ for (const src of sources) {
   }
   try {
     const items = await collectSource(src, kind, { since, sinceISO });
+    for (const it of items) it.source_id = src.id;
     all.push(...items);
     collected.push(src);
     runLog.push({ source: src.name, id: src.id, ok: true, items: items.length });
@@ -152,15 +154,19 @@ all.sort((a, b) => b.displayDate.localeCompare(a.displayDate));
 await mkdir(path.join(ROOT, "data"), { recursive: true });
 await writeFile(path.join(ROOT, "data", "first-seen.json"), JSON.stringify(Object.fromEntries([...firstSeen].filter(([, at]) => at).sort()), null, 0));
 
-// The store keeps everything; the inbox feed omits routine Federal Register
-// notices (which dominate ~4:1) unless they carry a comment deadline.
-const feedItems = all.filter((it) =>
-  !it.source.startsWith("Federal Register") ||
-  it.categories?.[0] !== "Notice" ||
-  it.structured?.comments_close_on);
+// The store keeps everything; the inbox feed applies spec/feed-filter.yaml
+// (rules and benefits-related notices from the Federal Register; no firm news or events).
+const feedRules = await loadFeedRules();
+const feedItems = [];
+const dropped = {};
+for (const it of all) {
+  const { keep, why } = keepForFeed(it, feedRules, it.source_id);
+  if (keep) feedItems.push(it);
+  else dropped[why.split(":")[0]] = (dropped[why.split(":")[0]] ?? 0) + 1;
+}
 await mkdir(path.dirname(OUT), { recursive: true });
 await writeFile(OUT, buildRss(feedItems.slice(0, 100), collected.map((s) => s.name)));
-console.log(`\n${all.length} unique items in window (${stored} newly stored) → ${path.relative(ROOT, OUT)}`);
+console.log(`\n${all.length} unique items in window (${stored} newly stored); ${feedItems.length} in the feed, ${all.length - feedItems.length} filtered (${Object.entries(dropped).map(([k, v]) => `${k} ${v}`).join(", ") || "none"}) → ${path.relative(ROOT, OUT)}`);
 const { attempted, failed } = carryFailureCounts(runLog, previous);
 await mkdir(path.join(ROOT, "data"), { recursive: true });
 await writeFile(path.join(ROOT, "data", "run-log.json"),

@@ -1,0 +1,63 @@
+# Benefits Signal — collated feed filter (what reaches the Outlook feed).
+# The document store keeps everything for triage; these rules only decide
+# what the human-facing RSS feed shows. Adjust here, not in code.
+
+federal_register:
+  # Document types that always reach the feed.
+  keep_types: [Rule, Proposed Rule, Presidential Document]
+  # Agencies whose notices are kept even without a keyword match (name substring, case-insensitive).
+  keep_notice_agencies: [Employee Benefits Security Administration]
+  # Notices from other agencies reach the feed only when the title or abstract matches one of these.
+  notice_keywords:
+    - ERISA
+    - employee benefit
+    - group health
+    - health plan
+    - health insurance
+    - welfare plan
+    - retirement plan
+    - pension
+    - multiemployer
+    - mental health parity
+    - MHPAEA
+    - COBRA
+    - HIPAA
+    - No Surprises
+    - transparency in coverage
+    - prescription drug
+    - pharmacy benefit
+    - cafeteria plan
+    - dependent care
+    - Form 5500
+    - fiduciary
+    - apprentice
+    - prevailing wage
+    - Davis-Bacon
+    - fringe benefit
+    - Medicare Secondary Payer
+    - Affordable Care Act
+    - essential health benefits
+    - qualified health plan
+    - HSA
+    - flexible spending
+  # Titles matching any of these are dropped regardless (agency housekeeping).
+  drop_title_patterns:
+    - "Agency Information Collection"
+    - "Information Collection Activities"
+    - "Submission for Office of Management and Budget Review"
+    - "Submission for OMB Review"
+    - "Office of Management and Budget Review"
+    - "Privacy Act of 1974"
+    - "Patent License"
+    - "Meeting of the"
+    - "Notice of Meeting"
+    - "Charter Renewal"
+    - "Sunshine Act"
+    - "Delegation of Authority"
+
+# Per-source category drops (RSS <category> values, case-insensitive substring).
+sources:
+  groom:
+    drop_categories: [Events, News]
+  ifebp:
+    drop_categories: [Canada]
