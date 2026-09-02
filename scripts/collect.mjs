@@ -11,6 +11,9 @@
  *                          across runs (previous log read from the Pages URL
  *                          when FEED_URL is set, else from the local file) so
  *                          a source silent for three runs raises a warning
+ *   data/first-seen.json — link → first collected time, carried across runs
+ *                          the same way, so future-dated notices keep the
+ *                          date they first appeared instead of "now"
  *
  * The source list is read from spec/sources.yaml (scripts/lib/sources.mjs).
  * Sources whose method has no collector yet are skipped with a logged reason,
@@ -39,17 +42,19 @@ const sha1 = (s) => createHash("sha1").update(s).digest("hex");
 const esc = (s = "") => s.replace(/&/g, "&amp;").replace(/</g, "&lt;")
   .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-/** Previous run log: from the published Pages copy when FEED_URL is set, else the local file. */
-async function loadPreviousRunLog() {
-  const local = path.join(ROOT, "data", "run-log.json");
+/** A previous run's JSON file: from the published Pages copy when FEED_URL is set, else the local file. */
+async function loadPrevious(name, why) {
+  const local = path.join(ROOT, "data", name);
   try {
-    if (process.env.FEED_URL) return JSON.parse(await fetchText(new URL("run-log.json", process.env.FEED_URL).href, { retries: 0 }));
+    if (process.env.FEED_URL) return JSON.parse(await fetchText(new URL(name, process.env.FEED_URL).href, { retries: 0 }));
     if (existsSync(local)) return JSON.parse(await readFile(local, "utf8"));
   } catch (e) {
-    console.error(`note: previous run log unavailable (${e.message}); failure counts restart at 1`);
+    console.error(`note: previous ${name} unavailable (${e.message}); ${why}`);
   }
   return null;
 }
+const loadPreviousRunLog = () => loadPrevious("run-log.json", "failure counts restart at 1");
+const loadPreviousFirstSeen = () => loadPrevious("first-seen.json", "first-seen dates restart today");
 
 /** Idempotent store: one JSON file per document, keyed by URL hash. Returns the count stored and each link's first-seen time. */
 async function storeItems(items) {
@@ -135,9 +140,13 @@ for (const src of sources) {
 const seen = new Set();
 all = all.filter((it) => (seen.has(it.link) ? false : (seen.add(it.link), true)));
 const { stored, firstSeen } = await storeItems(all);
+// Earlier runs' first-seen times win over this run's store (which is empty on a fresh Actions runner).
+for (const [link, at] of Object.entries((await loadPreviousFirstSeen()) ?? {})) if (at && (!firstSeen.get(link) || at < firstSeen.get(link))) firstSeen.set(link, at);
 const now = new Date();
 for (const it of all) it.displayDate = displayDate(it, firstSeen, now);
 all.sort((a, b) => b.displayDate.localeCompare(a.displayDate));
+await mkdir(path.join(ROOT, "data"), { recursive: true });
+await writeFile(path.join(ROOT, "data", "first-seen.json"), JSON.stringify(Object.fromEntries([...firstSeen].filter(([, at]) => at).sort()), null, 0));
 
 // The store keeps everything; the inbox feed omits routine Federal Register
 // notices (which dominate ~4:1) unless they carry a comment deadline.

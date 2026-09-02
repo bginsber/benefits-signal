@@ -39,6 +39,7 @@ jobs:
         run: |
           node scripts/collect.mjs --days 30 --out _site/collated.xml
           cp data/run-log.json _site/run-log.json
+          cp data/first-seen.json _site/first-seen.json
 
       - name: Triage (normalize + scan match)
         run: node scripts/triage.mjs
