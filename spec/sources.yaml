@@ -8,6 +8,7 @@
 
 interpretation:
   - name: EBIA Weekly
+    id: ebia
     method: email                     # NO public feed; public EBIA blog stale since mid-2023
     inbox: benefits-signal@<firm-domain>   # dedicated subscriptions-only mailbox
     notes: Thomson Reuters Checkpoint subscription email is the only viable channel.
@@ -15,6 +16,7 @@ interpretation:
     active: true
 
   - name: Mercer Law & Policy Group
+    id: mercer
     method: scrape                    # no RSS declared
     url: https://www.mercer.com/insights/law-and-policy/
     notes: Listing may be partly JS-loaded — verify the scraper sees article cards.
@@ -23,6 +25,7 @@ interpretation:
     active: true
 
   - name: Segal Compliance News
+    id: segal
     method: scrape-js                 # raw HTML shows zero articles; JS-rendered listing
     url: https://www.segalco.com/consulting-insights/compliance-news/
     notes: Needs headless rendering or the underlying XHR/JSON endpoint (find during Phase 0).
@@ -31,6 +34,7 @@ interpretation:
     active: true
 
   - name: Groom Law Group
+    id: groom
     method: rss
     url: https://www.groom.com/feed/  # verified valid; items dated Sep 1 / Aug 31 2026
     notes: Feed mixes events/webinars with alerts — filter by category/keywords.
@@ -38,12 +42,14 @@ interpretation:
     active: true
 
   - name: Trucker Huss Benefits Report
+    id: truckerhuss
     method: rss
     url: https://www.truckerhuss.com/feed/  # verified valid; ~monthly cadence
     scans: [ca9, fhw, met]
     active: true
 
   - name: Wagner Law Group Law Alerts
+    id: wagner
     method: rss
     url: https://www.wagnerlawgroup.com/feed/  # verified valid Aug 2026. Whole site is behind a Cloudflare managed challenge (cf-mitigated: challenge) that 403s some client IPs intermittently — blocked 2 of 3 Actions runs on 2026-09-01; collector logs a warning and continues
     notes: Includes general firm/media items — filter to law alerts / ERISA categories.
@@ -51,6 +57,7 @@ interpretation:
     active: true
 
   - name: Word on Benefits (IFEBP)
+    id: ifebp
     method: rss
     url: https://blog.ifebp.org/feed/  # verified valid RSS 2.0; very active
     notes: wordonbenefits.org resolves here. Weight apprenticeship/training posts to atf.
@@ -59,7 +66,15 @@ interpretation:
 
 primary:
   - name: Federal Register API
+    id: federal-register
     method: api
+    agencies:                                # verified slugs; one API call covers them all
+      - employee-benefits-security-administration
+      - internal-revenue-service
+      - employment-and-training-administration
+      - wage-and-hour-division
+      - health-and-human-services-department
+      - centers-for-medicare-medicaid-services
     url: https://www.federalregister.gov/api/v1/documents.json
     auth: none
     notes: >
@@ -76,6 +91,7 @@ primary:
     active: true
 
   - name: regulations.gov API v4
+    id: regulations-gov
     method: api
     url: https://api.regulations.gov/v4      # /documents and /dockets verified
     auth: api-key                            # free via api.data.gov; DEMO_KEY works for testing
@@ -86,6 +102,7 @@ primary:
     active: true
 
   - name: CourtListener API
+    id: courtlistener
     method: api
     url: https://www.courtlistener.com/api/rest/v4/search/
     auth: none-for-search               # docket alerts endpoint requires a free account token
@@ -98,6 +115,7 @@ primary:
     active: true
 
   - name: DOL/EBSA newsroom
+    id: dol-ebsa-newsroom
     method: scrape-js
     url: https://www.dol.gov/newsroom/releases?agency=ebsa
     notes: >
@@ -109,6 +127,7 @@ primary:
     active: true
 
   - name: IRS
+    id: irs-newsroom
     method: scrape
     url: https://www.irs.gov/newsroom/news-releases-for-current-month   # verified 200
     also: https://www.irs.gov/internal-revenue-bulletins                # written guidance
@@ -117,6 +136,7 @@ primary:
     active: true
 
   - name: HHS OCR newsroom
+    id: hhs-ocr-newsroom
     method: scrape-js
     url: https://www.hhs.gov/ocr/newsroom/index.html
     notes: Bot-protected like dol.gov (works via rendering proxy, 403 to curl).
@@ -125,13 +145,16 @@ primary:
     active: true
 
   - name: CMS newsroom
+    id: cms-newsroom
     method: scrape
     url: https://www.cms.gov/newsroom        # verified; curl-friendly
     scans: [fhw]
     active: true
 
   - name: DOL Office of Apprenticeship / ETA
+    id: dol-oa-eta
     method: api
+    collector: none                          # ETA/WHD are in the Federal Register entry's agencies list; nothing to fetch separately
     url: https://www.federalregister.gov/api/v1/documents.json   # ETA + WHD agency filters
     also: https://www.apprenticeship.gov/investments-tax-credits-and-tuition-support
     notes: >
@@ -143,6 +166,7 @@ primary:
     active: true
 
   - name: California DAS / DIR / CAC
+    id: ca-das
     method: scrape
     urls:
       - https://www.dir.ca.gov/das/das.html                # DAS home (verified)

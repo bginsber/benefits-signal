@@ -9,10 +9,9 @@
  *   public/collated.xml  — one merged RSS 2.0 feed (Outlook Classic readable)
  *   data/run-log.json    — per-source outcome for the "source silent" notice
  *
- * Source of truth for the source list is spec/sources.yaml; the subset
- * collected here (rss + federal-register methods) is mirrored below.
- * Scrape/JS/email sources (Mercer, Segal, EBIA, dol.gov, hhs.gov) are
- * Phase 0 follow-ups and are intentionally absent.
+ * The source list is read from spec/sources.yaml (scripts/lib/sources.mjs).
+ * Sources whose method has no collector yet are skipped with a logged reason,
+ * never silently dropped; every active source gets a row in the run log.
  *
  * Usage: node scripts/collect.mjs [--days 30] [--out public/collated.xml]
  */
@@ -21,8 +20,8 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { ROOT, loadSources, resolveCollector } from "./lib/sources.mjs";
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const DATA_DIR = path.join(ROOT, "data", "collected");
 const args = process.argv.slice(2);
 const DAYS = Number(args[args.indexOf("--days") + 1]) > 0 && args.includes("--days")
@@ -32,23 +31,6 @@ const OUT = args.includes("--out")
   : path.join(ROOT, "public", "collated.xml");
 
 const UA = "BenefitsSignalCollector/0.1 (internal legal newsletter pilot)";
-
-const RSS_SOURCES = [
-  { id: "groom",       name: "Groom Law Group",              url: "https://www.groom.com/feed/" },
-  { id: "truckerhuss", name: "Trucker Huss Benefits Report", url: "https://www.truckerhuss.com/feed/" },
-  { id: "wagner",      name: "Wagner Law Group",             url: "https://www.wagnerlawgroup.com/feed/" },
-  { id: "ifebp",       name: "Word on Benefits (IFEBP)",     url: "https://blog.ifebp.org/feed/" },
-];
-
-// Verified agency slugs (spec § 4). One API call covers them all.
-const FR_AGENCIES = [
-  "employee-benefits-security-administration",
-  "internal-revenue-service",
-  "employment-and-training-administration",
-  "wage-and-hour-division",
-  "health-and-human-services-department",
-  "centers-for-medicare-medicaid-services",
-];
 
 // ---------- helpers ----------
 
@@ -97,10 +79,10 @@ function parseRss(xml, sourceName) {
   return items;
 }
 
-async function fetchFederalRegister(sinceISO) {
+async function fetchFederalRegister(sinceISO, agencies) {
   const fields = ["title", "html_url", "publication_date", "agency_names", "type", "abstract", "comment_url", "comments_close_on", "effective_on", "document_number"];
   const params = new URLSearchParams();
-  for (const a of FR_AGENCIES) params.append("conditions[agencies][]", a);
+  for (const a of agencies) params.append("conditions[agencies][]", a);
   params.append("conditions[publication_date][gte]", sinceISO);
   params.append("per_page", "100");
   params.append("order", "newest");
@@ -144,7 +126,7 @@ async function storeItems(items) {
   return stored;
 }
 
-function buildRss(items) {
+function buildRss(items, sourceNames) {
   const now = new Date().toUTCString();
   const entries = items.map((it) => {
     const d = it.date ? new Date(it.date).toUTCString() : now;
@@ -163,7 +145,7 @@ function buildRss(items) {
   <channel>
     <title>Benefits Signal — Collated Sources</title>
     <link>${esc(process.env.FEED_URL || "https://example.invalid/benefits-signal")}</link>
-    <description>Merged raw intake: Groom, Trucker Huss, Wagner Law Group, Word on Benefits, and Federal Register (EBSA, IRS, ETA, WHD, HHS, CMS). Pre-triage material for the Benefits Signal pipeline; not legal advice.</description>
+    <description>${esc(`Merged raw intake: ${sourceNames.join(", ")}. Pre-triage material for the Benefits Signal pipeline; not legal advice.`)}</description>
     <language>en-us</language>
     <lastBuildDate>${now}</lastBuildDate>
     <ttl>720</ttl>
@@ -180,27 +162,31 @@ const sinceISO = since.toISOString().slice(0, 10);
 const runLog = [];
 let all = [];
 
-for (const src of RSS_SOURCES) {
+const sources = await loadSources();
+const collected = [];
+for (const src of sources) {
+  if (!src.active) continue;
+  const { kind, reason } = resolveCollector(src);
+  if (!kind) {
+    runLog.push({ source: src.name, id: src.id, skipped: reason });
+    console.log(`skip ${src.name}: ${reason}`);
+    continue;
+  }
   try {
-    const xml = await fetchText(src.url);
-    const items = parseRss(xml, src.name).filter((it) => !it.date || new Date(it.date) >= since);
+    let items;
+    if (kind === "rss") {
+      items = parseRss(await fetchText(src.url), src.name).filter((it) => !it.date || new Date(it.date) >= since);
+    } else if (kind === "federal-register") {
+      items = await fetchFederalRegister(sinceISO, src.agencies);
+    }
     all.push(...items);
-    runLog.push({ source: src.name, ok: true, items: items.length });
+    collected.push(src);
+    runLog.push({ source: src.name, id: src.id, ok: true, items: items.length });
     console.log(`ok   ${src.name}: ${items.length} items`);
   } catch (e) {
-    runLog.push({ source: src.name, ok: false, error: String(e.message ?? e) });
+    runLog.push({ source: src.name, id: src.id, ok: false, error: String(e.message ?? e) });
     console.error(`FAIL ${src.name}: ${e.message}`);
   }
-}
-
-try {
-  const fr = await fetchFederalRegister(sinceISO);
-  all.push(...fr);
-  runLog.push({ source: "Federal Register API", ok: true, items: fr.length });
-  console.log(`ok   Federal Register API: ${fr.length} documents`);
-} catch (e) {
-  runLog.push({ source: "Federal Register API", ok: false, error: String(e.message ?? e) });
-  console.error(`FAIL Federal Register API: ${e.message}`);
 }
 
 // Dedupe by link, sort newest first.
@@ -217,17 +203,18 @@ const feedItems = all.filter((it) =>
   it.categories?.[0] !== "Notice" ||
   it.structured?.comments_close_on);
 await mkdir(path.dirname(OUT), { recursive: true });
-await writeFile(OUT, buildRss(feedItems.slice(0, 100)));
+await writeFile(OUT, buildRss(feedItems.slice(0, 100), collected.map((s) => s.name)));
 await mkdir(path.join(ROOT, "data"), { recursive: true });
 await writeFile(path.join(ROOT, "data", "run-log.json"),
   JSON.stringify({ ran_at: new Date().toISOString(), window_days: DAYS, total_items: all.length, newly_stored: stored, sources: runLog }, null, 2));
 
 console.log(`\n${all.length} unique items in window (${stored} newly stored) → ${path.relative(ROOT, OUT)}`);
-const failed = runLog.filter((r) => !r.ok);
+const attempted = runLog.filter((r) => !("skipped" in r));
+const failed = attempted.filter((r) => !r.ok);
 for (const r of failed) console.error(`::warning title=Source failed::${r.source}: ${r.error ?? "unknown error"}`);
 // Partial source failures are logged (and recorded in data/run-log.json) but do not block publishing.
 // Only fail the run when nothing usable was collected.
-if (all.length === 0 || failed.length === runLog.length) {
+if (all.length === 0 || failed.length === attempted.length) {
   console.error("FATAL: no items collected — refusing to publish an empty feed");
   process.exitCode = 1;
 }

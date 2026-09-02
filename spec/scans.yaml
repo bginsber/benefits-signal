@@ -1,0 +1,82 @@
+# Benefits Signal — saved scans (spec § 3, scope rules from § 6.3)
+# Scans are the organizing system. Each charter is read by the model at match time.
+# Keys match the scan codes used in spec/sources.yaml `scans:` lists.
+#
+# Fields: id, name, charter (plain language, read verbatim by the matcher),
+# primary_authorities, plan_types (values the prototype's "Plan type" pill accepts),
+# out_of_scope (explicit exclusions the matcher must honor).
+
+scans:
+  - id: fhw
+    name: Federal Health & Welfare
+    charter: >
+      Federal statutes, regulations, sub-regulatory guidance, reporting and disclosure
+      obligations, and agency developments affecting group health and welfare plans:
+      ERISA Title I, ACA, MHPAEA, COBRA, HIPAA, transparency and No Surprises Act
+      requirements, RxDC and gag-clause attestations, Form 5500, IRS welfare-plan guidance.
+    primary_authorities: [DOL/EBSA, IRS, HHS/CMS, Federal Register]
+    plan_types: [Health & welfare, Multiemployer, Self-funded, All welfare plans]
+    out_of_scope:
+      - Single-employer 401(k)-only developments, unless a fiduciary principle transfers to welfare plans.
+      - Marketing content, webinar announcements, and firm news from any source.
+
+  - id: met
+    name: Multiemployer & Taft-Hartley
+    charter: >
+      Issues particular to jointly administered plans: trustee governance and board
+      composition under LMRA § 302, withdrawal-liability-adjacent developments that touch
+      welfare funds, § 515 collection and delinquency law, reciprocity, plan-document and
+      trust-agreement conformity, DOL enforcement priorities for multiemployer plans,
+      PBGC where relevant.
+    primary_authorities: [DOL/EBSA, Federal Register, NLRB where governance intersects, Federal courts]
+    plan_types: [Multiemployer, Health & welfare, Training trust / apprenticeship fund]
+    out_of_scope:
+      - Pension-only multiemployer items (withdrawal liability, PBGC funding) unless the welfare or training fund is affected.
+      - Marketing content, webinar announcements, and firm news from any source.
+
+  - id: ca9
+    name: California & Ninth Circuit
+    charter: >
+      California statutes, DMHC/CDI action affecting fund arrangements, California Labor
+      Code developments that reach fund operations, and Ninth Circuit and California
+      federal district court litigation on ERISA, MHPAEA, § 515, and fiduciary claims.
+    primary_authorities: [Ninth Circuit opinions via CourtListener, California Legislative Information, DIR/DAS]
+    plan_types: [Health & welfare, Multiemployer, Training trust / apprenticeship fund, All welfare plans]
+    out_of_scope:
+      - Litigation outside the Ninth Circuit unless it creates or resolves a split the Ninth Circuit is party to.
+      - Single-employer 401(k)-only litigation unless a fiduciary principle transfers.
+      - Marketing content, webinar announcements, and firm news from any source.
+
+  - id: cyb
+    name: Cybersecurity & Privacy
+    charter: >
+      Plan cybersecurity, participant-data privacy, incident-response obligations,
+      service-provider oversight, and the fiduciary framing of all of it: DOL cybersecurity
+      guidance and any rulemaking, HIPAA Security Rule changes as applied to group health
+      plans, state breach-notification law reaching fund administrators, vendor-contract
+      expectations.
+    primary_authorities: [DOL/EBSA, HHS OCR, Federal Register, California AG / CPPA where applicable]
+    plan_types: [Health & welfare, Multiemployer, Service providers, All welfare plans]
+    out_of_scope:
+      - General enterprise security news with no plan, participant-data, or fiduciary angle.
+      - Marketing content, webinar announcements, and firm news from any source.
+
+  - id: atf
+    name: Apprenticeship & Training Funds
+    charter: >
+      The training-trust side of the practice: jointly administered training trusts and
+      apprenticeship funds as ERISA welfare plans, and the regulatory web that governs their
+      funding and program operation. Coverage includes DOL Office of Apprenticeship standards
+      and any rulemaking on 29 CFR Parts 29 and 30 (registration, EEO); California Division of
+      Apprenticeship Standards and California Apprenticeship Council actions, including
+      training-contribution rules under the Labor Code; Davis-Bacon and California
+      prevailing-wage treatment of training-fund contributions as fringe benefits; project
+      labor agreement developments that flow into contributions; the ERISA reporting posture
+      of apprenticeship plans (the 29 CFR 2520.104-22 alternative-compliance notice and what
+      it does and does not exempt); IRS treatment of training-fund expenditures; and DOL/ETA
+      funding and WIOA developments that change program economics.
+    primary_authorities: [DOL Office of Apprenticeship / ETA, Federal Register, California DAS / DIR / CAC, DOL Wage and Hour Division]
+    plan_types: [Training trust / apprenticeship fund, Multiemployer]
+    out_of_scope:
+      - Individual program grant awards with no change to standards, contribution rules, or program economics.
+      - Marketing content, webinar announcements, and firm news from any source.
