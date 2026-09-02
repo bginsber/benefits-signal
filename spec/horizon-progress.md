@@ -269,3 +269,6 @@ Same check as iteration 8; no key, token, profile, or `ant`. No change. Blocked 
 
 ## Iteration 10 · 2026-09-01 · waiting on credentials
 Same check; nothing present. No change. Blocked on credentials from Ben.
+
+## Iteration 11 · 2026-09-01 · waiting on credentials
+Same check; nothing present. No change. Blocked on credentials from Ben.
