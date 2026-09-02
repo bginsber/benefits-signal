@@ -1,0 +1,50 @@
+{
+  "issueDate": "Wednesday, August 26, 2026",
+  "issueDateISO": "2026-08-26",
+  "issueSummary": "One development worth your time.",
+  "developments": [
+    {
+      "id": "ninth-circuit-issues-published-opinion-in-liu-v-kaiser-perma",
+      "lane": "WATCH",
+      "cue": "No action yet",
+      "headline": "Ninth Circuit takes up Liu v. Kaiser Permanente pension appeal",
+      "status": "Argued \u00b7 Decision pending",
+      "summary": [
+        "Placeholder prior-issue entry so the fixture exercises carriedForward."
+      ],
+      "metadata": {
+        "Plan type": [
+          "All welfare plans"
+        ],
+        "Jurisdiction": [
+          "Ninth Circuit"
+        ],
+        "Topics": [
+          "ERISA litigation"
+        ],
+        "Confidence": [
+          "Medium"
+        ],
+        "Fiduciary duties": [
+          "Claims & Appeals Procedure"
+        ]
+      },
+      "confidenceNote": "n",
+      "scan": "California & Ninth Circuit",
+      "affected": "a",
+      "action": "a",
+      "timing": "t",
+      "mergedSources": [
+        "CourtListener API"
+      ],
+      "nextStep": "Create monitoring follow-up",
+      "completion": "c",
+      "passage": "p",
+      "articleLabel": "l",
+      "articleUrl": "https://www.courtlistener.com/",
+      "authorityLabel": "l",
+      "authorityUrl": "https://www.courtlistener.com/"
+    }
+  ],
+  "sourceLog": []
+}

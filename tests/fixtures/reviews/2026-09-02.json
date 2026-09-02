@@ -1,0 +1,47 @@
+{
+  "issue_date": "2026-09-02",
+  "generated_at": "2026-09-01T18:00:00.000Z",
+  "instructions": "fixture",
+  "decisions": [
+    {
+      "development_id": "ninth-circuit-issues-published-opinion-in-liu-v-kaiser-perma",
+      "headline": "Liu",
+      "reviewer": "paralegal",
+      "role": "paralegal",
+      "decision": "approve",
+      "edits": {},
+      "note": "Reads cleanly; attorney can take the opinion from here.",
+      "decided_at": "2026-09-01T18:10:00.000Z"
+    },
+    {
+      "development_id": "california-apprenticeship-council-eeo-committee-met-on-augus",
+      "headline": "CAC",
+      "reviewer": "paralegal",
+      "role": "paralegal",
+      "decision": "edit",
+      "edits": {
+        "timing": "No action until the minutes post; re-check the CAC page on September 15",
+        "metadata": {
+          "Topics": [
+            "Apprenticeship",
+            "Equal opportunity",
+            "CAC",
+            "EEO standards"
+          ]
+        }
+      },
+      "note": "Tightened the timing line.",
+      "decided_at": "2026-09-01T18:12:00.000Z"
+    },
+    {
+      "development_id": "ftc-insulin-settlement-orders-bar-pbms-from-disadvantaging-l",
+      "headline": "PBM",
+      "reviewer": "paralegal",
+      "role": "paralegal",
+      "decision": "reject",
+      "edits": {},
+      "note": "Single explainer post with no primary order text; wait for the FTC docket.",
+      "decided_at": "2026-09-01T18:15:00.000Z"
+    }
+  ]
+}

@@ -1,0 +1,211 @@
+{
+  "issueDate": "Wednesday, August 26, 2026",
+  "issueDateISO": "2026-08-26",
+  "issueSummary": "Three developments worth your time. One needs a legal read.",
+  "developments": [
+    {
+      "id": "cybersecurity-program",
+      "lane": "NOW",
+      "cue": "Attorney review",
+      "headline": "DOL proposes cybersecurity program requirements for employee benefit plans",
+      "status": "Proposed · Comments due September 30",
+      "summary": [
+        "Would require plans to adopt, document, and annually review a written cybersecurity program and report certain incidents to DOL within 72 hours.",
+        "The proposal would reach health and welfare plans, including multiemployer funds and their service providers, creating new governance, vendor, and breach-notification duties."
+      ],
+      "metadata": {
+        "Plan type": [
+          "Health & welfare",
+          "Multiemployer"
+        ],
+        "Jurisdiction": [
+          "Federal"
+        ],
+        "Topics": [
+          "Cybersecurity",
+          "Service providers",
+          "Fiduciary process"
+        ],
+        "Confidence": [
+          "High"
+        ],
+        "Fiduciary duties": [
+          "Prudence & Process",
+          "Plan Document & Trust Conformity"
+        ]
+      },
+      "confidenceNote": "The legal status and comment date were confirmed against the primary material.",
+      "scan": "Cybersecurity & Privacy",
+      "affected": "Multiemployer health and welfare plans and their service providers",
+      "action": "Confirm whether existing governance and vendor-review materials would need revision.",
+      "timing": "Attorney assessment before the comment deadline",
+      "mergedSources": [
+        "EBIA Weekly",
+        "Word on Benefits",
+        "DOL/EBSA primary feed"
+      ],
+      "nextStep": "Prepare internal research assignment",
+      "completion": "Research assignment prepared for attorney review.",
+      "passage": "Plans would be expected to maintain a documented program proportionate to their systems, data, and service-provider relationships.",
+      "articleLabel": "EBIA Weekly analysis",
+      "articleUrl": "https://tax.thomsonreuters.com/en/checkpoint/ebia",
+      "authorityLabel": "DOL Employee Benefits Security Administration",
+      "authorityUrl": "https://www.dol.gov/agencies/ebsa"
+    },
+    {
+      "id": "aca-reporting",
+      "lane": "NEXT",
+      "cue": "September 30, 2026",
+      "headline": "ACA Forms 1094/1095 reporting deadline",
+      "status": "Deadline · September 30",
+      "summary": [
+        "Applicable large employers and self-funded plans must file Forms 1094-C and 1095-C with the IRS and furnish statements to individuals."
+      ],
+      "metadata": {
+        "Plan type": [
+          "Health & welfare",
+          "Self-funded"
+        ],
+        "Jurisdiction": [
+          "Federal"
+        ],
+        "Topics": [
+          "ACA",
+          "Reporting",
+          "IRS"
+        ],
+        "Confidence": [
+          "High"
+        ],
+        "Fiduciary duties": [
+          "Reporting & Disclosure"
+        ]
+      },
+      "confidenceNote": "The date and filing requirement were matched to current IRS instructions.",
+      "scan": "Federal Health & Welfare",
+      "affected": "Applicable large employers and self-funded health plans",
+      "action": "Confirm the filing calendar and responsible service provider.",
+      "timing": "Before September 30",
+      "mergedSources": [
+        "Mercer Law & Policy Group",
+        "Segal Compliance News",
+        "IRS primary feed"
+      ],
+      "nextStep": "Add deadline to review queue",
+      "completion": "Deadline review item prepared for paralegal confirmation.",
+      "passage": "The filing obligation applies to applicable large employers and providers of minimum essential coverage, subject to the governing instructions.",
+      "articleLabel": "Mercer Law & Policy Group",
+      "articleUrl": "https://www.mercer.com/en-us/insights/law-and-policy/",
+      "authorityLabel": "IRS: About Form 1094-C",
+      "authorityUrl": "https://www.irs.gov/forms-pubs/about-form-1094-c"
+    },
+    {
+      "id": "mhpaea-review",
+      "lane": "WATCH",
+      "cue": "No action yet",
+      "headline": "Ninth Circuit to reconsider MHPAEA standard of review",
+      "status": "Decision pending · Briefing schedule not set",
+      "summary": [
+        "The court granted rehearing en banc in a MHPAEA matter challenging application of the “de novo unless deferential” standard."
+      ],
+      "uncertainty": "Uncertain — the briefing schedule has not been set.",
+      "metadata": {
+        "Plan type": [
+          "Health & welfare"
+        ],
+        "Jurisdiction": [
+          "Ninth Circuit"
+        ],
+        "Topics": [
+          "MHPAEA",
+          "Litigation",
+          "Standard of review"
+        ],
+        "Confidence": [
+          "Medium"
+        ],
+        "Fiduciary duties": [
+          "Claims & Appeals Procedure"
+        ]
+      },
+      "confidenceNote": "The procedural development is clear, but its eventual effect on plan administration remains open.",
+      "scan": "California & Ninth Circuit",
+      "affected": "Health plans defending MHPAEA benefit determinations in the Ninth Circuit",
+      "action": "Monitor the briefing schedule and eventual standard articulated by the en banc court.",
+      "timing": "No operational change yet",
+      "mergedSources": [
+        "Groom: In Brief",
+        "Ninth Circuit primary feed"
+      ],
+      "nextStep": "Create monitoring follow-up",
+      "completion": "Monitoring follow-up prepared for attorney review.",
+      "passage": "The en banc court will reconsider the framework used to review the challenged mental-health benefit determination.",
+      "articleLabel": "Groom: In Brief",
+      "articleUrl": "https://www.groom.com/resources/",
+      "authorityLabel": "U.S. Court of Appeals for the Ninth Circuit",
+      "authorityUrl": "https://www.ca9.uscourts.gov/"
+    }
+  ],
+  "sourceLog": [
+    {
+      "source": "DOL/EBSA primary feed",
+      "scan": "Cybersecurity & Privacy",
+      "result": "Verified",
+      "note": "Confirmed status and comment deadline for the NOW item."
+    },
+    {
+      "source": "EBIA Weekly",
+      "scan": "Cybersecurity & Privacy",
+      "result": "Kept",
+      "note": "Lead practical analysis supporting the NOW item."
+    },
+    {
+      "source": "Word on Benefits",
+      "scan": "Multiemployer & Taft-Hartley",
+      "result": "Merged",
+      "note": "Added plan-administration context to the same development."
+    },
+    {
+      "source": "IRS primary feed",
+      "scan": "Federal Health & Welfare",
+      "result": "Verified",
+      "note": "Confirmed filing requirement and operative date."
+    },
+    {
+      "source": "Mercer Law & Policy Group",
+      "scan": "Federal Health & Welfare",
+      "result": "Kept",
+      "note": "Best deadline treatment for the NEXT item."
+    },
+    {
+      "source": "Segal Compliance News",
+      "scan": "Federal Health & Welfare",
+      "result": "Merged",
+      "note": "Duplicate coverage retained as supporting evidence."
+    },
+    {
+      "source": "Ninth Circuit primary feed",
+      "scan": "California & Ninth Circuit",
+      "result": "Verified",
+      "note": "Confirmed the procedural posture of the WATCH item."
+    },
+    {
+      "source": "Groom",
+      "scan": "California & Ninth Circuit",
+      "result": "Kept",
+      "note": "Clearest explanation of the pending appellate issue."
+    },
+    {
+      "source": "Trucker Huss Benefits Report",
+      "scan": "California & Ninth Circuit",
+      "result": "Omitted",
+      "note": "No additional in-scope development in this illustrative issue."
+    },
+    {
+      "source": "Wagner Law Group Law Alerts",
+      "scan": "Federal Health & Welfare",
+      "result": "Omitted",
+      "note": "Items reviewed did not clear the relevance threshold."
+    }
+  ]
+}

@@ -11,7 +11,7 @@ Companion to `spec/horizon-scanning-goal.md`. The loop appends one entry per ite
 | M3 · Normalize and scan-match | built; live run blocked on credentials | iteration 3, 2026-09-01 |
 | M4 · Cluster, verify, assess | built; live run blocked on credentials | iteration 4, 2026-09-01 |
 | M5 · Weekly candidate digest | done (fixture); workflow disabled pending secret | iteration 5, 2026-09-01 |
-| M6 · Front end reads data | not started | |
+| M6 · Front end reads data | done | iteration 6, 2026-09-01 |
 | M7 · Obligations and trustee agenda | not started | |
 
 ## Baseline · 2026-09-01 · before iteration 1
@@ -196,3 +196,36 @@ Follow-ups (left alone):
 - Urgent path (spec § 2 / § 14 item 4): a NOW item whose runway would be consumed by waiting for Wednesday should reach the reviewer immediately.
 - A test fixture failure taught that `parseRss` truncates descriptions at 600 characters; fine for the collated feed, but the review feed relies on Outlook reading the full description, which it does.
 Blocked: live triage/assess still need credentials (M3, M4). The weekly workflow additionally needs the `ANTHROPIC_API_KEY` repository secret before Ben uncomments its schedule.
+
+## Iteration 6 · 2026-09-01 · Milestone M6
+Slice: front end reads issue.json; publisher builds it from approved candidates and the review file; source log from records; empty and carried-forward issues render. Credentials re-checked: still none.
+Done:
+- `public/issue.json`: the illustrative August 26 issue extracted verbatim from `src/App.jsx` (three developments, ten source-log rows) into the `spec/issue-schema.json` shape, validated with zero errors. Each development gained the schema-required `Fiduciary duties` metadata (cybersecurity → Prudence & Process, Plan Document & Trust Conformity; ACA reporting → Reporting & Disclosure; MHPAEA en banc → Claims & Appeals Procedure).
+- `src/Issue.jsx`: the existing markup moved unchanged into a pure `Issue({ issue })` component; masthead date and summary, the development list, and the source-log table now read from the prop. One addition inside the opened briefing only: a "Status" row reading "Carried forward from a previous issue; updated here rather than presented as new." rendered when `carriedForward` is true.
+- `src/App.jsx`: fetches `${BASE_URL}issue.json`, renders `Issue` when it arrives, nothing while loading, and a quiet masthead-only message if the fetch fails.
+- `scripts/lib/publish.mjs` + `scripts/publish.mjs`: `releaseDecision` (paralegal approve/edit releases; NOW items and gated tags also need an attorney approve/edit row; reject/defer/blank exclude), `applyEdits` (schema fields only, metadata merged key by key), `carriedForward` when the id appeared in `--previous`, `readerSummaryLine` ("Two developments worth your time. One needs a legal read." / "Nothing requires your attention this week."), and `buildSourceLog` from records: Verified (primary + verification result), Kept (lead document), Merged (other cluster members), Omitted (rejected candidates with the reviewer's note; the omitted pool summarised one row per source with the closest reason). The CLI validates against the schema, refuses to write on errors, writes `public/issue.json`, and archives to `data/issues/<date>.json`.
+- Fixtures: `tests/fixtures/reviews/2026-09-02.json` (approve Liu, edit CAC's timing and Topics, reject PBM with a note) and `tests/fixtures/issues/2026-08-26.json` (a prior issue containing Liu, so it carries forward).
+- `tests/publish.test.mjs` (2 tests): bundles `src/Issue.jsx` with esbuild (already a Vite dependency) and renders with `react-dom/server`: the empty issue shows "Nothing requires your attention this week." with no `<article>`, and the carried-forward development is labeled exactly once; edits applied, rejected excluded, `pipeline` never reaches the front end, source-log results in order; release rules and edit merging unit-tested.
+- Visual check (vite preview + browser): the scan view is pixel-for-pixel the committed reference `qa-implementation-top.png` (masthead, date, summary line, NOW item). Inside the opened briefing the only difference is the Fiduciary duties pill row, in the existing pill style. CSS bundle hash unchanged (`index-BzS8h8ew.css`); JS bundle and `index.html` changed as expected; `dist/client/issue.json` now ships with the app.
+Evidence:
+```
+$ npm test                       → ℹ tests 30  ℹ pass 30  ℹ fail 0
+$ npm run test:sites             → ℹ pass 4  ℹ fail 0
+$ npm run build                  → ✓ built; Prepared Sites build; dist/client has assets/, index.html, issue.json
+$ node scripts/publish.mjs --fixture --issue 2026-09-02 --previous tests/fixtures/issues/2026-08-26.json
+issue of Wednesday, September 2, 2026: Two developments worth your time.
+  WATCH California Apprenticeship Council EEO committee met … (edit applied)
+  WATCH Ninth Circuit issues published opinion in Liu v. Kaiser … (carried forward)
+  ----  not released: FTC insulin settlement orders … (paralegal reject)
+  source log: 5 rows (Verified, Kept, Verified, Kept, Omitted)
+$ node scripts/publish.mjs --fixture --issue 2026-09-09 --review <missing>   → "Nothing requires your attention this week." · 0 developments · 3 Omitted rows
+```
+Decisions taken by default: none new. (Attorney gate on NOW items and the three gated tags, from M5, is now enforced at release time as well.)
+Assumptions:
+- "No visual change to any existing screen" is read as: the scan view and every existing element are unchanged; the schema-required Fiduciary duties row appears inside the opened briefing because the schema states that is the intended, front-end-free path for the tag. If Ben would rather hide it until Phase 3, delete the key from `public/issue.json`'s three developments and the row disappears (the schema would then need the key made optional).
+- The reader-facing summary line is generated ("N developments worth your time. One needs a legal read.") rather than written by the model, so the count is never something the model is prompted toward.
+- The paralegal "releases" by running `node scripts/publish.mjs --issue <date>` and pushing `public/issue.json`; no auth-gated page exists (Phase 2 in the spec).
+Follow-ups (left alone):
+- `spec/README-collector.md` and `AGENTS.md` do not yet describe the publish step; a short "how an issue is released" paragraph belongs in the README when the loop finishes.
+- The source log's omitted-pool rows depend on `data/omitted/` from a live triage run; until credentials exist those rows come only from rejected candidates.
+Blocked: live triage/assess (M3, M4) still need credentials; the weekly workflow needs the repository secret.
