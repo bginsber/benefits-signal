@@ -249,6 +249,19 @@ export async function fetchDas(source) {
   return items;
 }
 
+/**
+ * The date an item should sort and publish under: its own date when that is
+ * not in the future, otherwise the date it was first collected. A meeting
+ * notice for October is news the day it appears, not on the meeting day, so
+ * it must not pin itself to the top of the feed until then.
+ */
+export function displayDate(item, firstSeen = new Map(), now = new Date()) {
+  const nowISO = now.toISOString();
+  if (item.date && item.date <= nowISO) return item.date;
+  const seen = firstSeen.get(item.link);
+  return seen && seen <= nowISO ? seen : nowISO;
+}
+
 // ---------- dispatch ----------
 
 /** Collect one source by resolved kind. Returns items within the window (date >= since, or undated). */

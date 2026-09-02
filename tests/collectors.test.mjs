@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { parseCourtListener, parseDasPage, parseMercerSearch, parseSegalInsights, toISODate } from "../scripts/lib/collectors.mjs";
+import { displayDate, parseCourtListener, parseDasPage, parseMercerSearch, parseSegalInsights, toISODate } from "../scripts/lib/collectors.mjs";
 
 const fixture = (name) => readFile(new URL(`./fixtures/${name}`, import.meta.url), "utf8");
 const json = async (name) => JSON.parse(await fixture(name));
@@ -61,4 +61,13 @@ test("toISODate accepts ISO and long-form dates and rejects junk", () => {
   assert.equal(toISODate("2026-08-18"), "2026-08-18T12:00:00.000Z");
   assert.equal(toISODate("August 18, 2026"), "2026-08-18T12:00:00.000Z");
   assert.equal(toISODate("TBD"), null);
+});
+
+test("displayDate keeps past dates, and moves future-dated notices to when they were first seen", () => {
+  const now = new Date("2026-09-02T15:00:00.000Z");
+  const seen = new Map([["https://x/meeting", "2026-08-20T12:00:00.000Z"]]);
+  assert.equal(displayDate({ link: "https://x/old", date: "2026-08-30T12:00:00.000Z" }, seen, now), "2026-08-30T12:00:00.000Z");
+  assert.equal(displayDate({ link: "https://x/meeting", date: "2026-10-29T12:00:00.000Z" }, seen, now), "2026-08-20T12:00:00.000Z", "future meeting sorts by first-seen");
+  assert.equal(displayDate({ link: "https://x/new", date: "2026-10-29T12:00:00.000Z" }, seen, now), now.toISOString(), "brand-new future item is news today");
+  assert.equal(displayDate({ link: "https://x/undated", date: null }, seen, now), now.toISOString());
 });

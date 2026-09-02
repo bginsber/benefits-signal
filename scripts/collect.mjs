@@ -24,7 +24,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { ROOT, loadSources, resolveCollector } from "./lib/sources.mjs";
-import { collectSource, fetchText } from "./lib/collectors.mjs";
+import { collectSource, displayDate, fetchText } from "./lib/collectors.mjs";
 import { SILENT_AFTER, carryFailureCounts } from "./lib/runlog.mjs";
 
 const DATA_DIR = path.join(ROOT, "data", "collected");
@@ -51,24 +51,29 @@ async function loadPreviousRunLog() {
   return null;
 }
 
-/** Idempotent store: one JSON file per document, keyed by URL hash. */
+/** Idempotent store: one JSON file per document, keyed by URL hash. Returns the count stored and each link's first-seen time. */
 async function storeItems(items) {
   await mkdir(DATA_DIR, { recursive: true });
   let stored = 0;
+  const firstSeen = new Map();
   for (const it of items) {
     const file = path.join(DATA_DIR, `${sha1(it.link)}.json`);
-    if (!existsSync(file)) {
-      await writeFile(file, JSON.stringify({ ...it, collected_at: new Date().toISOString() }, null, 2));
-      stored++;
+    if (existsSync(file)) {
+      try { firstSeen.set(it.link, JSON.parse(await readFile(file, "utf8")).collected_at ?? null); } catch { /* unreadable; treat as new */ }
+      continue;
     }
+    const collected_at = new Date().toISOString();
+    await writeFile(file, JSON.stringify({ ...it, collected_at }, null, 2));
+    firstSeen.set(it.link, collected_at);
+    stored++;
   }
-  return stored;
+  return { stored, firstSeen };
 }
 
 function buildRss(items, sourceNames) {
   const now = new Date().toUTCString();
   const entries = items.map((it) => {
-    const d = it.date ? new Date(it.date).toUTCString() : now;
+    const d = new Date(it.displayDate).toUTCString();
     return `    <item>
       <title>${esc(`[${it.source.replace(/ — .*/, "")}] ${it.title}`)}</title>
       <link>${esc(it.link)}</link>
@@ -125,12 +130,14 @@ for (const src of sources) {
   }
 }
 
-// Dedupe by link, sort newest first.
+// Dedupe by link, store, then sort newest first by the date each item became news
+// (its own date, or the first-seen time for future-dated items such as meeting notices).
 const seen = new Set();
-all = all.filter((it) => (seen.has(it.link) ? false : (seen.add(it.link), true)))
-  .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
-
-const stored = await storeItems(all);
+all = all.filter((it) => (seen.has(it.link) ? false : (seen.add(it.link), true)));
+const { stored, firstSeen } = await storeItems(all);
+const now = new Date();
+for (const it of all) it.displayDate = displayDate(it, firstSeen, now);
+all.sort((a, b) => b.displayDate.localeCompare(a.displayDate));
 
 // The store keeps everything; the inbox feed omits routine Federal Register
 // notices (which dominate ~4:1) unless they carry a comment deadline.
