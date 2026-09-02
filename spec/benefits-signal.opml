@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Benefits Signal — source feeds (Outlook import)</title>
+    <dateCreated>Tue, 01 Sep 2026 00:00:00 GMT</dateCreated>
+  </head>
+  <body>
+    <outline text="Benefits Signal sources">
+      <outline type="rss" text="Groom Law Group" title="Groom Law Group" xmlUrl="https://www.groom.com/feed/" htmlUrl="https://www.groom.com/resources/"/>
+      <outline type="rss" text="Trucker Huss Benefits Report" title="Trucker Huss Benefits Report" xmlUrl="https://www.truckerhuss.com/feed/" htmlUrl="https://www.truckerhuss.com/"/>
+      <outline type="rss" text="Wagner Law Group" title="Wagner Law Group" xmlUrl="https://www.wagnerlawgroup.com/feed/" htmlUrl="https://www.wagnerlawgroup.com/"/>
+      <outline type="rss" text="Word on Benefits (IFEBP)" title="Word on Benefits (IFEBP)" xmlUrl="https://blog.ifebp.org/feed/" htmlUrl="https://blog.ifebp.org/"/>
+      <outline type="rss" text="Federal Register — EBSA" title="Federal Register — EBSA" xmlUrl="https://www.federalregister.gov/api/v1/documents.rss?conditions%5Bagencies%5D%5B%5D=employee-benefits-security-administration" htmlUrl="https://www.federalregister.gov/agencies/employee-benefits-security-administration"/>
+      <outline type="rss" text="Federal Register — IRS (rules and proposed rules)" title="Federal Register — IRS (rules and proposed rules)" xmlUrl="https://www.federalregister.gov/api/v1/documents.rss?conditions%5Bagencies%5D%5B%5D=internal-revenue-service&amp;conditions%5Btype%5D%5B%5D=RULE&amp;conditions%5Btype%5D%5B%5D=PRORULE" htmlUrl="https://www.federalregister.gov/agencies/internal-revenue-service"/>
+      <outline type="rss" text="Federal Register — Employment and Training Administration" title="Federal Register — Employment and Training Administration" xmlUrl="https://www.federalregister.gov/api/v1/documents.rss?conditions%5Bagencies%5D%5B%5D=employment-and-training-administration" htmlUrl="https://www.federalregister.gov/agencies/employment-and-training-administration"/>
+      <outline type="rss" text="Federal Register — Wage and Hour Division" title="Federal Register — Wage and Hour Division" xmlUrl="https://www.federalregister.gov/api/v1/documents.rss?conditions%5Bagencies%5D%5B%5D=wage-and-hour-division" htmlUrl="https://www.federalregister.gov/agencies/wage-and-hour-division"/>
+    </outline>
+  </body>
+</opml>

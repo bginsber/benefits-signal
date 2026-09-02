@@ -1,0 +1,154 @@
+# Benefits Signal — source configuration (Phase 0)
+# All URLs below were fetch-verified on 2026-09-01 unless marked otherwise.
+# layer: interpretation | primary
+# method: rss | scrape | scrape-js | email | api
+# Scan keys: fhw = Federal Health & Welfare, met = Multiemployer & Taft-Hartley,
+#            ca9 = California & Ninth Circuit, cyb = Cybersecurity & Privacy,
+#            atf = Apprenticeship & Training Funds
+
+interpretation:
+  - name: EBIA Weekly
+    method: email                     # NO public feed; public EBIA blog stale since mid-2023
+    inbox: benefits-signal@<firm-domain>   # dedicated subscriptions-only mailbox
+    notes: Thomson Reuters Checkpoint subscription email is the only viable channel.
+    scans: [fhw, cyb, met]
+    active: true
+
+  - name: Mercer Law & Policy Group
+    method: scrape                    # no RSS declared
+    url: https://www.mercer.com/insights/law-and-policy/
+    notes: Listing may be partly JS-loaded — verify the scraper sees article cards.
+           Backup: monthly Global Legislative Update email signup on the same page.
+    scans: [fhw]
+    active: true
+
+  - name: Segal Compliance News
+    method: scrape-js                 # raw HTML shows zero articles; JS-rendered listing
+    url: https://www.segalco.com/consulting-insights/compliance-news/
+    notes: Needs headless rendering or the underlying XHR/JSON endpoint (find during Phase 0).
+           Pre-Sep-2024 content lives in a separate insights archive.
+    scans: [fhw, met]
+    active: true
+
+  - name: Groom Law Group
+    method: rss
+    url: https://www.groom.com/feed/  # verified valid; items dated Sep 1 / Aug 31 2026
+    notes: Feed mixes events/webinars with alerts — filter by category/keywords.
+    scans: [fhw, met, ca9, cyb]
+    active: true
+
+  - name: Trucker Huss Benefits Report
+    method: rss
+    url: https://www.truckerhuss.com/feed/  # verified valid; ~monthly cadence
+    scans: [ca9, fhw, met]
+    active: true
+
+  - name: Wagner Law Group Law Alerts
+    method: rss
+    url: https://www.wagnerlawgroup.com/feed/  # verified valid; Aug 2026 items
+    notes: Includes general firm/media items — filter to law alerts / ERISA categories.
+    scans: [fhw, met, cyb]
+    active: true
+
+  - name: Word on Benefits (IFEBP)
+    method: rss
+    url: https://blog.ifebp.org/feed/  # verified valid RSS 2.0; very active
+    notes: wordonbenefits.org resolves here. Weight apprenticeship/training posts to atf.
+    scans: [fhw, met, atf]
+    active: true
+
+primary:
+  - name: Federal Register API
+    method: api
+    url: https://www.federalregister.gov/api/v1/documents.json
+    auth: none
+    notes: >
+      THE reliable primary channel for EBSA/IRS/ETA/WHD/HHS/CMS regulatory documents,
+      with structured comment_date and effective_date fields. Verified agency slugs:
+      employee-benefits-security-administration, internal-revenue-service,
+      employment-and-training-administration, wage-and-hour-division,
+      health-and-human-services-department, centers-for-medicare-medicaid-services.
+      Example (verified): ?conditions[agencies][]=employee-benefits-security-administration
+      &conditions[publication_date][gte]=2026-07-01&per_page=20
+      &fields[]=title&fields[]=publication_date&fields[]=agency_names
+      Cursor paging via next_page_url.
+    scans: [fhw, met, cyb, atf]
+    active: true
+
+  - name: regulations.gov API v4
+    method: api
+    url: https://api.regulations.gov/v4      # /documents and /dockets verified
+    auth: api-key                            # free via api.data.gov; DEMO_KEY works for testing
+    notes: Used at verification time for comment deadlines and docket status,
+           not as a daily collector. Key params filter[searchTerm], filter[agencyId],
+           filter[lastModifiedDate].
+    scans: [fhw, cyb, atf]
+    active: true
+
+  - name: CourtListener API
+    method: api
+    url: https://www.courtlistener.com/api/rest/v4/search/
+    auth: none-for-search               # docket alerts endpoint requires a free account token
+    notes: >
+      Verified: ?q=ERISA&type=o&court=ca9&order_by=dateFiled+desc returns Ninth Circuit
+      opinions (type=o opinions, type=r RECAP dockets). Docket-alerts endpoint
+      (/api/rest/v4/docket-alerts/) confirmed, 401 without token — register a free
+      account for alerts on watch-list cases.
+    scans: [ca9]
+    active: true
+
+  - name: DOL/EBSA newsroom
+    method: scrape-js
+    url: https://www.dol.gov/newsroom/releases?agency=ebsa
+    notes: >
+      CAVEAT (verified): dol.gov returns 403 to plain HTTP clients from datacenter IPs;
+      /rss/releases.xml also 403. Needs a browser-grade fetch path, or lean on the
+      Federal Register API for EBSA regulatory documents and treat the newsroom as
+      best-effort for sub-regulatory announcements.
+    scans: [fhw, met, cyb]
+    active: true
+
+  - name: IRS
+    method: scrape
+    url: https://www.irs.gov/newsroom/news-releases-for-current-month   # verified 200
+    also: https://www.irs.gov/internal-revenue-bulletins                # written guidance
+    notes: No working RSS (newsroom/feed is 404) — scrape the HTML listings.
+    scans: [fhw]
+    active: true
+
+  - name: HHS OCR newsroom
+    method: scrape-js
+    url: https://www.hhs.gov/ocr/newsroom/index.html
+    notes: Bot-protected like dol.gov (works via rendering proxy, 403 to curl).
+           HIPAA enforcement/settlements relevant to group health plans.
+    scans: [cyb]
+    active: true
+
+  - name: CMS newsroom
+    method: scrape
+    url: https://www.cms.gov/newsroom        # verified; curl-friendly
+    scans: [fhw]
+    active: true
+
+  - name: DOL Office of Apprenticeship / ETA
+    method: api
+    url: https://www.federalregister.gov/api/v1/documents.json   # ETA + WHD agency filters
+    also: https://www.apprenticeship.gov/investments-tax-credits-and-tuition-support
+    notes: >
+      apprenticeship.gov has NO newsroom page (verified: /news and variants 404);
+      funding announcements surface on the investments page; OA press goes through
+      the dol.gov newsroom (see its caveat). Federal Register ETA filter is the
+      dependable channel for 29 CFR 29/30 rulemaking.
+    scans: [atf]
+    active: true
+
+  - name: California DAS / DIR / CAC
+    method: scrape
+    urls:
+      - https://www.dir.ca.gov/das/das.html                # DAS home (verified)
+      - https://www.dir.ca.gov/das/publicworks.html        # public-works apprenticeship (verified)
+      - https://www.dir.ca.gov/das/DAS_CACMeetings.html    # CAC 2026 meetings (verified; NOT DASMeetings.html, which is stale/2019)
+      - https://www.dir.ca.gov/cac/cac.html                # CAC overview (verified)
+    notes: Plain HTML, curl-friendly.
+    scans: [atf, ca9]
+    active: true

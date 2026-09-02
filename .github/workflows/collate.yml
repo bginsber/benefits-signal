@@ -1,0 +1,51 @@
+name: Collate Benefits Signal feed
+
+on:
+  schedule:
+    - cron: "17 12 * * *"   # daily ~5:17am Pacific (12:17 UTC)
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: ["scripts/collect.mjs", ".github/workflows/collate.yml"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  collate:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run collector
+        env:
+          FEED_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/collated.xml
+        run: |
+          node scripts/collect.mjs --days 30 --out _site/collated.xml
+          cat > _site/index.html <<'EOF'
+          <!doctype html><meta charset="utf-8"><title>Benefits Signal feed</title>
+          <p>Benefits Signal collated source feed: <a href="collated.xml">collated.xml</a>.
+          Subscribe to that URL in Outlook (right-click RSS Feeds &rarr; Add a New RSS Feed).</p>
+          EOF
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
