@@ -1,0 +1,98 @@
+{
+  "id": "california-apprenticeship-council-eeo-committee-met-on-augus",
+  "lane": "WATCH",
+  "cue": "No action yet",
+  "headline": "California Apprenticeship Council EEO committee met on August 12 with a noticed agenda",
+  "status": "Committee meeting held · August 12, 2026",
+  "summary": [
+    "The California Apprenticeship Council's Equal Opportunity in Apprenticeship committee met on August 12, 2026 under a posted notice and agenda.",
+    "The agenda is the only collected document; any action the committee took on equal-opportunity standards for registered programs is not yet known."
+  ],
+  "metadata": {
+    "Plan type": [
+      "Training trust / apprenticeship fund"
+    ],
+    "Jurisdiction": [
+      "California"
+    ],
+    "Topics": [
+      "Apprenticeship",
+      "Equal opportunity",
+      "CAC"
+    ],
+    "Confidence": [
+      "Medium"
+    ],
+    "Fiduciary duties": [
+      "Program & Funding Compliance"
+    ]
+  },
+  "confidenceNote": "The CAC's own notice confirms the meeting and its date; it does not state what the committee decided.",
+  "scan": "Apprenticeship & Training Funds",
+  "affected": "Training trusts and apprenticeship funds that sponsor California registered programs",
+  "action": "Obtain the agenda and any minutes to see whether equal-opportunity standards or program requirements changed.",
+  "timing": "No action until the minutes show a decision",
+  "mergedSources": [
+    "California DAS / DIR / CAC"
+  ],
+  "nextStep": "Create monitoring follow-up",
+  "completion": "Monitoring follow-up prepared; re-check when the minutes post.",
+  "passage": "Equal Opportunity in Apprenticeship — August 12, 2026",
+  "articleLabel": "California DAS / CAC meeting page",
+  "articleUrl": "https://www.dir.ca.gov/DAS/DAS_MeetingAgenda/2026/August/2026-8-EEO-Notice.pdf",
+  "authorityLabel": "California Apprenticeship Council notice",
+  "authorityUrl": "https://www.dir.ca.gov/DAS/DAS_MeetingAgenda/2026/August/2026-8-EEO-Notice.pdf",
+  "pipeline": {
+    "cluster_id": "3e7725bda2682f14",
+    "cluster_label": "CAC Equal Opportunity in Apprenticeship committee meeting, August 12, 2026",
+    "why_same": "A single meeting notice; no other document describes this meeting.",
+    "member_document_ids": [
+      "4e4028ecb3e020488bf59aee17869bbefcdd511a"
+    ],
+    "scan_ids": [
+      "atf"
+    ],
+    "verification": {
+      "development_cluster_id": "3e7725bda2682f14",
+      "primary_document_id": "4e4028ecb3e020488bf59aee17869bbefcdd511a",
+      "primary_link": "https://www.dir.ca.gov/DAS/DAS_MeetingAgenda/2026/August/2026-8-EEO-Notice.pdf",
+      "lookup": "in-cluster",
+      "checked_at": "2026-09-02T05:48:24.452Z",
+      "prompt_version": "verify@1",
+      "checked_fields": {
+        "status": "confirmed",
+        "dates": "confirmed",
+        "posture": "partially_confirmed"
+      },
+      "result": "partially_confirmed",
+      "notes": "The primary document is the CAC committee's own notice: meeting_date 2026-08-12 and documents Notice and Agenda are stated. The notice does not state what the committee decided or any rule change, so posture beyond 'meeting noticed with an agenda' is not established.",
+      "model": "fixture",
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_input_tokens": 0
+      }
+    },
+    "fiduciary_justifications": [
+      {
+        "tag": "Program & Funding Compliance",
+        "justification": "Committee action on equal-opportunity standards would change what a registered program must do to keep its regulatory standing."
+      }
+    ],
+    "passage_document_id": "4e4028ecb3e020488bf59aee17869bbefcdd511a",
+    "operative_date": "2026-08-12",
+    "tier_rationale": "A meeting notice records that the committee met; nothing in the collected documents states a decision that changes program obligations, so the item stays in WATCH.",
+    "model_tier": "WATCH",
+    "model_confidence": "Medium",
+    "defects": [],
+    "prompt_version": "assess@1",
+    "model": "fixture",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0
+    },
+    "review_state": "pending",
+    "assessed_at": "2026-09-02T05:48:24.459Z"
+  }
+}

@@ -10,7 +10,7 @@ Companion to `spec/horizon-scanning-goal.md`. The loop appends one entry per ite
 | M2 · Close the source gaps | done | iteration 2, 2026-09-01 |
 | M3 · Normalize and scan-match | built; live run blocked on credentials | iteration 3, 2026-09-01 |
 | M4 · Cluster, verify, assess | built; live run blocked on credentials | iteration 4, 2026-09-01 |
-| M5 · Weekly candidate digest | not started | |
+| M5 · Weekly candidate digest | done (fixture); workflow disabled pending secret | iteration 5, 2026-09-01 |
 | M6 · Front end reads data | not started | |
 | M7 · Obligations and trustee agenda | not started | |
 
@@ -165,3 +165,34 @@ Follow-ups (left alone):
 - regulations.gov docket lookup (DEMO_KEY works for testing) and CourtListener docket lookup for watch-list cases.
 - Re-record the eleven hand-authored model fixtures (triage 5, cluster 1, verify 2, assess 3) once credentials exist, then re-run the fixture tests; hand-authored content may differ from real model output in ways the enforcement layer will surface as defects.
 Blocked: live triage (M3) and live assess (M4) both need credentials from Ben: `ANTHROPIC_API_KEY` exported in the shell that runs the loop, or `ant auth login` on this machine. When present, run in order: `node scripts/triage.mjs` (≈323 docs), then `node scripts/assess.mjs --today <date>`, and record per-scan counts, candidate list, tiers, verification results, and `cache_read_input_tokens` here.
+
+## Iteration 5 · 2026-09-01 · Milestone M5
+Slice: weekly candidate digest, review template, review feed, weekly workflow (disabled). Credentials re-checked: still none.
+Done:
+- `scripts/lib/digest.mjs`: `renderMarkdown` / `renderHtml` render each candidate in the newsletter's own order (lane · cue, headline, status, summary, uncertainty, then the disclosure: Who / What / By when, Matched scan, metadata pills, Merged evidence, Confidence rationale, Supporting passage, Links, Suggested next step with the "Nothing is sent or changed automatically" line), followed by reviewer notes never shown to readers: attorney-gate status and reason, tier with the model's original tier when a rule lowered it, confidence likewise, fiduciary-duty justifications, the verification record with primary link and notes, cluster label and why-same, every merged document with link and the passage source marked, every rule correction, prompt version. `needsAttorney()`: NOW items, plus Prohibited Transactions, Loyalty, and (spec § 14 item 1 default) Contribution Collection tags. `buildReviewTemplate()`: one paralegal row per candidate and an attorney row where gated, in the `ReviewDecision` shape (development_id, reviewer, role, decision, edits, note, decided_at), keeping decisions already filled in. `renderReviewFeed()`: RSS 2.0, one item per digest, full HTML digest in the description. `nextIssueDate()`: next Wednesday. Zero candidates renders "Nothing requires your attention this week."
+- `scripts/digest.mjs` CLI: `--fixture` reads `tests/fixtures/candidates/` (the three M4 fixture outputs, now committed); writes `data/digests/<issue>.md` and `.html`, `data/reviews/<issue>.json`, a candidate snapshot under `data/digests/<issue>/` so older digests re-render, and `_site/review.xml`. `--trustee-agenda` filters to candidates with a fiduciary tag other than None (M7 will build on it). `FEED_URL` makes the feed and digest links absolute on Pages.
+- `.github/workflows/triage.yml` (new, **disabled**: `workflow_dispatch` only, schedule commented with instructions): npm ci → collect → triage → assess → digest → copy digests → deploy `_site/` (collated.xml, run-log.json, review.xml, digests/) → also uploads matches/omitted/candidates/digests/reviews as a 90-day workflow artifact. Needs the `ANTHROPIC_API_KEY` repository secret; `COURTLISTENER_TOKEN` optional.
+- `.github/workflows/collate.yml`: the daily deploy now fetches the current `review.xml` and the digests it links from Pages before deploying, so the weekly review feed survives the daily site replacement. Index page lists both feeds.
+- `tests/digest.test.mjs` (3 tests): fixture CLI end to end (field order asserted marker by marker; corrections visible to the reviewer; review template rows; feed parses as RSS with one item carrying the full HTML); zero-candidate week; attorney-gate rows, decision preservation, summary line, next-Wednesday rule.
+Evidence:
+```
+$ npm test                       → ℹ tests 28  ℹ pass 28  ℹ fail 0
+$ npm run test:sites             → ℹ pass 4  ℹ fail 0
+$ npm run build                  → Prepared Sites build; dist/ unchanged in git
+$ node scripts/digest.mjs --fixture --out <scratch> --issue 2026-09-02
+digest for the issue of 2026-09-02: 3 candidate(s) — Three candidate developments for review.
+  digests/2026-09-02.md · reviews/2026-09-02.json (0 NOW; attorney rows where gated) · review.xml (1 item)
+$ node scripts/collect.mjs --days 7
+::warning title=Source silent::Wagner Law Group Law Alerts has failed 3 consecutive runs (since 2026-09-02): HTTP 403   ← first firing of the M2 notice
+```
+Sample review file (fixture run, `data/reviews/2026-09-02.json`): three rows, all `role: paralegal`, `decision: ""`, `decided_at: null`; no attorney rows because none of the three fixture candidates is NOW or carries a gated tag. The unit test covers the gated shape (`a:paralegal, a:attorney, b:paralegal, b:attorney, c:paralegal`).
+Decisions taken by default: § 14 item 1's second half applied — Contribution Collection & Delinquency items require attorney approval alongside the two tags spec § 6.7 names. § 14 item 3 (attorney approval on every NOW item) applied as the spec recommends. § 14 item 4 (Wednesday issue): `nextIssueDate()` follows it; the urgent path (runway rule) is not built.
+Assumptions:
+- Phase 1 delivery is the review feed in Outlook plus the Markdown file; the Phase 2 auth-gated review page is not built.
+- The weekly workflow deploys to Pages itself rather than handing off to the daily job, because both use the same Pages concurrency group and the daily job now carries the review feed forward.
+- Recall sampling (spec § 10: ten omitted documents per week) is not part of M5's wording and is left as a follow-up; the digest reports the omitted count so the pool is visible.
+Follow-ups (left alone):
+- Recall-sampling section in the digest with `OmissionSample` rows in the review file.
+- Urgent path (spec § 2 / § 14 item 4): a NOW item whose runway would be consumed by waiting for Wednesday should reach the reviewer immediately.
+- A test fixture failure taught that `parseRss` truncates descriptions at 600 characters; fine for the collated feed, but the review feed relies on Outlook reading the full description, which it does.
+Blocked: live triage/assess still need credentials (M3, M4). The weekly workflow additionally needs the `ANTHROPIC_API_KEY` repository secret before Ben uncomments its schedule.

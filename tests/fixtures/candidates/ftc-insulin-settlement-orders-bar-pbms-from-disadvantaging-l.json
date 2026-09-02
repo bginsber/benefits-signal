@@ -1,0 +1,101 @@
+{
+  "id": "ftc-insulin-settlement-orders-bar-pbms-from-disadvantaging-l",
+  "lane": "WATCH",
+  "cue": "No action yet",
+  "headline": "FTC insulin settlement orders bar PBMs from disadvantaging low-list-price insulin",
+  "status": "Settlement orders · Compliance date not stated in collected text",
+  "summary": [
+    "The FTC's settlement orders with the three largest pharmacy benefit managers restrict formulary practices that disadvantage low wholesale acquisition cost versions of insulin.",
+    "Funds that contract with these PBMs may see formulary and rebate changes that affect what the plan pays and what participants pay at the counter."
+  ],
+  "uncertainty": "The operative date has not been confirmed against primary authority; treat the timing as unsettled until it is.",
+  "metadata": {
+    "Plan type": [
+      "Health & welfare",
+      "Multiemployer"
+    ],
+    "Jurisdiction": [
+      "Federal"
+    ],
+    "Topics": [
+      "PBMs",
+      "Drug pricing",
+      "FTC",
+      "Formulary"
+    ],
+    "Confidence": [
+      "Low"
+    ],
+    "Fiduciary duties": [
+      "Prudence & Process"
+    ]
+  },
+  "confidenceNote": "The explainer describes the order provisions in detail.",
+  "scan": "Federal Health & Welfare",
+  "affected": "Health and welfare funds contracting with CVS Caremark, Express Scripts, or Optum Rx",
+  "action": "Ask the PBM whether the orders change the fund's formulary or rebate terms.",
+  "timing": "Before the next PBM contract review",
+  "mergedSources": [
+    "Word on Benefits (IFEBP)"
+  ],
+  "nextStep": "Request service-provider confirmation",
+  "completion": "Internal note prepared for attorney decision on whether to ask the PBM.",
+  "passage": "Today's blog explains key drug-pricing terms and the order provisions on nondiscrimination of low-wholesale acquisition cost (WAC) versions of drugs. The post PBMs and FTC Insulin Settlement Orders (Part 1): Drug Pricing Explainer appeared first on Word on Benefits .",
+  "articleLabel": "Word on Benefits explainer",
+  "articleUrl": "https://blog.ifebp.org/pbms-and-ftc-insulin-settlement-orders-part-1-drug-pricing-explainer/",
+  "authorityLabel": "Word on Benefits",
+  "authorityUrl": "https://blog.ifebp.org/pbms-and-ftc-insulin-settlement-orders-part-1-drug-pricing-explainer/",
+  "pipeline": {
+    "cluster_id": "9eef35b03baaff53",
+    "cluster_label": "FTC insulin settlement orders with the three largest PBMs",
+    "why_same": "One explainer post about the FTC orders; no other document in the set covers them.",
+    "member_document_ids": [
+      "58a333d5795a5124ed045a8377ae665fbdec6309"
+    ],
+    "scan_ids": [
+      "fhw"
+    ],
+    "verification": {
+      "development_cluster_id": "9eef35b03baaff53",
+      "primary_document_id": null,
+      "primary_link": null,
+      "lookup": "no document number or primary link in commentary",
+      "checked_at": "2026-09-02T05:48:24.459Z",
+      "prompt_version": "verify@1",
+      "checked_fields": {
+        "status": "unconfirmed",
+        "dates": "unconfirmed",
+        "posture": "unconfirmed"
+      },
+      "result": "unconfirmed",
+      "notes": "No primary authority located; commentary only. Status and dates are as the commentary states them and have not been checked against the agency, court, or register.",
+      "model": null
+    },
+    "fiduciary_justifications": [
+      {
+        "tag": "Prudence & Process",
+        "justification": "Trustees who monitor their PBM must ask how the orders change formulary and rebate practices the fund pays for."
+      }
+    ],
+    "passage_document_id": "58a333d5795a5124ed045a8377ae665fbdec6309",
+    "operative_date": null,
+    "tier_rationale": "The orders create a concrete change to PBM practices the fund relies on.",
+    "model_tier": "NEXT",
+    "model_confidence": "High",
+    "defects": [
+      "tier lowered from NEXT to WATCH: dates unconfirmed",
+      "confidence lowered from High to Low: single unverified source",
+      "passage was not verbatim; replaced with the stored text of 58a333d5795a5124ed045a8377ae665fbdec6309",
+      "tags without justification dropped: Prohibited Transactions & Expense Reasonableness"
+    ],
+    "prompt_version": "assess@1",
+    "model": "fixture",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0
+    },
+    "review_state": "pending",
+    "assessed_at": "2026-09-02T05:48:24.460Z"
+  }
+}

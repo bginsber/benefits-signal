@@ -1,0 +1,79 @@
+name: Weekly triage and candidate digest
+
+# DISABLED until Ben enables it: uncomment the schedule below and add the
+# ANTHROPIC_API_KEY repository secret (Settings → Secrets → Actions).
+# Without the secret the triage and assess steps fail with
+# "Could not resolve authentication method" and nothing is published.
+on:
+  workflow_dispatch: {}
+  # schedule:
+  #   - cron: "17 12 * * 3"   # Wednesdays ~5:17am Pacific (12:17 UTC), after the daily collate run
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      FEED_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/collated.xml
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      COURTLISTENER_TOKEN: ${{ secrets.COURTLISTENER_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+
+      - name: Collect (30-day window)
+        run: |
+          node scripts/collect.mjs --days 30 --out _site/collated.xml
+          cp data/run-log.json _site/run-log.json
+
+      - name: Triage (normalize + scan match)
+        run: node scripts/triage.mjs
+
+      - name: Cluster, verify, assess
+        run: node scripts/assess.mjs
+
+      - name: Candidate digest and review feed
+        run: |
+          node scripts/digest.mjs --feed _site/review.xml
+          mkdir -p _site/digests && cp data/digests/*.html _site/digests/
+          cat > _site/index.html <<'HTML'
+          <!doctype html><meta charset="utf-8"><title>Benefits Signal feeds</title>
+          <p>Collated sources: <a href="collated.xml">collated.xml</a> · Review queue: <a href="review.xml">review.xml</a></p>
+          HTML
+
+      - name: Keep the pipeline outputs for the paralegal
+        uses: actions/upload-artifact@v4
+        with:
+          name: benefits-signal-${{ github.run_id }}
+          path: |
+            data/matches
+            data/omitted
+            data/candidates
+            data/clusters.json
+            data/digests
+            data/reviews
+            data/run-log.json
+          retention-days: 90
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

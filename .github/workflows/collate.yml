@@ -36,10 +36,16 @@ jobs:
         run: |
           node scripts/collect.mjs --days 30 --out _site/collated.xml
           cp data/run-log.json _site/run-log.json
+          # The weekly triage workflow publishes the review feed and digests; carry them
+          # forward so this daily deploy does not remove them from the site.
+          PAGES="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          curl -fsS "$PAGES/review.xml" -o _site/review.xml || true
+          mkdir -p _site/digests
+          for u in $(grep -oE "$PAGES/digests/[0-9-]+\.html" _site/review.xml 2>/dev/null | sort -u); do curl -fsS "$u" -o "_site/digests/$(basename "$u")" || true; done
           cat > _site/index.html <<'EOF'
-          <!doctype html><meta charset="utf-8"><title>Benefits Signal feed</title>
-          <p>Benefits Signal collated source feed: <a href="collated.xml">collated.xml</a>.
-          Subscribe to that URL in Outlook (right-click RSS Feeds &rarr; Add a New RSS Feed).</p>
+          <!doctype html><meta charset="utf-8"><title>Benefits Signal feeds</title>
+          <p>Collated sources: <a href="collated.xml">collated.xml</a> · Review queue: <a href="review.xml">review.xml</a>.
+          Subscribe to either URL in Outlook (right-click RSS Feeds &rarr; Add a New RSS Feed).</p>
           EOF
 
       - name: Upload Pages artifact

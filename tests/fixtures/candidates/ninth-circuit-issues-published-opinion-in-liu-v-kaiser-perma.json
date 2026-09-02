@@ -1,0 +1,99 @@
+{
+  "id": "ninth-circuit-issues-published-opinion-in-liu-v-kaiser-perma",
+  "lane": "WATCH",
+  "cue": "No action yet",
+  "headline": "Ninth Circuit issues published opinion in Liu v. Kaiser Permanente Employees Pension Plan",
+  "status": "Decided · Filed August 31, 2026",
+  "summary": [
+    "The Ninth Circuit filed a published opinion on August 31, 2026 in an ERISA benefits appeal against the Kaiser Permanente Employees Pension Plan, appeal number 24-4303.",
+    "The holding is not in the collected text; the opinion is published, so it will bind district courts in the circuit on whatever benefit-claims question it decides."
+  ],
+  "uncertainty": "The collected record gives the docket and filing date but not the holding; read the opinion before relying on it.",
+  "metadata": {
+    "Plan type": [
+      "All welfare plans"
+    ],
+    "Jurisdiction": [
+      "Ninth Circuit"
+    ],
+    "Topics": [
+      "ERISA litigation",
+      "Claims and appeals",
+      "Ninth Circuit"
+    ],
+    "Confidence": [
+      "High"
+    ],
+    "Fiduciary duties": [
+      "Claims & Appeals Procedure"
+    ]
+  },
+  "confidenceNote": "CourtListener's record confirms the court, docket number, filing date, and that the opinion is published; the holding was not checked.",
+  "scan": "California & Ninth Circuit",
+  "affected": "Funds in the Ninth Circuit that administer benefit claims and appeals",
+  "action": "Have an attorney read the opinion and note any change to the claims standard of review.",
+  "timing": "No deadline; review at the next claims-procedure check",
+  "mergedSources": [
+    "CourtListener API"
+  ],
+  "nextStep": "Prepare internal research assignment",
+  "completion": "Research assignment prepared for attorney review.",
+  "passage": "FOR PUBLICATION UNITED STATES COURT OF APPEALS FOR THE NINTH CIRCUIT SHERRY YALI LIU, No. 24-4303",
+  "articleLabel": "CourtListener opinion record",
+  "articleUrl": "https://www.courtlistener.com/opinion/10962913/liu-v-kaiser-permanente-employees-pension-plan-for-the-permanente-medical/",
+  "authorityLabel": "Ninth Circuit opinion (PDF via CourtListener)",
+  "authorityUrl": "https://www.courtlistener.com/opinion/10962913/liu-v-kaiser-permanente-employees-pension-plan-for-the-permanente-medical/",
+  "pipeline": {
+    "cluster_id": "662b402a69889a7f",
+    "cluster_label": "Liu v. Kaiser Permanente Employees Pension Plan, Ninth Circuit opinion of August 31, 2026",
+    "why_same": "One published opinion; no commentary about it is in the set.",
+    "member_document_ids": [
+      "ab1447e3ec7f3e9f4afe1a585cf553fbc194473b"
+    ],
+    "scan_ids": [
+      "ca9"
+    ],
+    "verification": {
+      "development_cluster_id": "662b402a69889a7f",
+      "primary_document_id": "ab1447e3ec7f3e9f4afe1a585cf553fbc194473b",
+      "primary_link": "https://www.courtlistener.com/opinion/10962913/liu-v-kaiser-permanente-employees-pension-plan-for-the-permanente-medical/",
+      "lookup": "in-cluster",
+      "checked_at": "2026-09-02T05:48:24.460Z",
+      "prompt_version": "verify@1",
+      "checked_fields": {
+        "status": "confirmed",
+        "dates": "confirmed",
+        "posture": "confirmed"
+      },
+      "result": "confirmed",
+      "notes": "The CourtListener record states court ca9, docket_number 24-4303, date_filed 2026-08-31, and a published opinion (FOR PUBLICATION) with a download_url. There is no commentary to compare; the opinion's holding is not in the collected text and is not asserted here.",
+      "model": "fixture",
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_input_tokens": 0
+      }
+    },
+    "fiduciary_justifications": [
+      {
+        "tag": "Claims & Appeals Procedure",
+        "justification": "A published benefits-appeal opinion can change the standard of review applied to the fund's claim determinations."
+      }
+    ],
+    "passage_document_id": "ab1447e3ec7f3e9f4afe1a585cf553fbc194473b",
+    "operative_date": "2026-08-31",
+    "tier_rationale": "A decided case with no deadline and a holding not yet read belongs in WATCH.",
+    "model_tier": "WATCH",
+    "model_confidence": "High",
+    "defects": [],
+    "prompt_version": "assess@1",
+    "model": "fixture",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_read_input_tokens": 0
+    },
+    "review_state": "pending",
+    "assessed_at": "2026-09-02T05:48:24.460Z"
+  }
+}
