@@ -89,11 +89,15 @@ function buildRss(items, sourceNames) {
       <source url="${esc(it.link)}">${esc(it.source)}</source>
     </item>`;
   }).join("\n");
+  const feedUrl = process.env.FEED_URL || "https://example.invalid/benefits-signal/collated.xml";
   return `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Benefits Signal — Collated Sources</title>
-    <link>${esc(process.env.FEED_URL || "https://example.invalid/benefits-signal")}</link>
+    <link>${esc(feedUrl)}</link>
+    <atom:link href="${esc(feedUrl)}" rel="self" type="application/rss+xml"/>
+    <docs>https://www.rssboard.org/rss-specification</docs>
+    <generator>Benefits Signal collector</generator>
     <description>${esc(`Merged raw intake: ${sourceNames.join(", ")}. Pre-triage material for the Benefits Signal pipeline; not legal advice.`)}</description>
     <language>en-us</language>
     <lastBuildDate>${now}</lastBuildDate>

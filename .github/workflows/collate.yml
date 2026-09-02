@@ -37,6 +37,7 @@ jobs:
           node scripts/collect.mjs --days 30 --out _site/collated.xml
           cp data/run-log.json _site/run-log.json
           cp data/first-seen.json _site/first-seen.json
+          cp _site/collated.xml _site/collated.rss   # same feed; Pages serves .rss as application/rss+xml for clients that sniff the type
           # The weekly triage workflow publishes the review feed and digests; carry them
           # forward so this daily deploy does not remove them from the site.
           PAGES="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
@@ -45,7 +46,7 @@ jobs:
           for u in $(grep -oE "$PAGES/digests/[0-9-]+\.html" _site/review.xml 2>/dev/null | sort -u); do curl -fsS "$u" -o "_site/digests/$(basename "$u")" || true; done
           cat > _site/index.html <<'EOF'
           <!doctype html><meta charset="utf-8"><title>Benefits Signal feeds</title>
-          <p>Collated sources: <a href="collated.xml">collated.xml</a> · Review queue: <a href="review.xml">review.xml</a>.
+          <p>Collated sources: <a href="collated.xml">collated.xml</a> (also <a href="collated.rss">collated.rss</a>) · Review queue: <a href="review.xml">review.xml</a>.
           Subscribe to either URL in Outlook (right-click RSS Feeds &rarr; Add a New RSS Feed).</p>
           EOF
 
