@@ -223,4 +223,11 @@ await writeFile(path.join(ROOT, "data", "run-log.json"),
   JSON.stringify({ ran_at: new Date().toISOString(), window_days: DAYS, total_items: all.length, newly_stored: stored, sources: runLog }, null, 2));
 
 console.log(`\n${all.length} unique items in window (${stored} newly stored) → ${path.relative(ROOT, OUT)}`);
-if (runLog.some((r) => !r.ok)) process.exitCode = 1;
+const failed = runLog.filter((r) => !r.ok);
+for (const r of failed) console.error(`::warning title=Source failed::${r.source}: ${r.error ?? "unknown error"}`);
+// Partial source failures are logged (and recorded in data/run-log.json) but do not block publishing.
+// Only fail the run when nothing usable was collected.
+if (all.length === 0 || failed.length === runLog.length) {
+  console.error("FATAL: no items collected — refusing to publish an empty feed");
+  process.exitCode = 1;
+}
