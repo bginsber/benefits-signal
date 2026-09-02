@@ -5,3 +5,4 @@ _site/
 public/collated.xml
 .claude/*.local.md
 dist/client/collated.xml
+data/logs/

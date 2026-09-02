@@ -15,7 +15,7 @@ const SCAN_IDS = ["fhw", "met", "ca9", "cyb", "atf"];
 
 function assertScanMatchRecord(rec, scanIds) {
   assert.equal(typeof rec.document_id, "string");
-  assert.equal(rec.prompt_version, "triage@1");
+  assert.equal(rec.prompt_version, "triage@2");
   assert.equal(typeof rec.summary, "string");
   assert.ok(rec.summary.split(/[.!?]\s/).length >= 2, "summary should be two sentences");
   assert.deepEqual(rec.matches.map((m) => m.scan_id), scanIds, "one row per scan, in charter order");
@@ -49,7 +49,7 @@ test("fixture-mode triage writes schema-shaped matches and omissions, keeps the 
     assertScanMatchRecord(rec, scanIds);
     assert.equal(rec.omitted, true);
     assert.deepEqual(rec.scan_ids, []);
-    const fixture = JSON.parse(await readFile(path.join(ROOT, "tests/fixtures/model/triage", `triage@1-${rec.document_id}.json`), "utf8"));
+    const fixture = JSON.parse(await readFile(path.join(ROOT, "tests/fixtures/model/triage", `triage@2-${rec.document_id}.json`), "utf8"));
     const closest = [...fixture.data.matches].sort((a, b) => b.score - a.score)[0];
     assert.equal(rec.reason, closest.reason, "omission reason is the model's own sentence for the closest scan");
   }
@@ -89,10 +89,10 @@ test("structured-output schema enumerates the scans and the user message carries
 
 test("prompt header parses and a document without a recorded fixture is skipped, not invented", async () => {
   const prompt = await loadPrompt(path.join(ROOT, "prompts/triage.md"));
-  assert.equal(prompt.version, "triage@1");
+  assert.equal(prompt.version, "triage@2");
   assert.match(prompt.body, /^You are the intake reader/);
   const client = createModelClient({ mode: "fixture", fixtureDir: path.join(ROOT, "tests/fixtures/model/triage") });
-  const res = await client.complete({ key: "triage@1-does-not-exist", system: ["s"], user: "u", schema: {} });
+  const res = await client.complete({ key: "triage@2-does-not-exist", system: ["s"], user: "u", schema: {} });
   assert.equal(res.stop_reason, "no_fixture");
   assert.equal(res.data, null);
 });

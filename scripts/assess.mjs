@@ -14,6 +14,7 @@
  *   node scripts/assess.mjs                  # live: data/matches, data/collected → data/
  *   node scripts/assess.mjs --fixture        # replay: tests/fixtures/{matches,collected} → data/
  *   node scripts/assess.mjs --record --matches tests/fixtures/matches --collected tests/fixtures/collected
+ *   --claude-code (or BENEFITS_SIGNAL_MODEL=claude-code): call the model through the Claude Code CLI on the user's subscription
  *   options: --matches <dir> --collected <dir> --out <dir> --window-days 30 --open <issue.json> --today YYYY-MM-DD
  */
 
@@ -30,6 +31,7 @@ const flag = (name) => args.includes(name);
 const opt = (name, dflt) => (args.includes(name) ? args[args.indexOf(name) + 1] : dflt);
 
 const mode = flag("--fixture") ? "fixture" : flag("--record") ? "record" : "live";
+const backend = flag("--claude-code") || process.env.BENEFITS_SIGNAL_MODEL === "claude-code" ? "claude-code" : "sdk";
 const fx = (stage) => path.join(ROOT, "tests", "fixtures", "model", stage);
 const MATCHES = path.resolve(ROOT, opt("--matches", mode === "fixture" ? "tests/fixtures/matches" : "data/matches"));
 const COLLECTED = path.resolve(ROOT, opt("--collected", mode === "fixture" ? "tests/fixtures/collected" : "data/collected"));
@@ -43,9 +45,9 @@ const [scans, taxonomy, clusterPrompt, verifyPrompt, assessPrompt] = await Promi
   loadPrompt(path.join(ROOT, "prompts", "cluster.md")), loadPrompt(path.join(ROOT, "prompts", "verify.md")), loadPrompt(path.join(ROOT, "prompts", "assess.md")),
 ]);
 const clients = {
-  cluster: createModelClient({ mode, fixtureDir: fx("cluster") }),
-  verify: createModelClient({ mode, fixtureDir: fx("verify") }),
-  assess: createModelClient({ mode, fixtureDir: fx("assess") }),
+  cluster: createModelClient({ mode, backend, fixtureDir: fx("cluster") }),
+  verify: createModelClient({ mode, backend, fixtureDir: fx("verify") }),
+  assess: createModelClient({ mode, backend, fixtureDir: fx("assess") }),
 };
 const schema = JSON.parse(await readFile(path.join(ROOT, "spec", "issue-schema.json"), "utf8"));
 
@@ -61,7 +63,7 @@ for (const m of matches) {
   docs.push({ ...d, scan_ids: m.scan_ids ?? [], triage_summary: m.summary ?? "" });
 }
 const docsById = new Map(docs.map((d) => [d.id, d]));
-console.log(`assess ${mode}: ${docs.length} in-scope documents in the ${WINDOW_DAYS}-day window (${matches.length} match records)`);
+console.log(`assess ${mode} via ${backend}: ${docs.length} in-scope documents in the ${WINDOW_DAYS}-day window (${matches.length} match records)`);
 
 let clusters;
 try {
