@@ -52,6 +52,13 @@ This needs **Outlook Classic** (the desktop app with the classic ribbon). The "n
 
 Each item arrives as a mail-like message in the feed folder with the source name in the title, the publish date, a summary, and a **View article** link to the original. Federal Register items with a comment deadline carry it in the summary. Outlook rules, categories, flags, and forwarding work on the feed folder as they do for mail.
 
-If Outlook shows "Cannot download the RSS content," check the URL in a browser first: Pages serves `application/xml` with the feed as an RSS 2.0 document, so a browser will render or offer to download it. Do not use raw.githubusercontent.com, which serves `text/plain` and Outlook sometimes rejects. Outlook does not re-fetch a feed it has decided is broken until you remove and re-add it (right-click the feed folder → **Delete Folder**, then repeat the steps above).
+If Outlook shows "Cannot download the RSS content" or "Outlook cannot process the RSS content … may not point to a valid RSS source," work through these in order:
+
+1. **Remove and re-add the feed.** Outlook does not re-fetch a feed it has decided is broken. The URL returned 404 for about an hour on 2026-09-02 before GitHub Pages was enabled, and a subscription attempted then stays marked bad. Right-click the feed folder → **Delete Folder**, then repeat the steps above.
+2. **Paste the `https://` URL exactly.** `http://…` answers with a redirect, which Outlook's RSS engine sometimes refuses. Do not use raw.githubusercontent.com, which serves `text/plain`.
+3. **Try the `.rss` URL.** The same feed is also published as `https://bginsber.github.io/benefits-signal/collated.rss`, which Pages serves as `application/rss+xml`; some clients sniff the content type and prefer it.
+4. **Confirm it is Outlook Classic.** The new Outlook toggle (top right) removes RSS entirely.
+
+The feed itself validates: `xmllint` well-formed, W3C Feed Validator zero errors and zero warnings, with an `atom:link rel="self"`, `docs`, and `generator` in the channel.
 
 A sample output from a live 2026-09-01 run is committed at `spec/sample-collated.xml` for inspection; `data/` and `_site/` are runtime output and are gitignored.
