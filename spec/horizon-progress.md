@@ -8,9 +8,9 @@ Companion to `spec/horizon-scanning-goal.md`. The loop appends one entry per ite
 |---|---|---|
 | M1 · Scans and sources become data | done | iteration 1, 2026-09-01 |
 | M2 · Close the source gaps | done | iteration 2, 2026-09-01 |
-| M3 · Normalize and scan-match | built; live run blocked on credentials | iteration 3, 2026-09-01 |
-| M4 · Cluster, verify, assess | built; live run blocked on credentials | iteration 4, 2026-09-01 |
-| M5 · Weekly candidate digest | done (fixture); workflow disabled pending secret | iteration 5, 2026-09-01 |
+| M3 · Normalize and scan-match | done (live via Claude Code) | 2026-09-02 |
+| M4 · Cluster, verify, assess | done (live via Claude Code) | 2026-09-02 |
+| M5 · Weekly candidate digest | done (live; weekly launchd job on Ben's Mac) | 2026-09-02 |
 | M6 · Front end reads data | done | iteration 6, 2026-09-01 |
 | M7 · Obligations and trustee agenda | done | iteration 7, 2026-09-01 |
 
@@ -366,3 +366,18 @@ Same check; nothing present. The loop's 40-iteration budget ends here.
 - To finish: export `ANTHROPIC_API_KEY` in the shell (or install the `ant` CLI and `ant auth login`), then relaunch with the command at the top of `spec/horizon-scanning-goal.md`. The next iteration should: run `node scripts/triage.mjs` over `data/collected/` (≈323 documents; effort low, expect a few dollars); run `node scripts/assess.mjs`; record per-scan counts, candidates, tiers, verification results, and `cache_read_input_tokens` here; re-record the eleven hand-authored fixtures with `--record` (triage over `tests/fixtures/collected`, assess over `tests/fixtures/{matches,collected}`); re-run `npm test`, `npm run test:sites`, `npm run build`; then, if every acceptance check in the goal passes in that run, output the promise.
 - For Actions: add `ANTHROPIC_API_KEY` as a repository secret and uncomment the schedule in `.github/workflows/triage.yml`.
 - Suite state at close: 33 unit tests, 4 Sites tests, build green; working tree clean at this commit.
+
+## 2026-09-02 · after the loop · M3 and M4 live runs via Claude Code (no API key)
+Ben chose to run the model stages on his Mac on a schedule. The model client gained a `claude-code` backend (headless `claude -p --json-schema`, our system prompt, no tools, ~15k tokens of context per call, subscription-billed), triage now batches eight documents per call (prompt `triage@2`), and `scripts/weekly.sh` + `scripts/install-schedule.sh` run collect → triage → assess → digest every Tuesday at 18:00 local via launchd, pushing `public/review.xml` and the digest HTML for Pages to deploy.
+Evidence (two runs on 2026-09-02, logs in `data/logs/`):
+```
+run 1 (12:31 PDT): triage 325 docs in 41 batched calls → 309 assessed: 8 matched (fhw 6, met 1, ca9 1, atf 1), 301 omitted, 16 skipped (error_max_turns: the model tried a tool it did not have)
+                   assess: 8 candidates / 8 clusters, all WATCH; verification 0 confirmed / 2 partial / 6 unconfirmed (3 verify calls errored the same way); 16 min end to end
+fix:               no-tools preamble in the system prompt, --max-turns 3, batch retry as singles, one verify retry (commit deb78fe)
+run 2 (12:47 PDT): triage the 16 skipped → 2 calls, 0 skipped, 2 matched (fhw)
+                   assess: 9 candidates / 9 clusters (the two Trump Accounts documents merged), NOW 0 · NEXT 0 · WATCH 9; verification 0 confirmed / 4 partial / 5 unconfirmed; 0 rule defects; 0 schema errors
+                   digest + review template written; pushed as f19827e
+usage (subscription-equivalent, informational): triage ≈ $10 for the 325-doc backfill; assess ≈ $2.20 per weekly run; cache reads carried across CLI calls (519k tokens read in run 1)
+```
+Observations for calibration: the live model is more conservative than the hand-authored fixtures (it omitted the CAC EEO meeting notice and the PBM explainer). Everything is WATCH because commentary-only clusters have no primary and the Federal Register items in the window carry no deadline within 60 days. No NOW gate was exercised yet.
+Follow-ups: replace the hand-authored fixtures with recorded ones (`--record` through the sdk backend needs a key; the CLI backend records too via mode=record); add a `--record` path for batch fixtures; consider Sonnet for triage if subscription limits bite.
