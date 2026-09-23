@@ -43,7 +43,13 @@ export function keepForFeed(item, rules = {}, sourceId = null) {
   const type = item.categories?.[0] ?? "";
   const dropped = (fr.drop_title_patterns ?? []).find((p) => has(title, p));
   if (dropped) return { keep: false, why: `housekeeping: ${dropped}` };
-  if ((fr.keep_agencies ?? []).some((a) => has(item.source, a))) return { keep: true, why: "agency" };
+  if ((fr.keep_agencies ?? []).some((a) => has(item.source, a))) {
+    const ex = fr.individual_exemptions ?? {};
+    if ((ex.title_patterns ?? []).some((p) => has(title, p)) && !findKeyword(text, ex.keywords)) {
+      return { keep: false, why: "individual exemption: no welfare, multiemployer, or training plan named" };
+    }
+    return { keep: true, why: "agency" };
+  }
   if ((fr.keep_types ?? []).some((t) => t.toLowerCase() === type.toLowerCase())) return { keep: true, why: `type ${type}` };
   const kw = findKeyword(text, fr.keywords);
   if (kw) return { keep: true, why: `keyword ${kw}` };

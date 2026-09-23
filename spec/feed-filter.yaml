@@ -8,6 +8,13 @@
 federal_register:
   # Agencies whose documents always reach the feed, whatever their type (name substring, case-insensitive).
   keep_agencies: [Employee Benefits Security Administration]
+  # Individual prohibited-transaction exemptions: EBSA grants many for one company's 401(k) or pension
+  # plan. From a kept agency they reach the feed only when the title or abstract names a welfare,
+  # multiemployer, or training plan. Class exemptions ("Proposed Class Exemption", amendments to
+  # PTE 84-14 and the like) do not match these titles and still reach the feed.
+  individual_exemptions:
+    title_patterns: [Exemption Involving, Proposed Exemption, Exemptions From Certain Prohibited Transaction, Grant of Individual Exemption]
+    keywords: [multiemployer, Taft-Hartley, welfare, health, medical, apprentice, training fund, trust fund, joint board, VEBA, voluntary employees, Local]
   # Document types that always reach the feed.
   keep_types: [Presidential Document]
   # Everything else, rules and proposed rules included, reaches the feed only when the title or

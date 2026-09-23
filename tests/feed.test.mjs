@@ -11,7 +11,13 @@ test("feed filter keeps rules, EBSA notices, and keyword notices; drops housekee
   assert.equal(keepForFeed(fr("Prospective Grant of an Exclusive Patent License", "Notice"), rules).keep, false);
   assert.equal(keepForFeed(fr("Pharmacokinetics in Patients With Impaired Hepatic Function", "Notice"), rules).keep, false);
   assert.equal(keepForFeed(fr("Request for Information on Mental Health Parity Comparative Analyses", "Notice"), rules).keep, true);
-  assert.equal(keepForFeed({ source: "Federal Register — Employee Benefits Security Administration", title: "Proposed Exemption Involving XYZ", categories: ["Notice"] }, rules).keep, true);
+  const ebsa = (title, summary = "") => keepForFeed({ source: "Federal Register — Employee Benefits Security Administration", title, summary, categories: ["Notice"] }, rules).keep;
+  assert.equal(ebsa("Exemption Involving the Abiomed Retirement Savings Plan Located in Danvers, MA", "This document contains a final exemption from certain prohibited transaction restrictions."), false, "a single company's 401(k) exemption stays out");
+  assert.equal(ebsa("Proposed Exemption Involving XYZ"), false);
+  assert.equal(ebsa("Exemption Involving the Operating Engineers Local 12 Health and Welfare Fund"), true, "a union health and welfare fund's exemption reaches the feed");
+  assert.equal(ebsa("Proposed Exemptions From Certain Prohibited Transaction Restrictions", "Involving the Carpenters Multiemployer Pension Trust Fund"), true);
+  assert.equal(ebsa("Proposed Class Exemption for Pooled Employer Plans"), true, "class exemptions are not individual exemptions");
+  assert.equal(ebsa("Improving Transparency Into Fees for Welfare Plans"), true, "other EBSA documents still always reach the feed");
   // An information-collection notice is dropped even when it mentions a keyword.
   assert.equal(keepForFeed(fr("Agency Information Collection Activities; Comment Request on Form 5500", "Notice"), rules).keep, false);
 });
