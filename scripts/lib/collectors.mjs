@@ -12,14 +12,16 @@ export const UA = "BenefitsSignalCollector/0.1 (internal legal newsletter pilot)
 export const FEED_ACCEPT = "application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.9, */*;q=0.8";
 const RETRYABLE = new Set([403, 408, 425, 429, 500, 502, 503, 504]);
 
-/** Fetch text with bounded retry-and-backoff on transient statuses and network errors. */
-export async function fetchText(url, { headers = {}, method = "GET", body, retries = 2 } = {}) {
+/** Fetch text with a per-attempt timeout and bounded retry-and-backoff on transient statuses and network errors. */
+export async function fetchText(url, { headers = {}, method = "GET", body, retries = 2, timeoutMs = 45000 } = {}) {
   let lastErr;
   for (let attempt = 0; attempt <= retries; attempt++) {
     if (attempt) await new Promise((r) => setTimeout(r, 1000 * 3 ** (attempt - 1)));
     try {
-      const res = await fetch(url, { method, body, headers: { "User-Agent": UA, Accept: "*/*", ...headers }, redirect: "follow" });
-      if (res.ok) return res.text();
+      // The timeout covers the body too: a host that stalls mid-response must not hang the run.
+      const signal = AbortSignal.timeout(timeoutMs);
+      const res = await fetch(url, { method, body, headers: { "User-Agent": UA, Accept: "*/*", ...headers }, redirect: "follow", signal });
+      if (res.ok) return await res.text();
       lastErr = new Error(`HTTP ${res.status}`);
       if (!RETRYABLE.has(res.status)) throw lastErr;
     } catch (e) {
