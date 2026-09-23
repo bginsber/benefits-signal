@@ -291,6 +291,21 @@ primary:
     scans: [atf]
     active: true
 
+  - name: California DMHC
+    id: ca-dmhc
+    method: scrape
+    collector: dmhc
+    urls:
+      - https://www.dmhc.ca.gov/LicensingReporting/HealthPlanLicensing/AllPlanLetters.aspx   # verified 200 from Actions 2026-09-23
+      - https://www.dmhc.ca.gov/Resources/Newsroom/PressReleases.aspx                        # verified 200 from Actions 2026-09-23
+    notes: >
+      Department of Managed Health Care All Plan Letters, All Licensee Letters (PBM licensure), and
+      enforcement press releases: the California rules for the insured HMO and PPO arrangements that
+      funds buy. No RSS or GovDelivery feed answers (GovDelivery 406). spec/feed-filter.yaml drops
+      Medi-Cal-only letters. 14 letters and 5 releases in 2026; 4 items 2026-08-24 to 09-23.
+    scans: [ca9, fhw]
+    active: true
+
   - name: California DAS / DIR / CAC
     id: ca-das
     method: scrape

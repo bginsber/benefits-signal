@@ -105,7 +105,7 @@ sources:
   irs-irb:
     # Most bulletin items are income-tax or pension-funding guidance; keep health and welfare, fringe
     # benefits, and multiemployer items.
-    require_keywords: [health, welfare, medical, cafeteria, section 125, § 125, dependent care, HSA, health savings, flexible spending, HRA, health reimbursement, ICHRA, COBRA, Affordable Care, employer shared responsibility, 4980H, 6055, 6056, PCORI, MHPAEA, mental health parity, fringe benefit, educational assistance, Trump account, multiemployer, apprentice]
+    require_keywords: [health, welfare, medical, cafeteria, dependent care, HSA, health savings, flexible spending, HRA, health reimbursement, ICHRA, COBRA, Affordable Care, employer shared responsibility, 4980H, 6055, 6056, PCORI, MHPAEA, mental health parity, fringe benefit, educational assistance, Trump account, multiemployer, apprentice]
   cms-cciio:
     # The page also indexes Marketplace (exchange) guidance, which does not bind group health plans.
     require_keywords: [No Surprises, surprise billing, independent dispute, IDR, air ambulance, transparency, price comparison, group health, health plan issuers and group, mental health parity, MHPAEA, prescription drug, RxDC, gag clause, cost sharing, out-of-pocket, preventive, contraceptive, excepted benefit, short-term, grandfathered, HIPAA, COBRA, ICHRA, health reimbursement, wellness, advanced explanation of benefits]
@@ -115,3 +115,5 @@ sources:
   courtlistener-cal-district:
     # "(PS)" marks a pro se case in the Eastern District's captions.
     drop_title_patterns: ["(PS) "]
+  ca-dmhc:
+    drop_title_patterns: [Medi-Cal, Joint Statement]

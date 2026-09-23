@@ -16,13 +16,5 @@
 # summarizes JSON, and lists the feed links an HTML page advertises. "--dump URL --at REGEX"
 # prints raw markup for a parser fixture.
 
-# 4. California
---dump https://www.dmhc.ca.gov/LicensingReporting/HealthPlanLicensing/AllPlanLetters.aspx --at APL.26 --len 7000
---dump https://www.dmhc.ca.gov/Resources/Newsroom/PressReleases.aspx --at PressReleases/ --len 5000
-
-# 5. Law-firm benefits alerts
-https://www.jacksonlewis.com/rss/practice/employee-benefits
-https://www.faegredrinker.com/en/insights/rss
-https://www.bakerdonelson.com/rss/employee-benefits
-https://www.ballardspahr.com/rss/insights
-https://www.venable.com/rss/insights
+# 1. CCIIO guidance entries dated 2026 (volume check before promotion)
+--grep https://www.cms.gov/marketplace/resources/regulations-guidance --pattern [A-Z][a-z]+(&nbsp;|\s)\d{1,2},\s2026<br

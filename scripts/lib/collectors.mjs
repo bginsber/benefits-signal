@@ -42,6 +42,7 @@ export function decodeEntities(s = "") {
     .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"').replace(/&#8217;|&rsquo;/g, "’")
     .replace(/&#8220;|&ldquo;/g, "“").replace(/&#8221;|&rdquo;/g, "”")
+    .replace(/&ndash;/g, "–").replace(/&mdash;/g, "—").replace(/&lsquo;/g, "‘").replace(/&hellip;/g, "…")
     .replace(/&nbsp;/g, " ");
 }
 
@@ -474,15 +475,16 @@ export async function fetchIrb(source, since, now = new Date()) {
  * entries. Each entry becomes an item carrying its topic heading, so the feed filter can keep
  * group-health topics (No Surprises Act, transparency, parity) and drop Marketplace-only ones.
  */
-export function parseDatedGuidanceList(html, pageUrl, sourceName) {
+export function parseDatedGuidanceList(html, pageUrl, sourceName, now = new Date()) {
   const items = [];
+  const latest = new Date(now.getTime() + 31 * 86400000).toISOString(); // a typo such as "2104" must not pin an entry to the top of the feed
   let heading = "";
   const re = /<h[234][^>]*>([\s\S]*?)<\/h[234]>|<li[^>]*>\s*([^<]{6,40}?)\s*<br\s*\/?>([\s\S]*?)<\/li>/gi;
   for (const m of html.matchAll(re)) {
     if (m[1] != null) { heading = stripTags(m[1]); continue; }
     const date = toISODate(m[2]);
     const a = m[3].match(/<a[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i);
-    if (!date || !a) continue;
+    if (!date || !a || date > latest) continue;
     let link;
     try { link = new URL(decodeEntities(a[1]), pageUrl).href; } catch { continue; }
     const note = stripTags(m[3].replace(/<a[\s\S]*?<\/a>/i, " ")).replace(/^\W+|\W+$/g, "");
@@ -500,6 +502,45 @@ export function parseDatedGuidanceList(html, pageUrl, sourceName) {
 
 export async function fetchDatedGuidanceList(source) {
   return parseDatedGuidanceList(await fetchText(source.url), source.url, source.name);
+}
+
+// ---------- California DMHC (primary; plain HTML) ----------
+
+/**
+ * DMHC's All Plan Letters page ("APL 26-014 - Title (9/3/2026)" links, All Licensee Letters too)
+ * and its press-release page ("<strong>DATE</strong> - <a>title</a>"). Attachment and FAQ links
+ * under a letter are skipped; they carry no letter number.
+ */
+export function parseDmhcPage(html, pageUrl, sourceName) {
+  const items = [];
+  const abs = (href) => { try { return new URL(decodeEntities(href), pageUrl).href; } catch { return null; } };
+  for (const m of html.matchAll(/<a[^>]*href="([^"]+)"[^>]*>\s*((?:APL|ALL)\s*\d{2}-\d{3}[\s\S]*?)<\/a>/gi)) {
+    const text = stripTags(m[2]);
+    const d = text.match(/\((\d{1,2})\/(\d{1,2})\/(\d{4})\)\s*$/);
+    const link = abs(m[1]);
+    if (!d || !link) continue;
+    const [number, ...rest] = text.replace(/\s*\([^)]*\)\s*$/, "").split(/\s+[-–]\s+/);
+    items.push({
+      source: sourceName,
+      title: `${number.trim()}: ${rest.join(" – ").trim()}`,
+      link,
+      date: toISODate(`${d[3]}-${d[1].padStart(2, "0")}-${d[2].padStart(2, "0")}`),
+      summary: /^ALL/i.test(number) ? "All Licensee Letter" : "All Plan Letter to DMHC-licensed health plans",
+      categories: [/^ALL/i.test(number) ? "All Licensee Letter" : "All Plan Letter"],
+    });
+  }
+  for (const m of html.matchAll(/<strong>\s*([A-Z][a-z]+(?:&nbsp;|\s)+\d{1,2},\s*\d{4})(?:&nbsp;|\s)*<\/strong>[^<]*<a[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)) {
+    const link = abs(m[2]);
+    if (!link) continue;
+    items.push({ source: sourceName, title: stripTags(m[3]), link, date: toISODate(m[1]), summary: "DMHC press release", categories: ["Press release"] });
+  }
+  return items;
+}
+
+export async function fetchDmhc(source) {
+  const items = [];
+  for (const url of source.urls ?? [source.url]) items.push(...parseDmhcPage(await fetchText(url), url, source.name));
+  return items;
 }
 
 // ---------- feed with a fallback channel ----------
@@ -542,6 +583,7 @@ export async function collectSource(source, kind, { since, sinceISO }) {
     case "regulations-gov": return inWindow(await fetchRegulationsGov(source));
     case "irb": return inWindow(await fetchIrb(source, since));
     case "dated-list": return inWindow(await fetchDatedGuidanceList(source));
+    case "dmhc": return inWindow(await fetchDmhc(source));
     default: throw new Error(`no collector for kind ${kind}`);
   }
 }

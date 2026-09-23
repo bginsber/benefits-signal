@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { displayDate, fetchFeedWithFallback, isoWeek, parseAtom, parseDatedGuidanceList, parseIrb, parseRegulationsGov, parseCourtListener, parseCourtListenerRecap, parseDasPage, parseMercerSearch, parseRss, parseSegalInsights, toISODate } from "../scripts/lib/collectors.mjs";
+import { displayDate, fetchFeedWithFallback, isoWeek, parseAtom, parseDatedGuidanceList, parseDmhcPage, parseIrb, parseRegulationsGov, parseCourtListener, parseCourtListenerRecap, parseDasPage, parseMercerSearch, parseRss, parseSegalInsights, toISODate } from "../scripts/lib/collectors.mjs";
 
 const fixture = (name) => readFile(new URL(`./fixtures/${name}`, import.meta.url), "utf8");
 const json = async (name) => JSON.parse(await fixture(name));
@@ -75,6 +75,23 @@ test("dated guidance lists yield one item per entry, carrying the topic heading"
   assert.deepEqual(nsa.categories, ["No Surprises Act"]);
   assert.equal(nsa.link, "https://www.federalregister.gov/documents/2021/07/13/2021-14379/requirements-related-to-surprise-billing-part-i", "absolute links are kept, so they merge with the Federal Register item");
   assert.equal(items.find((it) => it.title.includes("Idr Process") || it.title.includes("(IDR) Process")).date, "2023-09-20T12:00:00.000Z", "a &nbsp; inside the date still parses");
+  const typo = `<h2>Shared Responsibility</h2><ul><li>September 18, 2104<br><a href="/x.pdf">Filing Threshold Hardship Exemption</a></li></ul>`;
+  assert.equal(parseDatedGuidanceList(typo, page, "x", new Date("2026-09-23T12:00:00Z")).length, 0, "a far-future typo date is skipped");
+});
+
+test("DMHC All Plan Letters and press releases yield dated items; attachments are skipped", async () => {
+  const apl = parseDmhcPage(await fixture("dmhc-apl.html"), "https://www.dmhc.ca.gov/LicensingReporting/HealthPlanLicensing/AllPlanLetters.aspx", "California DMHC");
+  assert.equal(apl.length, 14, "letters only; FAQ, checklist, and attachment links are not letters");
+  assert.equal(apl[0].title, "APL 26-014: Contracted Pharmacy Benefit Manager Information");
+  assert.equal(apl[0].date, "2026-09-03T12:00:00.000Z");
+  assert.equal(apl.find((it) => it.title.startsWith("APL 26-011")).title, "APL 26-011: Compliance with Senate Bill 306 (2025) – First Data Call – REVISED");
+  assert.deepEqual(apl.find((it) => it.title.startsWith("ALL 26-010")).categories, ["All Licensee Letter"]);
+  assert.equal(apl.find((it) => it.title.startsWith("APL 26-005")).link, "https://www.dmhc.ca.gov/LinkClick.aspx?fileticket=RN93GnGRShk%3d&portalid=0");
+  const press = parseDmhcPage(await fixture("dmhc-press.html"), "https://www.dmhc.ca.gov/Resources/Newsroom/PressReleases.aspx", "California DMHC");
+  assert.equal(press.length, 5);
+  assert.equal(press[0].title, "California fines Blue Shield of California $800,000 for delaying resolution of member complaints");
+  assert.equal(press[0].date, "2026-09-09T12:00:00.000Z");
+  assert.equal(press[0].link, "https://www.dmhc.ca.gov/Resources/Newsroom/PressReleases/September9,2026PressRelease.aspx");
 });
 
 test("Segal insights resolve relative URLs and parse long-form dates", async () => {
