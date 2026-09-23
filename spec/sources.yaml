@@ -125,6 +125,21 @@ primary:
     scans: [ca9]
     active: true
 
+  - name: CourtListener — Supreme Court and other circuits
+    id: courtlistener-appellate
+    method: api
+    url: https://www.courtlistener.com/api/rest/v4/search/
+    collector: courtlistener
+    court: scotus ca1 ca2 ca3 ca4 ca5 ca6 ca7 ca8 ca10 ca11 cadc   # ca9 has its own, broader entry above
+    query: ERISA AND ("multiemployer" OR "Taft-Hartley" OR "welfare fund" OR "health plan" OR "welfare plan" OR "Mental Health Parity" OR "delinquent contributions" OR "1145")
+    notes: >
+      Welfare-fund ERISA opinions outside the Ninth Circuit, narrowed to trust-fund terms so
+      routine disability-denial appeals stay out. Verified 2026-09-23 via the CourtListener
+      search API: 4 opinions filed 2026-08-24 to 09-23 (three Seventh Circuit Central States
+      opinions, one Second Circuit).
+    scans: [fhw, met]
+    active: true
+
   - name: DOL/EBSA newsroom
     id: dol-ebsa-newsroom
     method: scrape-js

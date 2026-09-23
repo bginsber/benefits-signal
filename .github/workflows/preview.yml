@@ -1,0 +1,56 @@
+name: Branch preview (no deploy)
+
+# Runs on working branches only. Tests the branch, reports on the live feed,
+# probes candidate sources, and runs this branch's collector into a build
+# artifact. It never deploys to GitHub Pages, so the live feed URL is untouched.
+on:
+  push:
+    branches: ["claude/**"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+
+      - name: Tests
+        run: npm test 2>&1 | grep -E "^(not ok|# (pass|fail))"; npm test > /dev/null
+
+      - name: Live feed report (what subscribers see today)
+        continue-on-error: true
+        run: |
+          node scripts/feed-report.mjs https://bginsber.github.io/benefits-signal/collated.xml --titles 71
+          curl -fsS https://bginsber.github.io/benefits-signal/run-log.json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const r=JSON.parse(s);console.log("run-log ran_at",r.ran_at,"total",r.total_items);for(const x of r.sources)console.log(" ",x.ok===true?"ok  ":x.ok===false?"FAIL":"skip",x.source,x.items??x.error??x.skipped,x.consecutive_failures?`(consecutive failures ${x.consecutive_failures})`:"")})'
+
+      - name: Probe candidate sources
+        continue-on-error: true
+        run: node scripts/probe-feeds.mjs $(grep -vE '^\s*(#|$)' spec/candidate-feeds.txt)
+
+      - name: TypeSafe docs (Jev classifier research)
+        continue-on-error: true
+        run: |
+          curl -fsS https://docs.typesafe.ai/llms.txt | head -120
+          for p in introduction/quickstart patterns/confidence-routing patterns/composite-scoring; do
+            echo "===== $p"; curl -fsS "https://docs.typesafe.ai/$p.md" | head -220
+          done
+
+      - name: Collector on this branch
+        run: |
+          node scripts/collect.mjs --days 30 --out _preview/collated.xml
+          node scripts/feed-report.mjs _preview/collated.xml --titles 100
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preview-${{ github.run_id }}
+          path: |
+            _preview
+            data/run-log.json
+          retention-days: 14
