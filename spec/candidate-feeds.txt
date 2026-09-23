@@ -12,9 +12,61 @@
 #   healthcarelawtoday.com, healthlawadvisor.com, benefitnews.com (HTML, not RSS);
 #   jdsupra.com docsRSSfeed (empty body); nccmp.org/feed (valid RSS, no items).
 
-# Round 3 (2026-09-23): lines are probed by scripts/probe-feeds.mjs, which reads RSS and Atom,
-# summarizes JSON, and lists the feed links an HTML page advertises. "--dump URL --at REGEX"
-# prints raw markup for a parser fixture.
+# Round 2, 2026-09-23 (branch claude/benefits-signal-rss-sources-r6o1zu, preview runs 6-12).
+# The probe now reads Atom, counts items in the last 30 days and how many name a benefits keyword,
+# summarizes JSON, lists the feed links an HTML page advertises, and can --dump or --grep markup.
+#
+# Promoted to spec/sources.yaml:
+#   Primary: api.regulations.gov/v4 documents (comment periods closing within two weeks, DEMO_KEY
+#     works from Actions); irs.gov/irb/YYYY-WW_IRB bulletin highlights; cms.gov/marketplace/resources/
+#     regulations-guidance (CCIIO dated index; collector built, then set inactive: 1 group-health
+#     entry among 23 dated 2026, none in 60 days); dmhc.ca.gov All Plan Letters and press releases;
+#     CourtListener RECAP (type=r) for cand/cacd/casd/caed ERISA rulings. regulations.gov and the IRB
+#     are broad (1 of 6 and 3 of 24 items on topic in 30 days) and sit behind require_keywords gates,
+#     like the DOL and HHS release feeds.
+#   Supplemental: beneficiallyyours.com/feed (Seyfarth; 5 in 30 days, 4 on topic); eric.org/feed
+#     (7 of 7); morganlewis.com/rss/blogs?category=mlbenebits&top=25 (monthly; found via the blog
+#     page's feed link); nccmp.org/feed/?post_type=resource (the plain /feed/ is empty because
+#     resources are a custom post type; 2 of 6 recent items are health or welfare).
+#   Wagner Law Group: news.google.com/rss/search?q=site:wagnerlawgroup.com+when:30d as the fallback
+#     channel when the site's Cloudflare challenge 403s (5 articles in 30 days). This is Google's
+#     index of the site; nothing is fetched from wagnerlawgroup.com.
+# Rejected, with the reason:
+#   content.govdelivery.com bulletins.rss for USIRS, USCMS, USDOLEBSA, CADMHC: HTTP 406 even with a
+#     feed Accept header. irs.gov newsroom, IRB index, news releases: HTML with no feed links; news
+#     releases are mostly filing-season and tax-credit items (0 of 7 on topic, IR-2026-107 to 113);
+#     irs.gov/downloads/irs-drop lists document numbers without subjects. cms.gov RSS page lists no
+#     feeds (points to email sign-up only).
+#   nccmp.org/category/news/feed (404); nccmp.org/wp-json (401). ifebp.org home and
+#     news-and-regulatory-updates: Sitefinity pages with no feed links; IFEBP's only feed is the blog
+#     already collected. horizonactuarial.com ?format=rss (HTML, no feed). pionline.com/rss/pension-funds,
+#     americanbenefitscouncil.org/feed (404). nabtu.org/feed (stale since 2025-03).
+#   Google News search for Taft-Hartley / multiemployer health / health and welfare fund: 2 of 63
+#     items in 30 days, neither about US benefit funds. No trade-press feed on Taft-Hartley funds
+#     answered: benefitspro, plansponsor (403, round 1), pionline (404).
+#   nlrb.gov rssBoardDecisions (titles are bare case numbers), rssGCMemos (titles are memo numbers,
+#     1 in 30 days), rssAnnouncements (stale since 2026-01): nothing in them can be matched to trust-fund
+#     governance, so no NLRB source meets the one-third bar.
+#   insurance.ca.gov (CDI) press releases: JavaScript bot-challenge page; not worked around.
+#   oag.ca.gov/news/feed (0 of 10 recent items on benefits or fund privacy); privacy.ca.gov/feed
+#     (CPPA moved here from cppa.ca.gov; 0 of 6 recent items reach plans or administrators: data-broker
+#     enforcement); gov.ca.gov/feed (0 of 10; signing releases do not name benefits bills). California
+#     legislature: leginfo.legislature.ca.gov has no feed or API; OpenStates and LegiScan need API keys,
+#     which rules them out under "free API or feed only".
+#   CourtListener opinion search (type=o) for cand/cacd/casd/caed: newest N.D. Cal. ERISA opinion is
+#     2019-04-05, so the California district source reads RECAP instead.
+#   employeebenefits.foxrothschild.com (DNS), foxrothschild.com practice page (no feed),
+#     hallbenefitslaw.com/feed (403), natlawreview.com practice-group page (404), ubabenefits.com
+#     rss.xml (404), kantorlaw.net/blog, newfront.com/blog, bradley.com/insights,
+#     thompsoncoburn.com/insights/blogs (HTML, no feed links), newfront.com/blog/rss.xml,
+#     healthemploymentandlabor.com/feed (404), sheppardhealthlaw.com/feed (429), mwe.com/feed (valid,
+#     0 items), employerlawreport.com/feed (0 in 30 days; employment law), jacksonlewis.com,
+#     faegredrinker.com, bakerdonelson.com, ballardspahr.com, venable.com RSS paths (404).
+#   Wagner alternatives: jdsupra.com profile and law-news pages (empty body to datacenter clients);
+#     bing.com news RSS (361-byte HTML).
+#   Atom: no candidate probed so far serves Atom; parsing is in place (tests/fixtures/atom-feed.xml)
+#     and nccmp.org/feed and mwe.com/feed are RSS that is valid but empty, not Atom.
 
-# 1. CCIIO guidance entries dated 2026 (volume check before promotion)
---grep https://www.cms.gov/marketplace/resources/regulations-guidance --pattern [A-Z][a-z]+(&nbsp;|\s)\d{1,2},\s2026<br
+# Still worth a periodic recheck (valid feeds that were empty or blocked on 2026-09-23)
+https://www.mwe.com/feed/
+https://www.jdsupra.com/resources/syndication/docsRSSfeed.aspx?ftype=EmployeeBenefits
