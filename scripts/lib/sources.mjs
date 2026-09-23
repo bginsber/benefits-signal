@@ -17,7 +17,7 @@ const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g
 export async function loadSources(file = path.join(ROOT, "spec", "sources.yaml")) {
   const y = parseYaml(await readFile(file, "utf8"));
   const out = [];
-  for (const layer of ["interpretation", "primary"]) {
+  for (const layer of ["interpretation", "supplemental", "primary"]) {
     for (const s of y[layer] ?? []) {
       if (!s.name) throw new Error(`sources.yaml: entry without a name in ${layer}`);
       if (!s.method) throw new Error(`sources.yaml: ${s.name} has no method`);

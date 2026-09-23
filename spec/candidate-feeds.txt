@@ -1,0 +1,17 @@
+# Candidate RSS feeds for coverage BenefitsLink provides and we do not.
+# The branch preview workflow probes each line; promote a feed to
+# spec/sources.yaml only after it probes OK with relevant, recent items.
+#
+# Probed 2026-09-23 from GitHub Actions.
+# Promoted: erisapracticecenter.com (Proskauer), benefitslawadvisor.com, dol.gov/rss/releases.xml,
+#   hhs.gov/rss/news.xml (the last two behind keyword gates in spec/feed-filter.yaml).
+# Rejected: chirblog.org (stale since 2026-03); healthaffairs.org etoc (undated, broad health policy);
+#   kff.org (broad health policy); employeebenefitslawblog.com (stale since 2026-04); hrdive.com topic
+#   feed, shrm.org, cms.gov/newsroom/rss, natlawreview.com/rss.xml (404); benefitspro.com,
+#   plansponsor.com, spencerfane.com (403 to datacenter clients); erisalitigationnewsletter.com (DNS);
+#   healthcarelawtoday.com, healthlawadvisor.com, benefitnews.com (HTML, not RSS);
+#   jdsupra.com docsRSSfeed (empty body); nccmp.org/feed (valid RSS, no items).
+
+# Still worth a periodic recheck
+https://nccmp.org/feed/
+https://www.jdsupra.com/resources/syndication/docsRSSfeed.aspx?ftype=EmployeeBenefits

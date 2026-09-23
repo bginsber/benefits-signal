@@ -112,6 +112,17 @@ export async function fetchFederalRegister(sinceISO, agencies) {
 
 // ---------- CourtListener v4 opinion search (primary, Ninth Circuit) ----------
 
+/**
+ * Some clusters carry a truncated short name ("E.") and an empty full name;
+ * the opinion's first page then gives the caption on the line after the docket number.
+ */
+function caseTitle(r, op) {
+  const name = String(r.caseName ?? "").trim();
+  if (name.length > 4) return name;
+  const fromSnippet = String(op.snippet ?? "").split("\n").map((l) => l.trim()).find((l) => / v\. /.test(l));
+  return r.caseNameFull || fromSnippet || name;
+}
+
 export function parseCourtListener(json, sourceName) {
   return (json.results ?? []).map((r) => {
     const op = r.opinions?.[0] ?? {};
@@ -120,7 +131,7 @@ export function parseCourtListener(json, sourceName) {
       .filter(Boolean).join(" · ");
     return {
       source: sourceName,
-      title: r.caseName,
+      title: caseTitle(r, op),
       link: `https://www.courtlistener.com${r.absolute_url}`,
       date: toISODate(r.dateFiled),
       summary: [head, snippet].filter(Boolean).join(" — ").slice(0, 600),

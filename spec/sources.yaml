@@ -1,6 +1,9 @@
 # Benefits Signal — source configuration (Phase 0)
 # All URLs below were fetch-verified on 2026-09-01 unless marked otherwise.
-# layer: interpretation | primary
+# layer: interpretation | supplemental | primary
+#   interpretation = the seven curated publications the digest is built around (AGENTS.md)
+#   supplemental   = extra commentary feeds that widen the Outlook feed toward BenefitsLink-style
+#                    coverage without joining the curated seven
 # method: rss | scrape | scrape-js | email | api
 # Scan keys: fhw = Federal Health & Welfare, met = Multiemployer & Taft-Hartley,
 #            ca9 = California & Ninth Circuit, cyb = Cybersecurity & Privacy,
@@ -72,6 +75,22 @@ interpretation:
     scans: [fhw, met, atf]
     active: true
 
+supplemental:
+  - name: Proskauer ERISA Practice Center
+    id: proskauer
+    method: rss
+    url: https://www.erisapracticecenter.com/feed/  # verified 2026-09-23 via branch preview: 10 items, newest 2026-09-11 (MHPAEA FAB, FAQs Part 74, e-delivery for group health plans)
+    notes: Health & welfare-heavy ERISA commentary; also carries some executive-comp and SEC items.
+    scans: [fhw, cyb, ca9]
+    active: true
+
+  - name: Benefits Law Advisor
+    id: benefitslawadvisor
+    method: rss
+    url: https://www.benefitslawadvisor.com/feed/  # verified 2026-09-23 via branch preview: 10 items, newest 2026-09-09 (multiemployer SFA challenge to PBGC); low cadence
+    scans: [met, fhw]
+    active: true
+
 primary:
   - name: Federal Register API
     id: federal-register
@@ -109,7 +128,7 @@ primary:
     scans: [fhw, cyb, atf]
     active: true
 
-  - name: CourtListener API
+  - name: Ninth Circuit Opinions
     id: courtlistener
     method: api
     url: https://www.courtlistener.com/api/rest/v4/search/
@@ -125,16 +144,30 @@ primary:
     scans: [ca9]
     active: true
 
-  - name: DOL/EBSA newsroom
-    id: dol-ebsa-newsroom
-    method: scrape-js
-    url: https://www.dol.gov/newsroom/releases?agency=ebsa
+  - name: Supreme Court & Other Circuits
+    id: courtlistener-appellate
+    method: api
+    url: https://www.courtlistener.com/api/rest/v4/search/
+    collector: courtlistener
+    court: scotus ca1 ca2 ca3 ca4 ca5 ca6 ca7 ca8 ca10 ca11 cadc   # ca9 has its own, broader entry above
+    query: ERISA AND ("multiemployer" OR "Taft-Hartley" OR "welfare fund" OR "health plan" OR "welfare plan" OR "Mental Health Parity" OR "delinquent contributions" OR "1145")
     notes: >
-      CAVEAT (verified): dol.gov returns 403 to plain HTTP clients from datacenter IPs;
-      /rss/releases.xml also 403. Needs a browser-grade fetch path, or lean on the
-      Federal Register API for EBSA regulatory documents and treat the newsroom as
-      best-effort for sub-regulatory announcements.
-    scans: [fhw, met, cyb]
+      Welfare-fund ERISA opinions outside the Ninth Circuit, narrowed to trust-fund terms so
+      routine disability-denial appeals stay out. Verified 2026-09-23 via the CourtListener
+      search API: 4 opinions filed 2026-08-24 to 09-23 (three Seventh Circuit Central States
+      opinions, one Second Circuit).
+    scans: [fhw, met]
+    active: true
+
+  - name: DOL News Releases
+    id: dol-ebsa-newsroom
+    method: rss
+    url: https://www.dol.gov/rss/releases.xml   # verified 2026-09-23 via branch preview: 10 items, newest 2026-09-17
+    notes: >
+      All-DOL release feed (OSHA, UI claims, H-2A); spec/feed-filter.yaml keeps only EBSA, benefits,
+      apprenticeship, and prevailing-wage items. dol.gov 403'd datacenter IPs on 2026-09-01 and answered
+      from Actions on 2026-09-23; a 403 is logged as a source failure and the run continues.
+    scans: [fhw, met, cyb, atf]
     active: true
 
   - name: IRS
@@ -146,13 +179,14 @@ primary:
     scans: [fhw]
     active: true
 
-  - name: HHS OCR newsroom
+  - name: HHS News Releases
     id: hhs-ocr-newsroom
-    method: scrape-js
-    url: https://www.hhs.gov/ocr/newsroom/index.html
-    notes: Bot-protected like dol.gov (works via rendering proxy, 403 to curl).
-           HIPAA enforcement/settlements relevant to group health plans.
-    scans: [cyb]
+    method: rss
+    url: https://www.hhs.gov/rss/news.xml   # verified 2026-09-23 via branch preview: 10 items, newest 2026-09-22
+    notes: >
+      Department-wide release feed; OCR HIPAA settlements and coverage rules are announced here.
+      spec/feed-filter.yaml keeps only HIPAA, privacy/breach, and group-coverage items.
+    scans: [cyb, fhw]
     active: true
 
   - name: CMS newsroom

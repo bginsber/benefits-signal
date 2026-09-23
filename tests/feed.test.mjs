@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { cleanSummary, keepForFeed, kicker, loadFeedRules, renderItemHtml, statusLine } from "../scripts/lib/feed.mjs";
+import { cleanSummary, findKeyword, keepForFeed, kicker, loadFeedRules, renderItemHtml, statusLine } from "../scripts/lib/feed.mjs";
 
 const rules = await loadFeedRules();
 const fr = (title, type, extra = {}) => ({ source: "Federal Register — Health and Human Services Department", title, categories: [type], summary: "", ...extra });
@@ -22,6 +22,28 @@ test("feed filter drops firm news and events by category and leaves other source
   assert.equal(keepForFeed({ source: "Groom Law Group", title: "IRS Issues New Guidance", categories: ["Publications"] }, rules, "groom").keep, true);
   assert.equal(keepForFeed({ source: "Word on Benefits (IFEBP)", title: "Grief Awareness", categories: ["Canada", "Employee Assistance"] }, rules, "ifebp").keep, false);
   assert.equal(keepForFeed({ source: "CourtListener API", title: "Liu v. Kaiser", categories: ["Opinion"] }, rules, "courtlistener").keep, true);
+});
+
+test("keywords match whole-word starts, so rules from HHS and IRS need a benefits topic to reach the feed", () => {
+  const order = fr("Order Continuing the Suspension of the Right To Introduce Certain Persons", "Rule");
+  assert.equal(keepForFeed(order, rules).keep, false, "'pension' must not match inside 'suspension'");
+  assert.equal(keepForFeed(fr("Medical Devices; Cardiovascular Devices; Classification", "Rule", { summary: "FDA is classifying a device." }), rules).keep, false);
+  assert.equal(keepForFeed({ source: "Federal Register — Internal Revenue Service", title: "Car Loan Interest Deduction", categories: ["Proposed Rule"], summary: "" }, rules).keep, false);
+  assert.equal(keepForFeed(fr("Federal Independent Dispute Resolution Operations; Correction", "Rule"), rules).keep, true);
+  assert.equal(keepForFeed({ source: "Federal Register — Internal Revenue Service", title: "Nondiscrimination Rules", categories: ["Proposed Rule"], summary: "Rules for dependent care assistance programs." }, rules).keep, true);
+  assert.equal(findKeyword("Multiemployer pensions", ["pension"]), "pension");
+});
+
+test("source rules drop off-topic Mercer items and Groom webinars without touching benefits items", () => {
+  const mercer = (title, summary = "") => keepForFeed({ source: "Mercer Law & Policy Group", title, categories: [], summary }, rules, "mercer");
+  assert.equal(mercer("Roundup: Employer resources on H-1B reforms", "Visa fee changes for employers.").keep, false);
+  assert.equal(mercer("Roundup: Employer resources on the changing landscape of DEI").keep, false);
+  assert.equal(mercer("San Francisco boosts 2027 Health Care Expenditure Rates").keep, true);
+  assert.equal(mercer("PBGC waives reporting for attrition events").keep, true);
+  const dol = (title) => keepForFeed({ source: "DOL News Releases", title, categories: [], summary: "" }, rules, "dol-ebsa-newsroom").keep;
+  assert.equal(dol("Unemployment Insurance Weekly Claims Report"), false);
+  assert.equal(dol("US Department of Labor recovers $2.1M for health plan participants after EBSA investigation"), true);
+  assert.equal(keepForFeed({ source: "Groom Law Group", title: "Groom Webinar: Q3 2026 Benefits Watch", categories: ["Publications"] }, rules, "groom").keep, false);
 });
 
 test("item HTML carries the prototype palette inline, the title, status, cleaned body, and a source link", () => {

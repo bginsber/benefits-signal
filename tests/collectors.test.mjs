@@ -18,6 +18,9 @@ test("CourtListener opinions keep docket, filing date, and opinion PDF as struct
     download_url: "https://cdn.ca9.uscourts.gov/datastore/opinions/2026/08/31/24-4303.pdf", citation: undefined,
   });
   assert.match(liu.summary, /^9th Cir\. · No\. 24-4303 · filed 2026-08-31/);
+  const snippet = "25-2204\nE. Coast Advanced Plastic Surgery, LLC v. Cigna Health & Life Ins. Co.\n\n   United States Court of Appeals";
+  const [short] = parseCourtListener({ results: [{ caseName: "E.", caseNameFull: "", absolute_url: "/opinion/10975583/e/", dateFiled: "2026-09-17", opinions: [{ snippet }] }] }, "x");
+  assert.equal(short.title, "E. Coast Advanced Plastic Surgery, LLC v. Cigna Health & Life Ins. Co.", "a truncated short name falls back to the caption on the opinion's first page");
 });
 
 test("Segal insights resolve relative URLs and parse long-form dates", async () => {
