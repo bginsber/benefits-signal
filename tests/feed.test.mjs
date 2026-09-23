@@ -46,6 +46,20 @@ test("source rules drop off-topic Mercer items and Groom webinars without touchi
   assert.equal(keepForFeed({ source: "Groom Law Group", title: "Groom Webinar: Q3 2026 Benefits Watch", categories: ["Publications"] }, rules, "groom").keep, false);
 });
 
+test("new source gates: deadline reminders use the Federal Register keywords; IRB and CCIIO keep group-health items", () => {
+  const keep = (id, title, summary = "") => keepForFeed({ source: id, title, summary, categories: [] }, rules, id).keep;
+  assert.equal(keep("regulations-gov", "Comments due September 25: Employer Contributions to Trump Accounts and Nondiscrimination Rules for Dependent Care Assistance Programs"), true);
+  assert.equal(keep("regulations-gov", "Comments due October 5: Application of Section 250(b)(3)(A)(i)(VII) to Sales or Other Dispositions of Property"), false);
+  assert.equal(keep("regulations-gov", "Comments due October 2: Agency Information Collection Activities; Proposals, Submissions, and Approvals"), false);
+  assert.equal(keep("irs-irb", "CC-00349938-26: Guidance on Eligible Investments for Trump Accounts"), true);
+  assert.equal(keep("irs-irb", "Notice 2026-51: This notice sets forth updates on the corporate bond monthly yield curve", "IRB 2026-38 · Employee Plans — segment rates under § 430(h)(2)"), false);
+  assert.equal(keep("cms-cciio", "CMS-9909-IFC: Requirements Related to Surprise Billing; Part I", "No Surprises Act"), true);
+  assert.equal(keep("cms-cciio", "Key Dates for Calendar Year 2025: Qualified Health Plan (QHP) Data Submission and Certification", "Plan Management"), false);
+  assert.equal(keep("courtlistener-cal-district", "(PS) Gunnison v. Ingersoll Rand Retirement Savings Plan — Findings and Recommendations"), false);
+  assert.equal(keep("nccmp", "Presentation: 2026 LA Surprise Billing and IDR Update"), true);
+  assert.equal(keep("nccmp", "Presentation: 2026 LA PBGC Update"), false);
+});
+
 test("item HTML carries the prototype palette inline, the title, status, cleaned body, and a source link", () => {
   const item = { source: "Federal Register — Employee Benefits Security Administration", title: "Cybersecurity Program Requirements", link: "https://www.federalregister.gov/d/2026-0412", date: "2026-08-20T12:00:00.000Z", categories: ["Proposed Rule"], summary: "Proposed Rule · Comments close 2026-09-30 — Would require a written program. The post X appeared first on Y.", structured: { comments_close_on: "2026-09-30", effective_on: null } };
   assert.equal(kicker(item), "Federal Register · Proposed Rule");

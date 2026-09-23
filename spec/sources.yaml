@@ -63,7 +63,15 @@ interpretation:
     id: wagner
     method: rss
     url: https://www.wagnerlawgroup.com/feed/  # verified valid Aug 2026. Whole site is behind a Cloudflare managed challenge (cf-mitigated: challenge) that 403s some client IPs intermittently — blocked 2 of 3 Actions runs on 2026-09-01; collector logs a warning and continues
-    notes: Includes general firm/media items — filter to law alerts / ERISA categories.
+    fallback_url: https://news.google.com/rss/search?q=site:wagnerlawgroup.com+when:30d&hl=en-US&gl=US&ceid=US:en
+    fallback_label: Google News
+    fallback_title_suffix: " - The Wagner Law Group"
+    notes: >
+      Includes general firm/media items — filter to law alerts / ERISA categories. When the site's
+      Cloudflare challenge 403s the collector, the items come from a Google News RSS search limited to
+      wagnerlawgroup.com (a public feed of Google's own index of the site; nothing is fetched from
+      Wagner's servers, so the challenge is not touched). Links then go through news.google.com.
+      spec/feed-filter.yaml drops the attorney-bio and department pages that search also returns.
     scans: [fhw, met, cyb]
     active: true
 
@@ -88,6 +96,43 @@ supplemental:
     id: benefitslawadvisor
     method: rss
     url: https://www.benefitslawadvisor.com/feed/  # verified 2026-09-23 via branch preview: 10 items, newest 2026-09-09 (multiemployer SFA challenge to PBGC); low cadence
+    scans: [met, fhw]
+    active: true
+
+  - name: Beneficially Yours (Seyfarth)
+    id: beneficiallyyours
+    method: rss
+    url: https://www.beneficiallyyours.com/feed/  # verified 2026-09-23 via branch preview: 10 items, newest 2026-09-10, 5 in 30 days (MHPAEA roadmap, DCAP regulations, wellness FAQs)
+    notes: Health & welfare and retirement plan alerts; weekly cadence.
+    scans: [fhw, cyb]
+    active: true
+
+  - name: ERIC Policy Highlights
+    id: eric
+    method: rss
+    url: https://www.eric.org/feed/  # verified 2026-09-23 via branch preview: 10 items, newest 2026-09-18, 7 in 30 days, all on benefits policy
+    notes: >
+      The ERISA Industry Committee's weekly health-care and retirement policy digests: agency guidance,
+      litigation, and bills from the plan-sponsor side. Advocacy commentary, not law-firm analysis.
+    scans: [fhw, cyb]
+    active: true
+
+  - name: Morgan Lewis ML BeneBits
+    id: morganlewis
+    method: rss
+    url: https://www.morganlewis.com/rss/blogs?category=mlbenebits&top=25  # found via the blog page's feed link; verified 2026-09-23 via branch preview: 25 items, newest 2026-09-01; about monthly
+    notes: Benefits and executive-compensation blog; spec/feed-filter.yaml keeps only its benefits posts. Covers multiemployer topics (SFA plans, Roth catch-up for multiemployer plans).
+    scans: [fhw, met]
+    active: true
+
+  - name: NCCMP Resources
+    id: nccmp
+    method: rss
+    url: https://nccmp.org/feed/?post_type=resource  # the site's default /feed/ is valid but empty; resources are a custom post type. Verified 2026-09-23 via branch preview: 10 items, newest 2026-09-15, 4 in 30 days
+    notes: >
+      National Coordinating Committee for Multiemployer Plans: conference presentations, comment letters,
+      and legislative updates for jointly administered plans. spec/feed-filter.yaml keeps the health,
+      welfare, and training items and drops pension-only sessions.
     scans: [met, fhw]
     active: true
 
@@ -117,14 +162,19 @@ primary:
     scans: [fhw, met, cyb, atf]
     active: true
 
-  - name: regulations.gov API v4
+  - name: Comment Deadlines (regulations.gov)
     id: regulations-gov
     method: api
-    url: https://api.regulations.gov/v4      # /documents and /dockets verified
-    auth: api-key                            # free via api.data.gov; DEMO_KEY works for testing
-    notes: Used at verification time for comment deadlines and docket status,
-           not as a daily collector. Key params filter[searchTerm], filter[agencyId],
-           filter[lastModifiedDate].
+    url: https://api.regulations.gov/v4      # /documents verified from Actions 2026-09-23 with DEMO_KEY (39 open EBSA/IRS/CMS documents)
+    collector: regulations-gov
+    agencies: [EBSA, IRS, CMS, HHS, ETA, WHD]
+    auth: api-key                            # REGULATIONS_GOV_API_KEY when set, else api.data.gov's DEMO_KEY (rate-limited per IP; one call per run)
+    notes: >
+      Open comment periods closing within two weeks, one reminder per document, dated two weeks before
+      the deadline and linked to the regulations.gov comment page. The Federal Register entry announces
+      a document when it publishes; this one brings it back while there is still time to comment.
+      spec/feed-filter.yaml applies the Federal Register keyword list. A free api.data.gov key avoids
+      DEMO_KEY's shared rate limit if runs start failing with HTTP 429.
     scans: [fhw, cyb, atf]
     active: true
 
@@ -189,12 +239,18 @@ primary:
     scans: [fhw, met, cyb, atf]
     active: true
 
-  - name: IRS
-    id: irs-newsroom
+  - name: IRS Internal Revenue Bulletin
+    id: irs-irb
     method: scrape
-    url: https://www.irs.gov/newsroom/news-releases-for-current-month   # verified 200
-    also: https://www.irs.gov/internal-revenue-bulletins                # written guidance
-    notes: No working RSS (newsroom/feed is 404) — scrape the HTML listings.
+    collector: irb
+    url: https://www.irs.gov/internal-revenue-bulletins   # weekly bulletins at /irb/YYYY-WW_IRB; verified 200 from Actions 2026-09-23
+    notes: >
+      The "Highlights of This Issue" synopses of each weekly bulletin: every notice, revenue procedure,
+      revenue ruling, and proposed or final regulation, under its section (Employee Plans, Income Tax,
+      ...). No IRS RSS exists (newsroom/feed 404; GovDelivery answers 406). The news-release listing is
+      mostly filing-season and tax-credit items and the IRS-drop table has document numbers without
+      subjects, so the bulletin is the channel for written guidance. spec/feed-filter.yaml keeps
+      health-and-welfare items.
     scans: [fhw]
     active: true
 
@@ -208,10 +264,16 @@ primary:
     scans: [cyb, fhw]
     active: true
 
-  - name: CMS newsroom
-    id: cms-newsroom
+  - name: CMS Private Insurance Guidance (CCIIO)
+    id: cms-cciio
     method: scrape
-    url: https://www.cms.gov/newsroom        # verified; curl-friendly
+    collector: dated-list
+    url: https://www.cms.gov/marketplace/resources/regulations-guidance   # verified 200 from Actions 2026-09-23; plain HTML, dated entries under topic headings
+    notes: >
+      CCIIO's regulations-and-guidance index: No Surprises Act, transparency, parity, and Marketplace
+      guidance as dated links under topic headings. spec/feed-filter.yaml keeps the group-health topics.
+      The CMS newsroom has no RSS (cms.gov/newsroom/rss 404; the RSS page lists no feeds) and GovDelivery
+      answers 406, so this page is the CMS channel for group-health guidance.
     scans: [fhw]
     active: true
 

@@ -16,29 +16,13 @@
 # summarizes JSON, and lists the feed links an HTML page advertises. "--dump URL --at REGEX"
 # prints raw markup for a parser fixture.
 
-# 1. Primary authority: IRS, CMS/CCIIO, regulations.gov
---dump https://www.irs.gov/internal-revenue-bulletins --at irb/2026 --len 3000
---dump https://www.irs.gov/irb/2026-38_IRB --at HIGHLIGHTS --len 16000
---dump https://www.cms.gov/about-cms/web-policies-important-links/rss-feeds --at <main --len 12000
---dump https://www.cms.gov/marketplace/resources/regulations-guidance --at 2026 --len 8000
---dump https://api.regulations.gov/v4/documents?filter[agencyId]=EBSA,IRS,CMS&filter[commentEndDate][ge]=2026-09-23&sort=commentEndDate&page[size]=5&api_key=DEMO_KEY --len 5000
-
-# 3. Multiemployer
-https://nccmp.org/feed/?post_type=resource
-https://nccmp.org/resource/feed/
---dump https://nccmp.org/resource-category/?category=healthcare --at resource --len 5000
-https://www.ifebp.org/resources---news/news-and-regulatory-updates
---dump https://www.ifebp.org/resources---news/news-and-regulatory-updates --at 2026 --len 6000
-https://www.nlrb.gov/rss/rssBoardDecisions.xml
-https://www.nlrb.gov/rss/rssGCMemos.xml
-https://www.nlrb.gov/rss/rssAnnouncements.xml
-
 # 4. California
---dump https://www.dmhc.ca.gov/LicensingReporting/HealthPlanLicensing/AllPlanLetters.aspx --at APL --len 8000
---dump https://www.dmhc.ca.gov/Resources/Newsroom/PressReleases.aspx --at 2026 --len 5000
-https://privacy.ca.gov/feed/
-https://privacy.ca.gov/about-us/newsroom/
+--dump https://www.dmhc.ca.gov/LicensingReporting/HealthPlanLicensing/AllPlanLetters.aspx --at APL.26 --len 7000
+--dump https://www.dmhc.ca.gov/Resources/Newsroom/PressReleases.aspx --at PressReleases/ --len 5000
 
-# 6. Wagner Law Group through another channel
-https://news.google.com/rss/search?q=site:wagnerlawgroup.com+when:30d&hl=en-US&gl=US&ceid=US:en
-https://news.google.com/rss/search?q=site:wagnerlawgroup.com+when:60d&hl=en-US&gl=US&ceid=US:en
+# 5. Law-firm benefits alerts
+https://www.jacksonlewis.com/rss/practice/employee-benefits
+https://www.faegredrinker.com/en/insights/rss
+https://www.bakerdonelson.com/rss/employee-benefits
+https://www.ballardspahr.com/rss/insights
+https://www.venable.com/rss/insights

@@ -58,6 +58,7 @@ federal_register:
     - HSA
     - health savings account
     - flexible spending
+    - Employee Benefits Security Administration
   # Titles matching any of these are dropped regardless (agency housekeeping).
   drop_title_patterns:
     - "Agency Information Collection"
@@ -74,7 +75,8 @@ federal_register:
     - "Delegation of Authority"
 
 # Per-source rules: category drops (RSS <category> values), title drops (substring), and
-# require_keywords (the item must name a benefits topic in its title or summary). Case-insensitive.
+# require_keywords (the item must name a benefits topic in its title or summary; "federal_register"
+# means the Federal Register keyword list above). Case-insensitive.
 sources:
   groom:
     drop_categories: [Events, News]
@@ -85,7 +87,31 @@ sources:
     require_keywords: [ERISA, employee benefit, benefit plan, benefits, health, welfare, retirement, pension, PBGC, 401(k), 403(b), COBRA, HIPAA, parity, Affordable Care, ACA, Medicare, EBSA, IRS, Trump account, HSA, FSA, dependent care]
   ifebp:
     drop_categories: [Canada]
+  wagner:
+    # The Google News fallback also returns attorney-bio and department pages from the site.
+    drop_title_patterns: [" | The Wagner Law Group", "Chairs and Professionals", "Attorneys at Law", "Welcomes", "Joins The Wagner"]
+  beneficiallyyours:
+    drop_title_patterns: [Webinar, Save the Date]
+  morganlewis:
+    # Half the blog is executive compensation and equity plans.
+    require_keywords: [ERISA, employee benefit, benefit plan, health, welfare, retirement, pension, PBGC, multiemployer, 401(k), 403(b), COBRA, HIPAA, parity, Affordable Care, EBSA, IRS, Trump account, HSA, FSA, dependent care, fiduciary]
   dol-ebsa-newsroom:
     require_keywords: [EBSA, Employee Benefits Security, ERISA, health plan, benefit plan, retirement, pension, 401(k), fiduciary, multiemployer, mental health parity, apprentice, Davis-Bacon, prevailing wage]
   hhs-ocr-newsroom:
     require_keywords: [HIPAA, Office for Civil Rights, breach, cybersecurity, ransomware, health plan, group health, No Surprises, surprise billing, mental health parity, Affordable Care Act, price transparency]
+  regulations-gov:
+    require_keywords: federal_register
+    drop_title_patterns: ["Information Collection", "Submission for OMB Review", "Privacy Act of 1974"]
+  irs-irb:
+    # Most bulletin items are income-tax or pension-funding guidance; keep health and welfare, fringe
+    # benefits, and multiemployer items.
+    require_keywords: [health, welfare, medical, cafeteria, section 125, § 125, dependent care, HSA, health savings, flexible spending, HRA, health reimbursement, ICHRA, COBRA, Affordable Care, employer shared responsibility, 4980H, 6055, 6056, PCORI, MHPAEA, mental health parity, fringe benefit, educational assistance, Trump account, multiemployer, apprentice]
+  cms-cciio:
+    # The page also indexes Marketplace (exchange) guidance, which does not bind group health plans.
+    require_keywords: [No Surprises, surprise billing, independent dispute, IDR, air ambulance, transparency, price comparison, group health, health plan issuers and group, mental health parity, MHPAEA, prescription drug, RxDC, gag clause, cost sharing, out-of-pocket, preventive, contraceptive, excepted benefit, short-term, grandfathered, HIPAA, COBRA, ICHRA, health reimbursement, wellness, advanced explanation of benefits]
+  nccmp:
+    # Conference presentations; keep the health, welfare, and training ones, not the pension-only sessions.
+    require_keywords: [health, welfare, surprise billing, No Surprises, IDR, independent dispute, parity, Affordable Care, ACA, HIPAA, COBRA, prescription, pharmacy, apprentice, training, Taft-Hartley, legislative]
+  courtlistener-cal-district:
+    # "(PS)" marks a pro se case in the Eastern District's captions.
+    drop_title_patterns: ["(PS) "]
