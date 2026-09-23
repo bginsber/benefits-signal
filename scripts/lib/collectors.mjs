@@ -176,15 +176,57 @@ export function parseCourtListener(json, sourceName) {
   });
 }
 
+/** Rulings, not filings: the docket entries a reader would want to open. */
+const DECISIONAL = /\b(order|judgment|findings|opinion|recommendation)/i;
+const PROCEDURAL = /\b(protective|stipulat|proposed|scheduling|pretrial|writ|pro hac|seal|continu|extend|extension|reassign|refer|transfer|mediation|settlement conference|minute order setting|notice)/i;
+const ERISA_DOCKET = /E\.?R\.?I\.?S\.?A|Employee Retirement Income Security/i;
+
+/**
+ * CourtListener RECAP search (type=r): district-court dockets with their matching documents.
+ * CourtListener's opinion collection for district courts is sparse, so rulings are read from
+ * RECAP instead: one item per main (non-attachment) document that is an order, judgment, or
+ * findings, on a docket whose nature of suit or cause is ERISA.
+ */
+export function parseCourtListenerRecap(json, sourceName) {
+  const items = [];
+  for (const r of json.results ?? []) {
+    if (!ERISA_DOCKET.test(`${r.suitNature ?? ""} ${r.cause ?? ""}`)) continue;
+    for (const d of r.recap_documents ?? []) {
+      const label = String(d.short_description ?? "").trim();
+      const desc = String(d.description ?? "").replace(/\s+/g, " ").trim();
+      if (d.attachment_number || d.document_type === "Attachment") continue;
+      if (!DECISIONAL.test(label || desc) || PROCEDURAL.test(label || desc)) continue;
+      const head = [r.court_citation_string, r.docketNumber ? `No. ${r.docketNumber}` : null, d.entry_date_filed ? `entered ${d.entry_date_filed}` : null]
+        .filter(Boolean).join(" · ");
+      items.push({
+        source: sourceName,
+        title: `${r.caseName} — ${label || "Order"}`,
+        link: `https://www.courtlistener.com${d.absolute_url}`,
+        date: toISODate(d.entry_date_filed),
+        summary: [head, decodeEntities(desc)].filter(Boolean).join(" — ").slice(0, 600),
+        categories: [label || "Order"],
+        structured: {
+          docket_number: r.docketNumber, date_filed: d.entry_date_filed, court: r.court_id, docket_id: r.docket_id,
+          download_url: d.filepath_local ? `https://storage.courtlistener.com/${d.filepath_local}` : null,
+        },
+      });
+    }
+  }
+  return items;
+}
+
 export async function fetchCourtListener(source, sinceISO) {
-  const params = new URLSearchParams({ q: source.query, type: "o", court: source.court ?? "ca9", order_by: "dateFiled desc", filed_after: sinceISO });
+  const recap = source.search_type === "r";
+  const params = recap
+    ? new URLSearchParams({ q: source.query, type: "r", court: source.court, order_by: "entry_date_filed desc", entry_date_filed_after: sinceISO })
+    : new URLSearchParams({ q: source.query, type: "o", court: source.court ?? "ca9", order_by: "dateFiled desc", filed_after: sinceISO });
   const headers = { Accept: "application/json" };
   if (process.env.COURTLISTENER_TOKEN) headers.Authorization = `Token ${process.env.COURTLISTENER_TOKEN}`;
   let url = `${source.url}?${params}`;
   const items = [];
   for (let page = 0; url && page < 3; page++) {
     const json = JSON.parse(await fetchText(url, { headers }));
-    items.push(...parseCourtListener(json, source.name));
+    items.push(...(recap ? parseCourtListenerRecap(json, source.name) : parseCourtListener(json, source.name)));
     url = json.next ?? null;
   }
   return items;

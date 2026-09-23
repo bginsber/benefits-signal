@@ -159,6 +159,25 @@ primary:
     scans: [fhw, met]
     active: true
 
+  - name: California District Courts
+    id: courtlistener-cal-district
+    method: api
+    url: https://www.courtlistener.com/api/rest/v4/search/
+    collector: courtlistener
+    search_type: r                    # RECAP dockets; CourtListener's district-court opinion collection for these courts ends in 2019
+    court: cand cacd casd caed
+    query: ERISA AND ("multiemployer" OR "Taft-Hartley" OR "welfare fund" OR "health plan" OR "welfare plan" OR "Mental Health Parity" OR "delinquent contributions" OR "1145" OR "trust fund")
+    notes: >
+      ERISA rulings from the four California federal district courts, narrowed to welfare-fund terms like
+      the appellate entry. Reads RECAP (PACER documents CourtListener holds) because the opinion search has
+      no California district opinions after 2019 (checked 2026-09-23: newest N.D. Cal. ERISA opinion is
+      2019-04-05). The parser keeps only orders, judgments, and findings on dockets whose nature of suit or
+      cause is ERISA; filings, protective and scheduling orders, and attachments are dropped. Coverage is
+      limited to documents someone has pulled from PACER into RECAP. Verified 2026-09-23 with the
+      CourtListener connector: 10 dockets with matching entries 2026-08-24 to 09-23.
+    scans: [ca9, fhw, met]
+    active: true
+
   - name: DOL News Releases
     id: dol-ebsa-newsroom
     method: rss

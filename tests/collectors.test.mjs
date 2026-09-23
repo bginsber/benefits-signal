@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { displayDate, parseAtom, parseCourtListener, parseDasPage, parseMercerSearch, parseRss, parseSegalInsights, toISODate } from "../scripts/lib/collectors.mjs";
+import { displayDate, parseAtom, parseCourtListener, parseCourtListenerRecap, parseDasPage, parseMercerSearch, parseRss, parseSegalInsights, toISODate } from "../scripts/lib/collectors.mjs";
 
 const fixture = (name) => readFile(new URL(`./fixtures/${name}`, import.meta.url), "utf8");
 const json = async (name) => JSON.parse(await fixture(name));
@@ -21,6 +21,20 @@ test("CourtListener opinions keep docket, filing date, and opinion PDF as struct
   const snippet = "25-2204\nE. Coast Advanced Plastic Surgery, LLC v. Cigna Health & Life Ins. Co.\n\n   United States Court of Appeals";
   const [short] = parseCourtListener({ results: [{ caseName: "E.", caseNameFull: "", absolute_url: "/opinion/10975583/e/", dateFiled: "2026-09-17", opinions: [{ snippet }] }] }, "x");
   assert.equal(short.title, "E. Coast Advanced Plastic Surgery, LLC v. Cigna Health & Life Ins. Co.", "a truncated short name falls back to the caption on the opinion's first page");
+});
+
+test("CourtListener RECAP keeps rulings on ERISA dockets and skips filings, procedural orders, and attachments", async () => {
+  const items = parseCourtListenerRecap(await json("courtlistener-recap.json"), "California District Courts");
+  assert.deepEqual(items.map((it) => it.title), [
+    "Jane Doe v. The Signature Benefits Plan and the Disney Severance Pay Plan — Findings of Fact & Conclusions of Law",
+    "GCIU-Employer Retirement Fund v. T.C. Peters Printing Co., Inc. — Judgment",
+  ], "protective orders, attachments, and non-ERISA dockets are dropped");
+  const [doe, gciu] = items;
+  assert.equal(doe.link, "https://www.courtlistener.com/docket/69264457/56/jane-doe-v-the-signature-benefits-plan-and-the-disney-severance-pay-plan/");
+  assert.equal(doe.date, "2026-09-17T12:00:00.000Z");
+  assert.match(doe.summary, /^C\.D\. Cal\. · No\. 8:24-cv-02230 · entered 2026-09-17 — FINDINGS OF FACT/);
+  assert.equal(doe.structured.download_url, "https://storage.courtlistener.com/recap/gov.uscourts.cacd.944669/gov.uscourts.cacd.944669.56.0.pdf");
+  assert.equal(gciu.structured.docket_number, "2:25-cv-11893");
 });
 
 test("Segal insights resolve relative URLs and parse long-form dates", async () => {

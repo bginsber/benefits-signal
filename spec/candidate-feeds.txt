@@ -17,46 +17,28 @@
 # prints raw markup for a parser fixture.
 
 # 1. Primary authority: IRS, CMS/CCIIO, regulations.gov
-https://content.govdelivery.com/accounts/USIRS/bulletins.rss
-https://content.govdelivery.com/accounts/USCMS/bulletins.rss
---dump https://www.irs.gov/newsroom/news-releases-for-current-month --at IR-2026
---dump https://www.irs.gov/internal-revenue-bulletins --at IRB.2026
---dump https://www.irs.gov/downloads/irs-drop --at n-26
---dump https://www.cms.gov/about-cms/web-policies-important-links/rss-feeds --at \.xml
---dump https://api.regulations.gov/v4/documents?filter[agencyId]=EBSA,IRS,CMS&filter[commentEndDate][ge]=2026-09-23&sort=commentEndDate&page[size]=3&api_key=DEMO_KEY
-
-# 2. Atom and previously valid-but-empty feeds
-https://nccmp.org/feed/
-https://nccmp.org/wp-json/wp/v2/types
-https://nccmp.org/wp-json/wp/v2/posts?per_page=5&_fields=date,link,title
+--dump https://www.irs.gov/internal-revenue-bulletins --at irb/2026 --len 3000
+--dump https://www.irs.gov/irb/2026-38_IRB --at HIGHLIGHTS --len 16000
+--dump https://www.cms.gov/about-cms/web-policies-important-links/rss-feeds --at <main --len 12000
+--dump https://www.cms.gov/marketplace/resources/regulations-guidance --at 2026 --len 8000
+--dump https://api.regulations.gov/v4/documents?filter[agencyId]=EBSA,IRS,CMS&filter[commentEndDate][ge]=2026-09-23&sort=commentEndDate&page[size]=5&api_key=DEMO_KEY --len 5000
 
 # 3. Multiemployer
---dump https://nccmp.org/ --at news
---dump https://www.ifebp.org/ --at news
---dump https://www.nlrb.gov/resources/rss-feeds --at \.xml
-https://www.horizonactuarial.com/blog?format=rss
-https://www.pionline.com/rss/pension-funds
-https://www.eric.org/feed/
-https://www.americanbenefitscouncil.org/feed/
-https://nabtu.org/feed/
+https://nccmp.org/feed/?post_type=resource
+https://nccmp.org/resource/feed/
+--dump https://nccmp.org/resource-category/?category=healthcare --at resource --len 5000
+https://www.ifebp.org/resources---news/news-and-regulatory-updates
+--dump https://www.ifebp.org/resources---news/news-and-regulatory-updates --at 2026 --len 6000
+https://www.nlrb.gov/rss/rssBoardDecisions.xml
+https://www.nlrb.gov/rss/rssGCMemos.xml
+https://www.nlrb.gov/rss/rssAnnouncements.xml
 
 # 4. California
---dump https://www.dmhc.ca.gov/ --at press
---dump https://www.insurance.ca.gov/0400-news/0100-press-releases/ --at 2026
---dump https://cppa.ca.gov/announcements/ --at 2026
-
-# 5. Law-firm benefits alerts
-https://www.morganlewis.com/rss/blogs?category=mlbenebits&top=25
-https://www.newfront.com/blog/rss.xml
-https://www.beneficiallyyours.com/feed/
-https://www.healthemploymentandlabor.com/feed/
-https://www.employerlawreport.com/feed/
-https://www.mwe.com/feed/
-https://www.sheppardhealthlaw.com/feed/
-https://www.foxrothschild.com/employee-benefits-and-executive-compensation
-https://www.bradley.com/insights
-https://www.thompsoncoburn.com/insights/blogs
+--dump https://www.dmhc.ca.gov/LicensingReporting/HealthPlanLicensing/AllPlanLetters.aspx --at APL --len 8000
+--dump https://www.dmhc.ca.gov/Resources/Newsroom/PressReleases.aspx --at 2026 --len 5000
+https://privacy.ca.gov/feed/
+https://privacy.ca.gov/about-us/newsroom/
 
 # 6. Wagner Law Group through another channel
-https://www.bing.com/news/search?q=%22Wagner+Law+Group%22&format=rss
---dump https://news.google.com/rss/search?q=site:wagnerlawgroup.com+when:30d&hl=en-US&gl=US&ceid=US:en --at <item
+https://news.google.com/rss/search?q=site:wagnerlawgroup.com+when:30d&hl=en-US&gl=US&ceid=US:en
+https://news.google.com/rss/search?q=site:wagnerlawgroup.com+when:60d&hl=en-US&gl=US&ceid=US:en

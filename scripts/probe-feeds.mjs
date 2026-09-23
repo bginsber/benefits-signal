@@ -9,9 +9,9 @@
  * level shape and the start of the body. For an HTML page: its title and any
  * feed links it advertises, so one probe can discover a feed URL.
  *
- * Usage: node scripts/probe-feeds.mjs <url> [--dump <url> [--at <regex>]] ...
- *   --dump prints up to 6,000 characters of the raw body (from the first match
- *   of --at when given), for writing a parser fixture from the Actions log.
+ * Usage: node scripts/probe-feeds.mjs <url> [--dump <url> [--at <regex>] [--len <n>]] ...
+ *   --dump prints --len characters (default 6,000) of the raw body, from the first
+ *   match of --at when given, for writing a parser fixture from the Actions log.
  */
 
 import { FEED_ACCEPT, decodeEntities, fetchText, parseRss } from "./lib/collectors.mjs";
@@ -19,7 +19,7 @@ import { findKeyword, loadFeedRules } from "./lib/feed.mjs";
 
 const args = process.argv.slice(2);
 if (!args.length) {
-  console.error("usage: node scripts/probe-feeds.mjs <url> [--dump <url> [--at <regex>]] ...");
+  console.error("usage: node scripts/probe-feeds.mjs <url> [--dump <url> [--at <regex>] [--len <n>]] ...");
   process.exit(2);
 }
 
@@ -31,7 +31,7 @@ const jobs = [];
 for (let i = 0; i < args.length; i++) {
   if (args[i] === "--dump") {
     const job = { url: args[++i], dump: true };
-    if (args[i + 1] === "--at") { job.at = args[i + 2]; i += 2; }
+    while (["--at", "--len"].includes(args[i + 1])) { job[args[i + 1].slice(2)] = args[i + 2]; i += 2; }
     jobs.push(job);
   } else jobs.push({ url: args[i] });
 }
@@ -53,12 +53,12 @@ function describeJson(body) {
   return true;
 }
 
-for (const { url, dump, at } of jobs) {
+for (const { url, dump, at, len = 6000 } of jobs) {
   try {
     const body = await fetchText(url, { retries: 0, headers: { Accept: FEED_ACCEPT } });
     if (dump) {
       const start = at ? Math.max(0, body.search(new RegExp(at, "i"))) : 0;
-      console.log(`DUMP  ${url} (${body.length} bytes, from ${start})\n${body.slice(start, start + 6000)}\nEND DUMP`);
+      console.log(`DUMP  ${url} (${body.length} bytes, from ${start})\n${body.slice(start, start + Number(len))}\nEND DUMP`);
       continue;
     }
     const items = parseRss(body, "probe");
