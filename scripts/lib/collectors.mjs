@@ -57,18 +57,48 @@ export function toISODate(s) {
   return isNaN(d) ? null : d.toISOString();
 }
 
-// ---------- RSS (interpretation sources) ----------
+// ---------- RSS and Atom feeds ----------
 
+/** RSS 2.0 / RSS 1.0 (RDF) items, or Atom entries when the document has no <item>. */
 export function parseRss(xml, sourceName) {
+  if (!/<item[\s>]/i.test(xml) && /<entry[\s>]/i.test(xml)) return parseAtom(xml, sourceName);
   const items = [];
   for (const m of xml.matchAll(/<item[\s>]([\s\S]*?)<\/item>/gi)) {
     const block = m[1];
     const link = decodeEntities(tag(block, "link")) || (block.match(/<guid[^>]*>([\s\S]*?)<\/guid>/i)?.[1] ?? "").trim();
     const title = stripTags(tag(block, "title"));
-    const pub = tag(block, "pubDate");
+    const pub = tag(block, "pubDate") || tag(block, "dc:date");
     const date = pub ? new Date(pub) : null;
     const desc = stripTags(tag(block, "description")).slice(0, 600);
     const cats = [...block.matchAll(/<category[^>]*>([\s\S]*?)<\/category>/gi)].map((c) => stripTags(c[1]));
+    if (!title || !link) continue;
+    items.push({ source: sourceName, title, link, date: date && !isNaN(date) ? date.toISOString() : null, summary: desc, categories: cats });
+  }
+  return items;
+}
+
+const attr = (el, name) => decodeEntities(el.match(new RegExp(`\\s${name}\\s*=\\s*("([^"]*)"|'([^']*)')`, "i"))?.slice(2).find((v) => v != null) ?? "");
+
+/** Text of an Atom text construct; type="html" content is escaped HTML, so it is unescaped once more before tags are stripped. */
+function atomText(block, name) {
+  const m = block.match(new RegExp(`<${name}(\\s[^>]*)?>([\\s\\S]*?)</${name}>`, "i"));
+  if (!m) return "";
+  return stripTags(/type\s*=\s*["']html["']/i.test(m[1] ?? "") ? decodeEntities(m[2]) : m[2]);
+}
+
+/** Atom 1.0 entries: alternate link href, published (else updated) date, summary (else content), category terms. */
+export function parseAtom(xml, sourceName) {
+  const items = [];
+  for (const m of xml.matchAll(/<entry[\s>]([\s\S]*?)<\/entry>/gi)) {
+    const block = m[1];
+    const links = [...block.matchAll(/<link\b[^>]*>/gi)].map((l) => l[0]);
+    const alt = links.find((l) => !/\srel\s*=/i.test(l) || /\srel\s*=\s*["']alternate["']/i.test(l)) ?? links[0];
+    const link = alt ? attr(alt, "href") : "";
+    const title = atomText(block, "title");
+    const pub = tag(block, "published") || tag(block, "updated");
+    const date = pub ? new Date(pub) : null;
+    const desc = (atomText(block, "summary") || atomText(block, "content")).slice(0, 600);
+    const cats = [...block.matchAll(/<category\b[^>]*>/gi)].map((c) => attr(c[0], "label") || attr(c[0], "term")).filter(Boolean);
     if (!title || !link) continue;
     items.push({ source: sourceName, title, link, date: date && !isNaN(date) ? date.toISOString() : null, summary: desc, categories: cats });
   }

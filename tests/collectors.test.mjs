@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { displayDate, parseCourtListener, parseDasPage, parseMercerSearch, parseSegalInsights, toISODate } from "../scripts/lib/collectors.mjs";
+import { displayDate, parseAtom, parseCourtListener, parseDasPage, parseMercerSearch, parseRss, parseSegalInsights, toISODate } from "../scripts/lib/collectors.mjs";
 
 const fixture = (name) => readFile(new URL(`./fixtures/${name}`, import.meta.url), "utf8");
 const json = async (name) => JSON.parse(await fixture(name));
@@ -58,6 +58,27 @@ test("CAC meeting tables yield one notice per committee with the meeting date an
   assert.equal(cca.link, "https://www.dir.ca.gov/DAS/DAS_MeetingAgenda/2026/August/2026-8-CCA-CAC-Notice.pdf");
   assert.deepEqual(cca.structured.documents.map((d) => d.label), ["Notice", "Agenda", "Remote Attendees"]);
   assert.equal(new Set(items.map((it) => it.link)).size, items.length, "links must be unique so the store keys them separately");
+});
+
+test("Atom entries yield the alternate link, published date, summary text, and category labels", async () => {
+  const xml = await fixture("atom-feed.xml");
+  const items = parseAtom(xml, "Example Blog");
+  assert.equal(items.length, 2, "an entry without a title is skipped");
+  const [faq, appeal] = items;
+  assert.equal(faq.title, "Agencies Issue FAQs on Mental Health Parity & Network Adequacy");
+  assert.equal(faq.link, "https://blog.example.org/2026/09/mhpaea-faqs.html", "the rel=alternate link wins over replies and edit links");
+  assert.equal(faq.date, "2026-09-18T16:30:00.000Z", "published wins over updated");
+  assert.equal(faq.summary, "The Departments released FAQs Part 75 on nonquantitative treatment limitations.");
+  assert.deepEqual(faq.categories, ["MHPAEA", "Group Health"]);
+  assert.equal(appeal.link, "https://blog.example.org/2026/08/section-515.html", "a link without rel is the alternate link");
+  assert.equal(appeal.date, "2026-08-29T12:00:00.000Z", "updated stands in when there is no published date");
+  assert.match(appeal.summary, /^The Seventh Circuit held/);
+  assert.deepEqual(parseRss(xml, "Example Blog"), items, "parseRss hands Atom documents to the Atom parser");
+});
+
+test("RSS 1.0 (RDF) items take their date from dc:date", () => {
+  const xml = `<rdf:RDF><item rdf:about="https://x/a"><title>IRS Notice 2026-61</title><link>https://x/a</link><dc:date>2026-09-15T14:00:00Z</dc:date></item></rdf:RDF>`;
+  assert.equal(parseRss(xml, "x")[0].date, "2026-09-15T14:00:00.000Z");
 });
 
 test("toISODate accepts ISO and long-form dates and rejects junk", () => {

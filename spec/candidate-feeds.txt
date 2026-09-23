@@ -12,6 +12,50 @@
 #   healthcarelawtoday.com, healthlawadvisor.com, benefitnews.com (HTML, not RSS);
 #   jdsupra.com docsRSSfeed (empty body); nccmp.org/feed (valid RSS, no items).
 
-# Still worth a periodic recheck
+# Round 2 (2026-09-23): lines are probed by scripts/probe-feeds.mjs, which now reads Atom too,
+# summarizes JSON, and lists the feed links an HTML page advertises. "--dump URL --at REGEX"
+# prints raw markup for a parser fixture.
+
+# 1. Primary authority: IRS, CMS/CCIIO, regulations.gov
+https://content.govdelivery.com/accounts/USIRS/bulletins.rss
+https://content.govdelivery.com/accounts/USCMS/bulletins.rss
+https://content.govdelivery.com/accounts/USDOLEBSA/bulletins.rss
+https://www.irs.gov/newsroom
+https://www.irs.gov/internal-revenue-bulletins
+https://www.irs.gov/newsroom/news-releases-for-current-month
+https://www.cms.gov/about-cms/web-policies-important-links/rss-feeds
+https://www.cms.gov/marketplace/resources/regulations-guidance
+https://api.regulations.gov/v4/documents?filter[agencyId]=EBSA,IRS,CMS&filter[commentEndDate][ge]=2026-09-23&sort=commentEndDate&page[size]=25&api_key=DEMO_KEY
+
+# 2. Atom and previously valid-but-empty feeds
 https://nccmp.org/feed/
 https://www.jdsupra.com/resources/syndication/docsRSSfeed.aspx?ftype=EmployeeBenefits
+
+# 3. Multiemployer
+https://nccmp.org/
+https://nccmp.org/category/news/feed/
+https://www.ifebp.org/
+https://www.nlrb.gov/news-publications/news/news-releases
+https://news.google.com/rss/search?q=%22Taft-Hartley%22+OR+%22multiemployer+health%22+OR+%22health+and+welfare+fund%22&hl=en-US&gl=US&ceid=US:en
+
+# 4. California
+https://www.dmhc.ca.gov/
+https://content.govdelivery.com/accounts/CADMHC/bulletins.rss
+https://www.insurance.ca.gov/0400-news/0100-press-releases/
+https://oag.ca.gov/news/feed
+https://cppa.ca.gov/announcements/
+https://www.gov.ca.gov/feed/
+
+# 5. Law-firm benefits alerts
+https://employeebenefits.foxrothschild.com/feed/
+https://www.hallbenefitslaw.com/feed/
+https://www.newfront.com/blog
+https://www.morganlewis.com/blogs/mlbenebits
+https://natlawreview.com/practice-groups/employee-benefits-executive-compensation
+https://www.jdsupra.com/law-news/employee-benefits/
+https://www.kantorlaw.net/blog
+https://www.ubabenefits.com/blog/rss.xml
+
+# 6. Wagner Law Group through another channel
+https://news.google.com/rss/search?q=site:wagnerlawgroup.com&hl=en-US&gl=US&ceid=US:en
+https://www.jdsupra.com/profile/wagner_law_group/
