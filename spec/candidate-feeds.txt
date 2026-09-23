@@ -12,50 +12,51 @@
 #   healthcarelawtoday.com, healthlawadvisor.com, benefitnews.com (HTML, not RSS);
 #   jdsupra.com docsRSSfeed (empty body); nccmp.org/feed (valid RSS, no items).
 
-# Round 2 (2026-09-23): lines are probed by scripts/probe-feeds.mjs, which now reads Atom too,
+# Round 3 (2026-09-23): lines are probed by scripts/probe-feeds.mjs, which reads RSS and Atom,
 # summarizes JSON, and lists the feed links an HTML page advertises. "--dump URL --at REGEX"
 # prints raw markup for a parser fixture.
 
 # 1. Primary authority: IRS, CMS/CCIIO, regulations.gov
 https://content.govdelivery.com/accounts/USIRS/bulletins.rss
 https://content.govdelivery.com/accounts/USCMS/bulletins.rss
-https://content.govdelivery.com/accounts/USDOLEBSA/bulletins.rss
-https://www.irs.gov/newsroom
-https://www.irs.gov/internal-revenue-bulletins
-https://www.irs.gov/newsroom/news-releases-for-current-month
-https://www.cms.gov/about-cms/web-policies-important-links/rss-feeds
-https://www.cms.gov/marketplace/resources/regulations-guidance
-https://api.regulations.gov/v4/documents?filter[agencyId]=EBSA,IRS,CMS&filter[commentEndDate][ge]=2026-09-23&sort=commentEndDate&page[size]=25&api_key=DEMO_KEY
+--dump https://www.irs.gov/newsroom/news-releases-for-current-month --at IR-2026
+--dump https://www.irs.gov/internal-revenue-bulletins --at IRB.2026
+--dump https://www.irs.gov/downloads/irs-drop --at n-26
+--dump https://www.cms.gov/about-cms/web-policies-important-links/rss-feeds --at \.xml
+--dump https://api.regulations.gov/v4/documents?filter[agencyId]=EBSA,IRS,CMS&filter[commentEndDate][ge]=2026-09-23&sort=commentEndDate&page[size]=3&api_key=DEMO_KEY
 
 # 2. Atom and previously valid-but-empty feeds
 https://nccmp.org/feed/
-https://www.jdsupra.com/resources/syndication/docsRSSfeed.aspx?ftype=EmployeeBenefits
+https://nccmp.org/wp-json/wp/v2/types
+https://nccmp.org/wp-json/wp/v2/posts?per_page=5&_fields=date,link,title
 
 # 3. Multiemployer
-https://nccmp.org/
-https://nccmp.org/category/news/feed/
-https://www.ifebp.org/
-https://www.nlrb.gov/news-publications/news/news-releases
-https://news.google.com/rss/search?q=%22Taft-Hartley%22+OR+%22multiemployer+health%22+OR+%22health+and+welfare+fund%22&hl=en-US&gl=US&ceid=US:en
+--dump https://nccmp.org/ --at news
+--dump https://www.ifebp.org/ --at news
+--dump https://www.nlrb.gov/resources/rss-feeds --at \.xml
+https://www.horizonactuarial.com/blog?format=rss
+https://www.pionline.com/rss/pension-funds
+https://www.eric.org/feed/
+https://www.americanbenefitscouncil.org/feed/
+https://nabtu.org/feed/
 
 # 4. California
-https://www.dmhc.ca.gov/
-https://content.govdelivery.com/accounts/CADMHC/bulletins.rss
-https://www.insurance.ca.gov/0400-news/0100-press-releases/
-https://oag.ca.gov/news/feed
-https://cppa.ca.gov/announcements/
-https://www.gov.ca.gov/feed/
+--dump https://www.dmhc.ca.gov/ --at press
+--dump https://www.insurance.ca.gov/0400-news/0100-press-releases/ --at 2026
+--dump https://cppa.ca.gov/announcements/ --at 2026
 
 # 5. Law-firm benefits alerts
-https://employeebenefits.foxrothschild.com/feed/
-https://www.hallbenefitslaw.com/feed/
-https://www.newfront.com/blog
-https://www.morganlewis.com/blogs/mlbenebits
-https://natlawreview.com/practice-groups/employee-benefits-executive-compensation
-https://www.jdsupra.com/law-news/employee-benefits/
-https://www.kantorlaw.net/blog
-https://www.ubabenefits.com/blog/rss.xml
+https://www.morganlewis.com/rss/blogs?category=mlbenebits&top=25
+https://www.newfront.com/blog/rss.xml
+https://www.beneficiallyyours.com/feed/
+https://www.healthemploymentandlabor.com/feed/
+https://www.employerlawreport.com/feed/
+https://www.mwe.com/feed/
+https://www.sheppardhealthlaw.com/feed/
+https://www.foxrothschild.com/employee-benefits-and-executive-compensation
+https://www.bradley.com/insights
+https://www.thompsoncoburn.com/insights/blogs
 
 # 6. Wagner Law Group through another channel
-https://news.google.com/rss/search?q=site:wagnerlawgroup.com&hl=en-US&gl=US&ceid=US:en
-https://www.jdsupra.com/profile/wagner_law_group/
+https://www.bing.com/news/search?q=%22Wagner+Law+Group%22&format=rss
+--dump https://news.google.com/rss/search?q=site:wagnerlawgroup.com+when:30d&hl=en-US&gl=US&ceid=US:en --at <item

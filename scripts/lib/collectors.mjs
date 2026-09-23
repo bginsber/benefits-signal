@@ -8,6 +8,8 @@
  */
 
 export const UA = "BenefitsSignalCollector/0.1 (internal legal newsletter pilot)";
+/** Some feed hosts (GovDelivery) answer 406 unless the client asks for a feed type. */
+export const FEED_ACCEPT = "application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.9, */*;q=0.8";
 const RETRYABLE = new Set([403, 408, 425, 429, 500, 502, 503, 504]);
 
 /** Fetch text with bounded retry-and-backoff on transient statuses and network errors. */
@@ -309,7 +311,7 @@ export function displayDate(item, firstSeen = new Map(), now = new Date()) {
 export async function collectSource(source, kind, { since, sinceISO }) {
   const inWindow = (list) => list.filter((it) => !it.date || new Date(it.date) >= since);
   switch (kind) {
-    case "rss": return inWindow(parseRss(await fetchText(source.url), source.name));
+    case "rss": return inWindow(parseRss(await fetchText(source.url, { headers: { Accept: FEED_ACCEPT } }), source.name));
     case "federal-register": return fetchFederalRegister(sinceISO, source.agencies);
     case "courtlistener": return inWindow(await fetchCourtListener(source, sinceISO));
     case "segal-insights": return inWindow(await fetchSegal(source));

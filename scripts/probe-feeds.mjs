@@ -14,7 +14,7 @@
  *   of --at when given), for writing a parser fixture from the Actions log.
  */
 
-import { decodeEntities, fetchText, parseRss } from "./lib/collectors.mjs";
+import { FEED_ACCEPT, decodeEntities, fetchText, parseRss } from "./lib/collectors.mjs";
 import { findKeyword, loadFeedRules } from "./lib/feed.mjs";
 
 const args = process.argv.slice(2);
@@ -55,7 +55,7 @@ function describeJson(body) {
 
 for (const { url, dump, at } of jobs) {
   try {
-    const body = await fetchText(url, { retries: 0 });
+    const body = await fetchText(url, { retries: 0, headers: { Accept: FEED_ACCEPT } });
     if (dump) {
       const start = at ? Math.max(0, body.search(new RegExp(at, "i"))) : 0;
       console.log(`DUMP  ${url} (${body.length} bytes, from ${start})\n${body.slice(start, start + 6000)}\nEND DUMP`);
