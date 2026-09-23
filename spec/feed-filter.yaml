@@ -34,7 +34,9 @@ federal_register:
     - surprise billing
     - independent dispute resolution
     - transparency in coverage
-    - prescription drug
+    - prescription drug benefit
+    - prescription drug coverage
+    - RxDC
     - pharmacy benefit
     - cafeteria plan
     - dependent care
@@ -83,3 +85,7 @@ sources:
     require_keywords: [ERISA, employee benefit, benefit plan, benefits, health, welfare, retirement, pension, PBGC, 401(k), 403(b), COBRA, HIPAA, parity, Affordable Care, ACA, Medicare, EBSA, IRS, Trump account, HSA, FSA, dependent care]
   ifebp:
     drop_categories: [Canada]
+  dol-ebsa-newsroom:
+    require_keywords: [EBSA, Employee Benefits Security, ERISA, health plan, benefit plan, retirement, pension, 401(k), fiduciary, multiemployer, mental health parity, apprentice, Davis-Bacon, prevailing wage]
+  hhs-ocr-newsroom:
+    require_keywords: [HIPAA, Office for Civil Rights, breach, cybersecurity, ransomware, health plan, group health, No Surprises, surprise billing, mental health parity, Affordable Care Act, price transparency]

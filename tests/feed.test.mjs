@@ -40,6 +40,9 @@ test("source rules drop off-topic Mercer items and Groom webinars without touchi
   assert.equal(mercer("Roundup: Employer resources on the changing landscape of DEI").keep, false);
   assert.equal(mercer("San Francisco boosts 2027 Health Care Expenditure Rates").keep, true);
   assert.equal(mercer("PBGC waives reporting for attrition events").keep, true);
+  const dol = (title) => keepForFeed({ source: "DOL News Releases", title, categories: [], summary: "" }, rules, "dol-ebsa-newsroom").keep;
+  assert.equal(dol("Unemployment Insurance Weekly Claims Report"), false);
+  assert.equal(dol("US Department of Labor recovers $2.1M for health plan participants after EBSA investigation"), true);
   assert.equal(keepForFeed({ source: "Groom Law Group", title: "Groom Webinar: Q3 2026 Benefits Watch", categories: ["Publications"] }, rules, "groom").keep, false);
 });
 

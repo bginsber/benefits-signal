@@ -120,7 +120,8 @@ export function parseCourtListener(json, sourceName) {
       .filter(Boolean).join(" · ");
     return {
       source: sourceName,
-      title: r.caseName,
+      // Some clusters carry a truncated short name ("E."); fall back to the full caption.
+      title: String(r.caseName ?? "").length > 4 ? r.caseName : (r.caseNameFull || r.caseName),
       link: `https://www.courtlistener.com${r.absolute_url}`,
       date: toISODate(r.dateFiled),
       summary: [head, snippet].filter(Boolean).join(" — ").slice(0, 600),

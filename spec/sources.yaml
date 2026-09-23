@@ -159,16 +159,15 @@ primary:
     scans: [fhw, met]
     active: true
 
-  - name: DOL/EBSA newsroom
+  - name: DOL News Releases
     id: dol-ebsa-newsroom
-    method: scrape-js
-    url: https://www.dol.gov/newsroom/releases?agency=ebsa
+    method: rss
+    url: https://www.dol.gov/rss/releases.xml   # verified 2026-09-23 via branch preview: 10 items, newest 2026-09-17
     notes: >
-      CAVEAT (verified): dol.gov returns 403 to plain HTTP clients from datacenter IPs;
-      /rss/releases.xml also 403. Needs a browser-grade fetch path, or lean on the
-      Federal Register API for EBSA regulatory documents and treat the newsroom as
-      best-effort for sub-regulatory announcements.
-    scans: [fhw, met, cyb]
+      All-DOL release feed (OSHA, UI claims, H-2A); spec/feed-filter.yaml keeps only EBSA, benefits,
+      apprenticeship, and prevailing-wage items. dol.gov 403'd datacenter IPs on 2026-09-01 and answered
+      from Actions on 2026-09-23; a 403 is logged as a source failure and the run continues.
+    scans: [fhw, met, cyb, atf]
     active: true
 
   - name: IRS
@@ -180,13 +179,14 @@ primary:
     scans: [fhw]
     active: true
 
-  - name: HHS OCR newsroom
+  - name: HHS News Releases
     id: hhs-ocr-newsroom
-    method: scrape-js
-    url: https://www.hhs.gov/ocr/newsroom/index.html
-    notes: Bot-protected like dol.gov (works via rendering proxy, 403 to curl).
-           HIPAA enforcement/settlements relevant to group health plans.
-    scans: [cyb]
+    method: rss
+    url: https://www.hhs.gov/rss/news.xml   # verified 2026-09-23 via branch preview: 10 items, newest 2026-09-22
+    notes: >
+      Department-wide release feed; OCR HIPAA settlements and coverage rules are announced here.
+      spec/feed-filter.yaml keeps only HIPAA, privacy/breach, and group-coverage items.
+    scans: [cyb, fhw]
     active: true
 
   - name: CMS newsroom

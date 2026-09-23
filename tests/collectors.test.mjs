@@ -18,6 +18,8 @@ test("CourtListener opinions keep docket, filing date, and opinion PDF as struct
     download_url: "https://cdn.ca9.uscourts.gov/datastore/opinions/2026/08/31/24-4303.pdf", citation: undefined,
   });
   assert.match(liu.summary, /^9th Cir\. · No\. 24-4303 · filed 2026-08-31/);
+  const [short] = parseCourtListener({ results: [{ caseName: "E.", caseNameFull: "E. v. Anthem Health Plans, Inc.", absolute_url: "/opinion/1/e/", dateFiled: "2026-09-17" }] }, "x");
+  assert.equal(short.title, "E. v. Anthem Health Plans, Inc.", "a truncated short name falls back to the full caption");
 });
 
 test("Segal insights resolve relative URLs and parse long-form dates", async () => {

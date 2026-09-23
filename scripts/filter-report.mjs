@@ -20,7 +20,10 @@ for (const doc of await readCollected(IN)) {
   const { keep, why } = keepForFeed(doc, rules, doc.source_id);
   if (keep && !args.includes("--kept")) continue;
   const key = `${keep ? "KEPT" : "DROPPED"} · ${why.split(":")[0]}`;
-  (groups[key] ??= []).push(`${doc.date?.slice(0, 10) ?? "undated   "}  [${String(doc.source).replace(/ — .*/, "")}] ${doc.title}`.slice(0, 170));
+  const line = `${doc.date?.slice(0, 10) ?? "undated   "}  [${String(doc.source).replace(/ — .*/, "")}] ${doc.title}`.slice(0, 170);
+  // Dropped rules are the costly misses; show enough of the abstract to judge them.
+  const detail = !keep && /Rule without/.test(why) ? `\n      ${String(doc.summary ?? "").slice(0, 220)}` : "";
+  (groups[key] ??= []).push(line + detail);
 }
 for (const [k, list] of Object.entries(groups).sort()) {
   console.log(`\n${k} (${list.length})`);
