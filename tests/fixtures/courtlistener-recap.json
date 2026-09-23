@@ -1,0 +1,108 @@
+{
+  "count": 4,
+  "next": null,
+  "results": [
+    {
+      "caseName": "Jane Doe v. The Signature Benefits Plan and the Disney Severance Pay Plan",
+      "cause": "29:1132 E.R.I.S.A.-Employee Benefits",
+      "court_citation_string": "C.D. Cal.",
+      "court_id": "cacd",
+      "docketNumber": "8:24-cv-02230",
+      "docket_absolute_url": "/docket/69264457/jane-doe-v-the-signature-benefits-plan-and-the-disney-severance-pay-plan/",
+      "docket_id": 69264457,
+      "suitNature": "Labor: E.R.I.S.A.",
+      "recap_documents": [
+        {
+          "absolute_url": "/docket/69264457/56/jane-doe-v-the-signature-benefits-plan-and-the-disney-severance-pay-plan/",
+          "attachment_number": null,
+          "description": " FINDINGS OF FACT AND CONCLUSIONS OF LAW signed by Judge Dolly M. Gee: The Court concludes: Under a de novo standard of review, Plaintiff is entitled to benefits for S.J.'s residential treatment at Compass from 3/28/2024 to 5/4/2024. Plaintiff's motion for judgment is GRANTED and Defendant's cross-motion for judgment is DENIED.   (gk)",
+          "document_number": 56,
+          "document_type": "PACER Document",
+          "entry_date_filed": "2026-09-17",
+          "filepath_local": "recap/gov.uscourts.cacd.944669/gov.uscourts.cacd.944669.56.0.pdf",
+          "is_available": true,
+          "page_count": 30,
+          "short_description": "Findings of Fact & Conclusions of Law"
+        }
+      ]
+    },
+    {
+      "caseName": "GCIU-Employer Retirement Fund v. T.C. Peters Printing Co., Inc.",
+      "cause": "29:1145 E.R.I.S.A.",
+      "court_citation_string": "C.D. Cal.",
+      "court_id": "cacd",
+      "docketNumber": "2:25-cv-11893",
+      "docket_absolute_url": "/docket/72045929/gciu-employer-retirement-fund-v-tc-peters-printing-co-inc/",
+      "docket_id": 72045929,
+      "suitNature": "Labor: E.R.I.S.A.",
+      "recap_documents": [
+        {
+          "absolute_url": "/docket/72045929/17/gciu-employer-retirement-fund-v-tc-peters-printing-co-inc/",
+          "attachment_number": null,
+          "description": " JUDGMENT by Judge Dolly M. Gee, Related to: Order on Motion for Default Judgment, 16 . IT IS HEREBY ORDERED, ADJUDGED, AND DECREED that judgment is entered in favor of Plaintiffs in the total amount of $16,649.70 ... pursuant to Section 515 of ERISA, 29 U.S.C. &# 167; 1145; (es)",
+          "document_number": 17,
+          "document_type": "PACER Document",
+          "entry_date_filed": "2026-08-14",
+          "filepath_local": "recap/gov.uscourts.cacd.999794/gov.uscourts.cacd.999794.17.0_11.pdf",
+          "is_available": true,
+          "page_count": 2,
+          "short_description": "Judgment"
+        }
+      ]
+    },
+    {
+      "caseName": "Trustees of the Brick Masons Pension Trust Fund v. The New Generation",
+      "cause": "29:1145 E.R.I.S.A.",
+      "court_citation_string": "C.D. Cal.",
+      "court_id": "cacd",
+      "docketNumber": "2:25-cv-05511",
+      "docket_absolute_url": "/docket/71190036/trustees-of-the-brick-masons-pension-trust-fund-v-the-new-generation/",
+      "docket_id": 71190036,
+      "suitNature": "791 Employee Retirement Income Security Act",
+      "recap_documents": [
+        {
+          "absolute_url": "/docket/71190036/32/trustees-of-the-brick-masons-pension-trust-fund-v-the-new-generation/",
+          "attachment_number": null,
+          "description": "PROTECTIVE ORDER  by Magistrate Judge Karen L. Stevenson re Stipulation for Protective Order  31     (tsn)",
+          "document_number": 32,
+          "document_type": "PACER Document",
+          "entry_date_filed": "2026-09-03",
+          "is_available": true,
+          "short_description": "Protective Order"
+        },
+        {
+          "absolute_url": "/docket/71190036/30/1/trustees-of-the-brick-masons-pension-trust-fund-v-the-new-generation/",
+          "attachment_number": 1,
+          "description": "",
+          "document_number": 30,
+          "document_type": "Attachment",
+          "entry_date_filed": "2026-09-01",
+          "is_available": true,
+          "short_description": "Proposed Order"
+        }
+      ]
+    },
+    {
+      "caseName": "Riva on the River Homeowners Assoc. v. The Management Assoc., Inc.",
+      "cause": "28:1332 Diversity-Breach of Contract",
+      "court_citation_string": "E.D. Cal.",
+      "court_id": "caed",
+      "docketNumber": "2:24-cv-01234",
+      "docket_absolute_url": "/docket/69241326/riva-on-the-river-homeowners-assoc-v-the-management-assoc-inc/",
+      "docket_id": 69241326,
+      "suitNature": "Contract: Other",
+      "recap_documents": [
+        {
+          "absolute_url": "/docket/69241326/81/riva-on-the-river-homeowners-assoc-v-the-management-assoc-inc/",
+          "attachment_number": null,
+          "description": " ORDER signed by Magistrate Judge Chi Soo Kim on 8/27/26 DENYING 51 Motion for Class Certification.   (Deputy Clerk JAW)",
+          "document_number": 81,
+          "document_type": "PACER Document",
+          "entry_date_filed": "2026-08-28",
+          "is_available": true,
+          "short_description": "Order on Motion to Certify Class"
+        }
+      ]
+    }
+  ]
+}

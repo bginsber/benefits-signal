@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { displayDate, parseCourtListener, parseDasPage, parseMercerSearch, parseSegalInsights, toISODate } from "../scripts/lib/collectors.mjs";
+import { displayDate, fetchFeedWithFallback, isoWeek, parseAtom, parseDatedGuidanceList, parseDmhcPage, parseIrb, parseRegulationsGov, parseCourtListener, parseCourtListenerRecap, parseDasPage, parseMercerSearch, parseRss, parseSegalInsights, toISODate } from "../scripts/lib/collectors.mjs";
 
 const fixture = (name) => readFile(new URL(`./fixtures/${name}`, import.meta.url), "utf8");
 const json = async (name) => JSON.parse(await fixture(name));
@@ -21,6 +21,79 @@ test("CourtListener opinions keep docket, filing date, and opinion PDF as struct
   const snippet = "25-2204\nE. Coast Advanced Plastic Surgery, LLC v. Cigna Health & Life Ins. Co.\n\n   United States Court of Appeals";
   const [short] = parseCourtListener({ results: [{ caseName: "E.", caseNameFull: "", absolute_url: "/opinion/10975583/e/", dateFiled: "2026-09-17", opinions: [{ snippet }] }] }, "x");
   assert.equal(short.title, "E. Coast Advanced Plastic Surgery, LLC v. Cigna Health & Life Ins. Co.", "a truncated short name falls back to the caption on the opinion's first page");
+});
+
+test("CourtListener RECAP keeps rulings on ERISA dockets and skips filings, procedural orders, and attachments", async () => {
+  const items = parseCourtListenerRecap(await json("courtlistener-recap.json"), "California District Courts");
+  assert.deepEqual(items.map((it) => it.title), [
+    "Jane Doe v. The Signature Benefits Plan and the Disney Severance Pay Plan — Findings of Fact & Conclusions of Law",
+    "GCIU-Employer Retirement Fund v. T.C. Peters Printing Co., Inc. — Judgment",
+  ], "protective orders, attachments, and non-ERISA dockets are dropped");
+  const [doe, gciu] = items;
+  assert.equal(doe.link, "https://www.courtlistener.com/docket/69264457/56/jane-doe-v-the-signature-benefits-plan-and-the-disney-severance-pay-plan/");
+  assert.equal(doe.date, "2026-09-17T12:00:00.000Z");
+  assert.match(doe.summary, /^C\.D\. Cal\. · No\. 8:24-cv-02230 · entered 2026-09-17 — FINDINGS OF FACT/);
+  assert.equal(doe.structured.download_url, "https://storage.courtlistener.com/recap/gov.uscourts.cacd.944669/gov.uscourts.cacd.944669.56.0.pdf");
+  assert.equal(gciu.structured.docket_number, "2:25-cv-11893");
+});
+
+test("regulations.gov open comment periods become reminders dated two weeks before the deadline", async () => {
+  const items = parseRegulationsGov(await json("regulations-gov.json"), "Comment Deadlines", new Date("2026-09-20T12:00:00Z"));
+  assert.deepEqual(items.map((it) => it.structured.comments_close_on), ["2026-09-25", "2026-10-02"], "deadlines more than two weeks out wait for a later run");
+  const [trump] = items;
+  assert.equal(trump.title, "Comments due September 25: Employer Contributions to Trump Accounts and Nondiscrimination Rules for Dependent Care Assistance Programs");
+  assert.equal(trump.link, "https://www.regulations.gov/document/IRS-2026-0925-0001");
+  assert.equal(trump.date, "2026-09-12T03:59:59.000Z");
+  assert.match(trump.summary, /^Internal Revenue Service · Notice of Proposed Rulemaking \(NPRM\) · docket IRS-2026-0925 · FR Doc\. 2026-16314$/);
+  assert.equal(parseRegulationsGov(await json("regulations-gov.json"), "x", new Date("2026-09-23T12:00:00Z")).length, 5);
+});
+
+test("Internal Revenue Bulletin highlights yield one dated item per document under its section", async () => {
+  const url = "https://www.irs.gov/irb/2026-38_IRB";
+  const items = parseIrb(await fixture("irb-2026-38.html"), url, "IRS Internal Revenue Bulletin");
+  assert.equal(items.length, 5);
+  assert.deepEqual(items.map((it) => it.categories[0]), ["Employee Plans", "Employee Plans", "Income Tax", "Income Tax", "Income Tax"]);
+  const trump = items.find((it) => it.link === `${url}#CC-00349938-26`);
+  assert.equal(trump.title, "CC-00349938-26: Guidance on Eligible Investments for Trump Accounts", "the table of contents names items the highlights list by number");
+  assert.equal(trump.date, "2026-09-14T12:00:00.000Z");
+  assert.match(trump.summary, /^IRB 2026-38 · Income Tax — The proposed regulations would provide guidance regarding eligible investments/);
+  assert.match(items[0].title, /^Notice 2026-51: This notice sets forth updates on the corporate bond monthly yield curve/);
+  assert.ok(items[0].title.length < 170);
+  const td = parseIrb(`<a href="#TD-10053">TD 10053</a><h1>Internal Revenue Bulletin: 2026-36</h1><p class="pubdate">August 31, 2026</p><h1 class="title role-highlights">HIGHLIGHTS</h1><h2><strong>INCOME TAX</strong></h2><h2><a href="#TD-10053"></a><strong>T.D. 10053, page 237.</strong></h2><p>These final regulations amend regulations under section 3406.</p><h1 class="title role-mission"></h1>`, "https://www.irs.gov/irb/2026-36_IRB", "x");
+  assert.equal(td[0].title, "T.D. 10053: These final regulations amend regulations under section 3406.", "a contents entry that only repeats the number gives way to the synopsis");
+  assert.equal(isoWeek(new Date("2026-09-14T12:00:00Z")), "2026-38", "IRB numbers follow the ISO week of their Monday");
+  assert.equal(isoWeek(new Date("2026-01-01T12:00:00Z")), "2026-01");
+});
+
+test("dated guidance lists yield one item per entry, carrying the topic heading", async () => {
+  const page = "https://www.cms.gov/marketplace/resources/regulations-guidance";
+  const items = parseDatedGuidanceList(await fixture("cciio-guidance.html"), page, "CMS Private Insurance Guidance");
+  assert.equal(items.length, 15);
+  const papi = items[0];
+  assert.equal(papi.date, "2026-01-29T12:00:00.000Z");
+  assert.equal(papi.link, "https://www.cms.gov/files/document/2027-papi-parameters-guidance-2026-01-29.pdf");
+  assert.ok(!papi.title.endsWith("(PDF)"));
+  const nsa = items.find((it) => it.title.startsWith("CMS-9909-IFC"));
+  assert.deepEqual(nsa.categories, ["No Surprises Act"]);
+  assert.equal(nsa.link, "https://www.federalregister.gov/documents/2021/07/13/2021-14379/requirements-related-to-surprise-billing-part-i", "absolute links are kept, so they merge with the Federal Register item");
+  assert.equal(items.find((it) => it.title.includes("Idr Process") || it.title.includes("(IDR) Process")).date, "2023-09-20T12:00:00.000Z", "a &nbsp; inside the date still parses");
+  const typo = `<h2>Shared Responsibility</h2><ul><li>September 18, 2104<br><a href="/x.pdf">Filing Threshold Hardship Exemption</a></li></ul>`;
+  assert.equal(parseDatedGuidanceList(typo, page, "x", new Date("2026-09-23T12:00:00Z")).length, 0, "a far-future typo date is skipped");
+});
+
+test("DMHC All Plan Letters and press releases yield dated items; attachments are skipped", async () => {
+  const apl = parseDmhcPage(await fixture("dmhc-apl.html"), "https://www.dmhc.ca.gov/LicensingReporting/HealthPlanLicensing/AllPlanLetters.aspx", "California DMHC");
+  assert.equal(apl.length, 14, "letters only; FAQ, checklist, and attachment links are not letters");
+  assert.equal(apl[0].title, "APL 26-014: Contracted Pharmacy Benefit Manager Information");
+  assert.equal(apl[0].date, "2026-09-03T12:00:00.000Z");
+  assert.equal(apl.find((it) => it.title.startsWith("APL 26-011")).title, "APL 26-011: Compliance with Senate Bill 306 (2025) – First Data Call – REVISED");
+  assert.deepEqual(apl.find((it) => it.title.startsWith("ALL 26-010")).categories, ["All Licensee Letter"]);
+  assert.equal(apl.find((it) => it.title.startsWith("APL 26-005")).link, "https://www.dmhc.ca.gov/LinkClick.aspx?fileticket=RN93GnGRShk%3d&portalid=0");
+  const press = parseDmhcPage(await fixture("dmhc-press.html"), "https://www.dmhc.ca.gov/Resources/Newsroom/PressReleases.aspx", "California DMHC");
+  assert.equal(press.length, 5);
+  assert.equal(press[0].title, "California fines Blue Shield of California $800,000 for delaying resolution of member complaints");
+  assert.equal(press[0].date, "2026-09-09T12:00:00.000Z");
+  assert.equal(press[0].link, "https://www.dmhc.ca.gov/Resources/Newsroom/PressReleases/September9,2026PressRelease.aspx");
 });
 
 test("Segal insights resolve relative URLs and parse long-form dates", async () => {
@@ -60,10 +133,47 @@ test("CAC meeting tables yield one notice per committee with the meeting date an
   assert.equal(new Set(items.map((it) => it.link)).size, items.length, "links must be unique so the store keys them separately");
 });
 
+test("Atom entries yield the alternate link, published date, summary text, and category labels", async () => {
+  const xml = await fixture("atom-feed.xml");
+  const items = parseAtom(xml, "Example Blog");
+  assert.equal(items.length, 2, "an entry without a title is skipped");
+  const [faq, appeal] = items;
+  assert.equal(faq.title, "Agencies Issue FAQs on Mental Health Parity & Network Adequacy");
+  assert.equal(faq.link, "https://blog.example.org/2026/09/mhpaea-faqs.html", "the rel=alternate link wins over replies and edit links");
+  assert.equal(faq.date, "2026-09-18T16:30:00.000Z", "published wins over updated");
+  assert.equal(faq.summary, "The Departments released FAQs Part 75 on nonquantitative treatment limitations.");
+  assert.deepEqual(faq.categories, ["MHPAEA", "Group Health"]);
+  assert.equal(appeal.link, "https://blog.example.org/2026/08/section-515.html", "a link without rel is the alternate link");
+  assert.equal(appeal.date, "2026-08-29T12:00:00.000Z", "updated stands in when there is no published date");
+  assert.match(appeal.summary, /^The Seventh Circuit held/);
+  assert.deepEqual(parseRss(xml, "Example Blog"), items, "parseRss hands Atom documents to the Atom parser");
+});
+
+test("a source whose own feed is blocked reads its fallback feed, without the channel's title suffix", async () => {
+  const google = await fixture("google-news-site.xml");
+  const source = { name: "Wagner Law Group Law Alerts", url: "https://www.wagnerlawgroup.com/feed/", fallback_url: "https://news.google.com/rss/search?q=site:wagnerlawgroup.com", fallback_title_suffix: " - The Wagner Law Group", fallback_label: "Google News" };
+  const fetcher = async (url) => { if (url === source.url) throw new Error("HTTP 403"); return google; };
+  const items = await fetchFeedWithFallback(source, fetcher);
+  assert.equal(items.length, 2);
+  assert.equal(items[0].title, "Bally’s Class Action Launches Circuit Reviews of Smoking Penalties");
+  assert.equal(items[0].date, "2026-09-15T07:00:00.000Z");
+  assert.deepEqual(items[0].categories, ["via Google News"]);
+  assert.equal(items[0].summary, "", "the fallback's description only repeats the title");
+  await assert.rejects(fetchFeedWithFallback({ ...source, fallback_url: undefined }, fetcher), /HTTP 403/, "no fallback: the failure is reported");
+  const own = await fetchFeedWithFallback(source, async () => "<rss><item><title>Own</title><link>https://w/1</link></item></rss>");
+  assert.equal(own[0].title, "Own", "the own feed wins when it answers");
+});
+
+test("RSS 1.0 (RDF) items take their date from dc:date", () => {
+  const xml = `<rdf:RDF><item rdf:about="https://x/a"><title>IRS Notice 2026-61</title><link>https://x/a</link><dc:date>2026-09-15T14:00:00Z</dc:date></item></rdf:RDF>`;
+  assert.equal(parseRss(xml, "x")[0].date, "2026-09-15T14:00:00.000Z");
+});
+
 test("toISODate accepts ISO and long-form dates and rejects junk", () => {
   assert.equal(toISODate("2026-08-18"), "2026-08-18T12:00:00.000Z");
   assert.equal(toISODate("August 18, 2026"), "2026-08-18T12:00:00.000Z");
   assert.equal(toISODate("TBD"), null);
+  assert.equal(toISODate("Sept. 18, 2026"), "2026-09-18T12:00:00.000Z");
 });
 
 test("displayDate keeps past dates, and moves future-dated notices to when they were first seen", () => {

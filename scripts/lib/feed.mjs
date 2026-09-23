@@ -35,7 +35,9 @@ export function keepForFeed(item, rules = {}, sourceId = null) {
   }
   const titleHit = (src?.drop_title_patterns ?? []).find((p) => has(title, p));
   if (titleHit) return { keep: false, why: `title ${titleHit}` };
-  if (src?.require_keywords?.length && !findKeyword(text, src.require_keywords)) return { keep: false, why: "off-topic: no benefits keyword" };
+  // require_keywords: federal_register reuses the Federal Register keyword list.
+  const required = src?.require_keywords === "federal_register" ? rules.federal_register?.keywords : src?.require_keywords;
+  if (required?.length && !findKeyword(text, required)) return { keep: false, why: "off-topic: no benefits keyword" };
   if (!/^Federal Register/.test(item.source)) return { keep: true, why: "interpretation or primary source" };
   const fr = rules.federal_register ?? {};
   const type = item.categories?.[0] ?? "";
