@@ -430,7 +430,8 @@ export function parseIrb(html, url, sourceName) {
     if (!anchor) { section = titleCase(label); continue; }
     const synopsis = stripTags([...chunk.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map((m) => m[1]).join(" "));
     const named = toc.get(anchor);
-    const brief = named && named !== label ? named : synopsis.length > 140 ? `${synopsis.slice(0, 140).replace(/\s+\S*$/, "")}…` : synopsis;
+    const bare = (t) => String(t ?? "").replace(/[^a-z0-9]/gi, "").toLowerCase();
+    const brief = named && bare(named) !== bare(label) ? named : synopsis.length > 140 ? `${synopsis.slice(0, 140).replace(/\s+\S*$/, "")}…` : synopsis;
     items.push({
       source: sourceName,
       title: `${label}: ${brief}`,

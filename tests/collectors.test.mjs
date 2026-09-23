@@ -59,6 +59,8 @@ test("Internal Revenue Bulletin highlights yield one dated item per document und
   assert.match(trump.summary, /^IRB 2026-38 · Income Tax — The proposed regulations would provide guidance regarding eligible investments/);
   assert.match(items[0].title, /^Notice 2026-51: This notice sets forth updates on the corporate bond monthly yield curve/);
   assert.ok(items[0].title.length < 170);
+  const td = parseIrb(`<a href="#TD-10053">TD 10053</a><h1>Internal Revenue Bulletin: 2026-36</h1><p class="pubdate">August 31, 2026</p><h1 class="title role-highlights">HIGHLIGHTS</h1><h2><strong>INCOME TAX</strong></h2><h2><a href="#TD-10053"></a><strong>T.D. 10053, page 237.</strong></h2><p>These final regulations amend regulations under section 3406.</p><h1 class="title role-mission"></h1>`, "https://www.irs.gov/irb/2026-36_IRB", "x");
+  assert.equal(td[0].title, "T.D. 10053: These final regulations amend regulations under section 3406.", "a contents entry that only repeats the number gives way to the synopsis");
   assert.equal(isoWeek(new Date("2026-09-14T12:00:00Z")), "2026-38", "IRB numbers follow the ISO week of their Monday");
   assert.equal(isoWeek(new Date("2026-01-01T12:00:00Z")), "2026-01");
 });
