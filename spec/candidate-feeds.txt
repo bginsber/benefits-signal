@@ -1,22 +1,25 @@
 # Candidate RSS feeds for coverage BenefitsLink provides and we do not.
 # The branch preview workflow probes each line; promote a feed to
 # spec/sources.yaml only after it probes OK with relevant, recent items.
+#
+# Probed 2026-09-23 and promoted: erisapracticecenter.com (Proskauer), benefitslawadvisor.com.
+# Probed 2026-09-23 and rejected: chirblog.org (stale since 2026-03), healthaffairs.org etoc (undated,
+# broad health policy), hrdive.com topic feed (404), benefitspro.com and plansponsor.com (403 to
+# datacenter clients), shrm.org (404), erisalitigationnewsletter.com (DNS failure).
 
-# Multiemployer / Taft-Hartley
+# Answered but parsed to zero items in round 1; the probe now prints the body start
 https://nccmp.org/feed/
-# Health & welfare policy and guidance commentary
-https://chirblog.org/feed/
-https://www.erisapracticecenter.com/feed/
-https://www.healthaffairs.org/action/showFeed?type=etoc&feed=rss&jc=hlthaff
-# Aggregated law-firm alerts (closest free analogue to BenefitsLink's firm-alert stream)
 https://www.jdsupra.com/resources/syndication/docsRSSfeed.aspx?ftype=EmployeeBenefits
 https://www.jdsupra.com/resources/syndication/docsRSSfeed.aspx?ftype=ERISA
-# Trade press
-https://www.hrdive.com/feeds/topic/benefits/
-https://www.benefitspro.com/feed/
-https://www.plansponsor.com/feed/
-https://www.shrm.org/rss/benefits
-# Other firm blogs with ERISA / group-health focus
-https://www.benefitslawadvisor.com/feed/
-https://www.erisalitigationnewsletter.com/feed/
 https://www.healthcarelawtoday.com/feed/
+# Primary-authority newsrooms (dol.gov was 403 to datacenter IPs on 2026-09-01; recheck)
+https://www.dol.gov/rss/releases.xml
+https://www.hhs.gov/rss/news.xml
+https://www.cms.gov/newsroom/rss
+# Firm and trade blogs with group-health or multiemployer focus
+https://www.healthlawadvisor.com/feed/
+https://www.employeebenefitslawblog.com/feed/
+https://www.benefitnews.com/feed
+https://www.spencerfane.com/feed/
+https://www.kff.org/feed/
+https://www.natlawreview.com/rss.xml

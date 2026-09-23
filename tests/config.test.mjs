@@ -15,6 +15,7 @@ test("spec/sources.yaml carries the seven interpretation sources and every scan 
   const [sources, scans] = await Promise.all([loadSources(), loadScans()]);
   const interpretation = sources.filter((s) => s.layer === "interpretation");
   assert.equal(interpretation.length, 7);
+  assert.ok(sources.filter((s) => s.layer === "supplemental").every((s) => s.method === "rss" && s.url), "supplemental sources are plain feeds");
   const ids = new Set(scans.map((s) => s.id));
   for (const s of sources) {
     assert.ok(s.id, `${s.name} has no id`);

@@ -19,25 +19,32 @@ export async function loadFeedRules(file = path.join(ROOT, "spec", "feed-filter.
 
 const has = (hay, needle) => String(hay ?? "").toLowerCase().includes(String(needle).toLowerCase());
 
+/** First keyword that starts a word in the text ("pension" matches "pensions", not "suspension"). */
+export function findKeyword(text, keywords = []) {
+  return keywords.find((k) => new RegExp(`(?:^|[^a-z0-9])${String(k).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i").test(text ?? ""));
+}
+
 /** Decide whether a collected item reaches the feed. Returns { keep, why }. */
 export function keepForFeed(item, rules = {}, sourceId = null) {
   const src = rules.sources?.[sourceId ?? item.source_id ?? ""] ?? null;
+  const title = item.title ?? "";
+  const text = `${title} ${item.summary ?? ""}`;
   if (src?.drop_categories?.length) {
     const hit = (item.categories ?? []).find((c) => src.drop_categories.some((d) => has(c, d)));
     if (hit) return { keep: false, why: `category ${hit}` };
   }
+  const titleHit = (src?.drop_title_patterns ?? []).find((p) => has(title, p));
+  if (titleHit) return { keep: false, why: `title ${titleHit}` };
+  if (src?.require_keywords?.length && !findKeyword(text, src.require_keywords)) return { keep: false, why: "off-topic: no benefits keyword" };
   if (!/^Federal Register/.test(item.source)) return { keep: true, why: "interpretation or primary source" };
   const fr = rules.federal_register ?? {};
   const type = item.categories?.[0] ?? "";
-  const title = item.title ?? "";
   const dropped = (fr.drop_title_patterns ?? []).find((p) => has(title, p));
   if (dropped) return { keep: false, why: `housekeeping: ${dropped}` };
+  if ((fr.keep_agencies ?? []).some((a) => has(item.source, a))) return { keep: true, why: "agency" };
   if ((fr.keep_types ?? []).some((t) => t.toLowerCase() === type.toLowerCase())) return { keep: true, why: `type ${type}` };
-  if ((fr.keep_notice_agencies ?? []).some((a) => has(item.source, a))) return { keep: true, why: "agency" };
-  const text = `${title} ${item.summary ?? ""}`;
-  const kw = (fr.notice_keywords ?? []).find((k) => has(text, k));
+  const kw = findKeyword(text, fr.keywords);
   if (kw) return { keep: true, why: `keyword ${kw}` };
-  if (item.structured?.comments_close_on && /^(Rule|Proposed Rule)/i.test(type)) return { keep: true, why: "comment deadline" };
   return { keep: false, why: `${type || "document"} without a benefits keyword` };
 }
 

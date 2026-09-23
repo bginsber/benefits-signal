@@ -1,33 +1,47 @@
 # Benefits Signal — collated feed filter (what reaches the Outlook feed).
 # The document store keeps everything for triage; these rules only decide
 # what the human-facing RSS feed shows. Adjust here, not in code.
+#
+# Keywords match at the start of a word, case-insensitive: "pension" matches
+# "pensions" but not "suspension".
 
 federal_register:
+  # Agencies whose documents always reach the feed, whatever their type (name substring, case-insensitive).
+  keep_agencies: [Employee Benefits Security Administration]
   # Document types that always reach the feed.
-  keep_types: [Rule, Proposed Rule, Presidential Document]
-  # Agencies whose notices are kept even without a keyword match (name substring, case-insensitive).
-  keep_notice_agencies: [Employee Benefits Security Administration]
-  # Notices from other agencies reach the feed only when the title or abstract matches one of these.
-  notice_keywords:
+  keep_types: [Presidential Document]
+  # Everything else, rules and proposed rules included, reaches the feed only when the title or
+  # abstract names a benefits topic. The agency list includes all of HHS and IRS, so without this
+  # FDA device classifications and IRS foreign-tax rules flood the feed.
+  keywords:
     - ERISA
     - employee benefit
     - group health
     - health plan
     - health insurance
+    - health coverage
     - welfare plan
+    - welfare benefit
     - retirement plan
     - pension
     - multiemployer
+    - Taft-Hartley
     - mental health parity
     - MHPAEA
     - COBRA
     - HIPAA
     - No Surprises
+    - surprise billing
+    - independent dispute resolution
     - transparency in coverage
     - prescription drug
     - pharmacy benefit
     - cafeteria plan
     - dependent care
+    - health reimbursement
+    - ICHRA
+    - wellness program
+    - Trump Account
     - Form 5500
     - fiduciary
     - apprentice
@@ -36,9 +50,11 @@ federal_register:
     - fringe benefit
     - Medicare Secondary Payer
     - Affordable Care Act
+    - employer shared responsibility
     - essential health benefits
     - qualified health plan
     - HSA
+    - health savings account
     - flexible spending
   # Titles matching any of these are dropped regardless (agency housekeeping).
   drop_title_patterns:
@@ -55,9 +71,15 @@ federal_register:
     - "Sunshine Act"
     - "Delegation of Authority"
 
-# Per-source category drops (RSS <category> values, case-insensitive substring).
+# Per-source rules: category drops (RSS <category> values), title drops (substring), and
+# require_keywords (the item must name a benefits topic in its title or summary). Case-insensitive.
 sources:
   groom:
     drop_categories: [Events, News]
+    drop_title_patterns: [Webinar, Save the Date, Symposium]
+  mercer:
+    # Mercer's Law & Policy stream covers all of HR (immigration, DEI, minimum wage, pay transparency);
+    # only its benefits items belong in this feed.
+    require_keywords: [ERISA, employee benefit, benefit plan, benefits, health, welfare, retirement, pension, PBGC, 401(k), 403(b), COBRA, HIPAA, parity, Affordable Care, ACA, Medicare, EBSA, IRS, Trump account, HSA, FSA, dependent care]
   ifebp:
     drop_categories: [Canada]
